@@ -12,7 +12,7 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [theme, setCurrentTheme] = useState<Theme>(itemsTheme[0]);
+    const [theme, setCurrentTheme] = useState<Theme>((localStorage.getItem("theme") as Theme) || itemsTheme[0]);
 
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme") as Theme | null;
@@ -28,7 +28,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const setTheme = (newTheme: Theme) => {
         if (itemsTheme.includes(newTheme)) {
-            console.log("newTheme", newTheme);
+            // console.log("newTheme", newTheme);
             setCurrentTheme(newTheme);
         }
     };

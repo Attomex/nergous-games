@@ -6,6 +6,7 @@ import { Button, Dropdown, Space } from "antd";
 import type { MenuProps } from "antd";
 import CreateGameModal from "../../features/gamePage/CreateGameModal/CreateGameModal";
 import AddGamesModal from "../../features/gamePage/AddGamesModal/AddGamesModal";
+import { useAuth } from "../../context/AuthContext";
 
 export interface GameInfo {
     id: number;
@@ -53,6 +54,8 @@ const GamePage = () => {
     const [modalCreateGame, setModalCreateGame] = useState<boolean>(false);
     const [modalAddGames, setModalAddGames] = useState<boolean>(false);
     const [pagination, setPagination] = useState(1);
+    const [sizePages, setSizePages] = useState(1);
+    const { checkAdmin } = useAuth();
 
     const onClick: MenuProps["onClick"] = ({ key }) => {
         if (key === "1") {
@@ -74,6 +77,7 @@ const GamePage = () => {
                 .get("/games/user?page=" + pagination)
                 .then((response) => {
                     setUserGames(response.data.data);
+                    setSizePages(response.data.pages);
                 })
                 .catch((error) => {
                     throw new Error(error.response.data);
@@ -89,6 +93,14 @@ const GamePage = () => {
         getUserGames();
     }, [pagination]);
 
+    useEffect(() => {
+        checkAdmin();
+    }, []);
+
+    const changePagination = (page: number) => {
+        setPagination((prev) => prev + page);
+    };
+
     return (
         <>
             <div style={{ marginBottom: "20px" }}>
@@ -97,6 +109,14 @@ const GamePage = () => {
                         <Button>Добавить</Button>
                     </Space>
                 </Dropdown>
+                <Space>
+                    {pagination === sizePages ? null : <Button onClick={() => changePagination(1)}>Следующая страница</Button>}
+
+                    {pagination === 1 ? null : <Button onClick={() => changePagination(-1)}>Предыдущая страница</Button>}
+                </Space>
+                <div style={{ marginLeft: "10px", marginRight: "10px" }}>
+                    Страница {pagination} из {sizePages}
+                </div>
             </div>
             {userGames !== undefined ? (
                 <div className={styles.cardsWrapper}>
@@ -105,8 +125,16 @@ const GamePage = () => {
                     ))}
                 </div>
             ) : null}
+            <Space>
+                {pagination === sizePages ? null : <Button onClick={() => changePagination(1)}>Следующая страница</Button>}
+
+                {pagination === 1 ? null : <Button onClick={() => changePagination(-1)}>Предыдущая страница</Button>}
+            </Space>
+            <div style={{ marginLeft: "10px", marginRight: "10px" }}>
+                Страница {pagination} из {sizePages}
+            </div>
             <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={getUserGames} />
-            <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={getUserGames}/>
+            <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={getUserGames} />
         </>
     );
 };

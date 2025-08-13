@@ -7,7 +7,9 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.logo, .settings{
+.logo,
+.settings,
+.menu {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -16,10 +18,31 @@
     padding-top: 13px;
 }
 
-.settings{
+.settings {
     justify-content: flex-end;
 }
 
-.logo{
-    padding-left: 10px;
+.logo {
+    padding: 8px;
+    margin: auto 0;
+    font-size: 1rem;
+}
+
+.games__page__btn {
+    width: 150px;
+    padding: 8px;
+    margin: 0 auto;
+    background-color: var(--primary-color);
+    border: transparent;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.games__page__btn:hover {
+    background-color: var(--bg-color);
+    transition: background-color 0.3s ease-in-out;
 }

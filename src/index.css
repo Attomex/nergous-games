@@ -1,42 +1,39 @@
 body.milk-brown {
-    --primary-color: #AD8B73;
-    --bg-color: #CEAB93;
-    --secondary-color: #E3CAA5;
-    --text-color: #FFFBE9;
+    --primary-color: #ad8b73;
+    --bg-color: #ceab93;
+    --secondary-color: #e3caa5;
+    --text-color: #fffbe9;
 }
 
 body.milk-fiol {
     --primary-color: #424874;
-    --bg-color: #A6B1E1;
-    --secondary-color: #DCD6F7;
-    --text-color: #F4EEFF;
+    --bg-color: #a6b1e1;
+    --secondary-color: #dcd6f7;
+    --text-color: #f4eeff;
 }
 
 body.milk-green {
     --primary-color: #798777;
-    --bg-color: #A2B29F;
-    --secondary-color: #BDD2B6;
-    --text-color: #F8EDE3;
+    --bg-color: #a2b29f;
+    --secondary-color: #bdd2b6;
+    --text-color: #f8ede3;
 }
 
 body.dark {
     --primary-color: #222831;
-    --bg-color: #393E46;
-    --secondary-color: #00ADB5;
-    --text-color: #EEEEEE;
+    --bg-color: #393e46;
+    --secondary-color: #00adb5;
+    --text-color: #eeeeee;
 }
-
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }

@@ -4,12 +4,21 @@ import { User } from "../../context/AuthContext";
 import { Divider, Image, Descriptions, ConfigProvider } from "antd";
 import type { DescriptionsProps } from "antd";
 import styles from "./Profile.module.css";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+import Badge from "../../features/Badge/Badge";
+import { statsColors } from "../../constants/statsColor";
 
 const img_src = process.env.REACT_APP_IMG_SRC_URL;
 
 const Profile = () => {
     const { user, getUserInfo } = useAuth();
-    const [userInfo, setUserInfo] = useState<User>({ email: "", steam_url: "", photo: "" });
+    const [userInfo, setUserInfo] = useState<User>({
+        email: "",
+        steam_url: "",
+        photo: "",
+        stats: { finished: 0, playing: 0, planned: 0, dropped: 0 },
+    });
 
     useEffect(() => {
         const getInfo = async () => {
@@ -22,6 +31,41 @@ const Profile = () => {
 
         getInfo();
     }, [user]);
+
+    ChartJS.register(ArcElement, Tooltip, Legend);
+
+    const data = {
+        labels: ["Завершено", "В планах", "В процессе", "Брошено"],
+        datasets: [
+            {
+                label: "Количество",
+                data: [userInfo.stats.finished, userInfo.stats.planned, userInfo.stats.playing, userInfo.stats.dropped],
+                backgroundColor: [statsColors.finished, statsColors.planned, statsColors.playing, statsColors.dropped],
+            },
+        ],
+    };
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false,
+            },
+            tooltip: {
+                enabled: false,
+            },
+        },
+        cutout: "45%",
+        elements: {
+            arc: {
+                borderWidth: 0,
+                spacing: 2,
+            },
+        },
+        layout: {
+            padding: 2,
+        },
+    };
 
     const items: DescriptionsProps["items"] = [
         {
@@ -38,12 +82,10 @@ const Profile = () => {
                     onClick={() => {
                         navigator.clipboard.writeText(userInfo.steam_url);
                         console.log("Ссылка была скопирована");
-                    }}
-                >
+                    }}>
                     {userInfo.steam_url}
                 </div>
             ),
-            
         },
     ];
 
@@ -64,16 +106,34 @@ const Profile = () => {
                             token: {
                                 fontSize: 18,
                             },
-                        }}
-                    >
+                        }}>
                         <Descriptions title="Информация о пользователе" items={items} />
                     </ConfigProvider>
                 </div>
             </div>
 
             <Divider style={{ backgroundColor: "var(--primary-color)" }} />
-            <div>
+            <div className="user__stats">
                 <h1>Статистика</h1>
+                <div className="container" style={{ display: "flex", justifyContent: "space-between", width: "600px" }}>
+                    <div className="stats" style={{ margin: "auto 0" }}>
+                        <p>
+                            <Badge color={statsColors.finished} /> Завершено: {userInfo?.stats.finished}
+                        </p>
+                        <p>
+                            <Badge color={statsColors.planned} /> В планах: {userInfo?.stats.planned}
+                        </p>
+                        <p>
+                            <Badge color={statsColors.playing} /> В процессе: {userInfo?.stats.playing}
+                        </p>
+                        <p>
+                            <Badge color={statsColors.dropped} /> Брошено: {userInfo?.stats.dropped}
+                        </p>
+                    </div>
+                    <div className="donut">
+                        <Doughnut data={data} options={options} />
+                    </div>
+                </div>
             </div>
         </div>
     );

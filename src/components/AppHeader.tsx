@@ -24,7 +24,7 @@ const AppHeader = () => {
         if (key === "1") {
             navigate("/profile");
         }
-    }
+    };
 
     const items_theme: MenuProps["items"] = [
         {
@@ -60,8 +60,8 @@ const AppHeader = () => {
             key: "2",
             label: "Выход",
             icon: <LogoutOutlined />,
-            danger: true
-        }
+            danger: true,
+        },
     ];
 
     return (
@@ -74,35 +74,44 @@ const AppHeader = () => {
                                 textHoverBg: "var(--bg-color)",
                             },
                         },
-                    }}
-                >
+                    }}>
                     <Row>
                         <Col span={8} className={style.logo}>
-                            Header
+                            <div
+                                onClick={() => {
+                                    window.location.href = "https://i.ytimg.com/vi/PVyFj52G3no/maxresdefault.jpg";
+                                }}>
+                                Жесткий крутой хедер
+                            </div>
                         </Col>
-                        <Col span={8} offset={8} className={style.settings}>
+                        <Col span={8} className={style.menu}>
+                            <button onClick={() => navigate("/games")} className={style.games__page__btn}>
+                                Страница игр
+                            </button>
+                        </Col>
+                        <Col span={8} className={style.settings}>
                             <Dropdown menu={{ items: items_theme, onClick: onClick_theme }} trigger={["click"]}>
                                 {/* <a onClick={(e) => e.preventDefault()}> */}
-                                    <Space onClick={(e) => e.preventDefault()}>
-                                        <Button
-                                            color="default"
-                                            shape="circle"
-                                            variant="text"
-                                            icon={<BgColorsOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
-                                        />
-                                    </Space>
+                                <Space onClick={(e) => e.preventDefault()}>
+                                    <Button
+                                        color="default"
+                                        shape="circle"
+                                        variant="text"
+                                        icon={<BgColorsOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
+                                    />
+                                </Space>
                                 {/* </a> */}
                             </Dropdown>
                             <Dropdown menu={{ items: items_profile, onClick: onClick_profile }} trigger={["click"]}>
                                 {/* <a onClick={(e) => e.preventDefault()}> */}
-                                    <Space onClick={(e) => e.preventDefault()}>
+                                <Space onClick={(e) => e.preventDefault()}>
                                     <Button
                                         color="default"
                                         shape="circle"
                                         variant="text"
                                         icon={<UserOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
                                     />
-                                    </Space>
+                                </Space>
                                 {/* </a> */}
                             </Dropdown>
                         </Col>
