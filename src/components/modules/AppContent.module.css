@@ -1,0 +1,7 @@
+.content {
+    grid-area: content;
+    overflow-y: auto;
+    /* height: calc(100vh - 60px); */
+    padding: 20px;
+    background-color: var(--bg-color);
+}

@@ -1,0 +1,25 @@
+.header {
+    grid-area: header;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo, .settings{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 100%;
+    padding-right: 10px;
+    padding-top: 13px;
+}
+
+.settings{
+    justify-content: flex-end;
+}
+
+.logo{
+    padding-left: 10px;
+}

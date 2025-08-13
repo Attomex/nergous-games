@@ -1,0 +1,17 @@
+.profile {
+    display: grid;
+    grid-template-areas: 
+        "image info";
+    grid-template-columns: 300px auto;
+    grid-template-rows: 300px auto;
+}
+
+.profile__image {
+    grid-area: image;
+    padding: 10px;
+}
+
+.profile__info {
+    grid-area: info;
+    padding: 10px;
+}

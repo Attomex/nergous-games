@@ -1,0 +1,32 @@
+.sidebar {
+    grid-area: sidebar;
+    position: sticky;
+    width: 250px;
+    top: 60px;
+    background-color: var(--primary-color);
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar button {
+    width: 80%;
+    padding: 10px;
+    margin: 0 auto;
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sidebar button:hover {
+    background-color: #dee2e6;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    gap: 10px;
+}

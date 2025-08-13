@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
+import GamePage from "./pages/GamePage/GamePage";
+import LoginRegPage from "./pages/Auth/LoginRegPage";
+import Profile from "./pages/ProfilePage/Profile";
+import { AuthProvider } from "./context/AuthContext";
+import Lander from "./pages/LanderPage/Lander";
+import ProtectedRoute from "./provider/ProtectedRouteProvider";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <Routes>
+                    <Route
+                        path="/*"
+                        element={
+                            <ProtectedRoute>
+                                <MainLayout>
+                                    <Routes>
+                                        <Route path="/games" element={<GamePage />} />
+                                        <Route path="/profile" element={<Profile />} />
+                                        <Route path="/*" element={<Navigate to="/profile" />} />
+                                    </Routes>
+                                </MainLayout>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route path="/" element={<Lander />} />
+                    <Route
+                        path="/login"
+                        element={
+                            <ProtectedRoute>
+                                <LoginRegPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Routes>
+            </AuthProvider>
+        </BrowserRouter>
+    );
 }
 
 export default App;

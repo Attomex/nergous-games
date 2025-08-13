@@ -1,0 +1,116 @@
+import { Col, Row, Button, Dropdown, Space, ConfigProvider, Badge } from "antd";
+import { UserOutlined, BgColorsOutlined, MoonOutlined, InfoCircleOutlined, LogoutOutlined } from "@ant-design/icons";
+import type { MenuProps } from "antd";
+import style from "./modules/AppHeader.module.css";
+import { useTheme } from "../provider/ThemeProvider";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+const AppHeader = () => {
+    const { theme, setTheme, themes } = useTheme();
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const onClick_theme: MenuProps["onClick"] = ({ key }) => {
+        const selectedTheme = themes[Number(key) - 1];
+        setTheme(selectedTheme);
+    };
+
+    const onClick_profile: MenuProps["onClick"] = ({ key }) => {
+        if (key === "2") {
+            logout();
+            navigate("/login");
+        }
+        if (key === "1") {
+            navigate("/profile");
+        }
+    }
+
+    const items_theme: MenuProps["items"] = [
+        {
+            key: "1",
+            label: "Молочно-коричневый",
+            extra: theme === "milk-brown" ? <Badge status="processing" /> : null,
+        },
+        {
+            key: "2",
+            label: "Молочно-фиолетовый",
+            extra: theme === "milk-fiol" ? <Badge status="processing" /> : null,
+        },
+        {
+            key: "3",
+            label: "Молочно-зеленый",
+            extra: theme === "milk-green" ? <Badge status="processing" /> : null,
+        },
+        {
+            key: "4",
+            label: "Темная тема",
+            icon: <MoonOutlined />,
+            extra: theme === "dark" ? <Badge status="processing" /> : null,
+        },
+    ];
+
+    const items_profile: MenuProps["items"] = [
+        {
+            key: "1",
+            label: "Информация",
+            icon: <InfoCircleOutlined />,
+        },
+        {
+            key: "2",
+            label: "Выход",
+            icon: <LogoutOutlined />,
+            danger: true
+        }
+    ];
+
+    return (
+        <div className={style.header}>
+            <div>
+                <ConfigProvider
+                    theme={{
+                        components: {
+                            Button: {
+                                textHoverBg: "var(--bg-color)",
+                            },
+                        },
+                    }}
+                >
+                    <Row>
+                        <Col span={8} className={style.logo}>
+                            Header
+                        </Col>
+                        <Col span={8} offset={8} className={style.settings}>
+                            <Dropdown menu={{ items: items_theme, onClick: onClick_theme }} trigger={["click"]}>
+                                {/* <a onClick={(e) => e.preventDefault()}> */}
+                                    <Space onClick={(e) => e.preventDefault()}>
+                                        <Button
+                                            color="default"
+                                            shape="circle"
+                                            variant="text"
+                                            icon={<BgColorsOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
+                                        />
+                                    </Space>
+                                {/* </a> */}
+                            </Dropdown>
+                            <Dropdown menu={{ items: items_profile, onClick: onClick_profile }} trigger={["click"]}>
+                                {/* <a onClick={(e) => e.preventDefault()}> */}
+                                    <Space onClick={(e) => e.preventDefault()}>
+                                    <Button
+                                        color="default"
+                                        shape="circle"
+                                        variant="text"
+                                        icon={<UserOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
+                                    />
+                                    </Space>
+                                {/* </a> */}
+                            </Dropdown>
+                        </Col>
+                    </Row>
+                </ConfigProvider>
+            </div>
+        </div>
+    );
+};
+
+export default AppHeader;
