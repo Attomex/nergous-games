@@ -75,19 +75,27 @@ const AppHeader = () => {
                             },
                         },
                     }}>
-                    <Row>
+                    <Row align="middle">
                         <Col span={8} className={style.logo}>
                             <div
                                 onClick={() => {
                                     window.location.href = "https://i.ytimg.com/vi/PVyFj52G3no/maxresdefault.jpg";
                                 }}>
-                                Жесткий крутой хедер
+                                не тыкать
                             </div>
                         </Col>
-                        <Col span={8} className={style.menu}>
-                            <button onClick={() => navigate("/games")} className={style.games__page__btn}>
-                                Страница игр
-                            </button>
+                        <Col span={8}>
+                            <div className={style.menu}>
+                                <button onClick={() => navigate("/all-games")} className={style.games__page__btn}>
+                                    Все игры
+                                </button>
+                                <button onClick={() => navigate("/games")} className={style.games__page__btn}>
+                                    Страница игр
+                                </button>
+                                <button onClick={() => navigate("/updates")} className={style.games__page__btn}>
+                                    Обновления
+                                </button>
+                            </div>
                         </Col>
                         <Col span={8} className={style.settings}>
                             <Dropdown menu={{ items: items_theme, onClick: onClick_theme }} trigger={["click"]}>

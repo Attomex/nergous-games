@@ -8,8 +8,7 @@
 }
 
 .logo,
-.settings,
-.menu {
+.settings {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -26,6 +25,15 @@
     padding: 8px;
     margin: auto 0;
     font-size: 1rem;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 100%;
+    padding-top: 13px;
+    margin: 0 auto;
 }
 
 .games__page__btn {

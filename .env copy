@@ -3,3 +3,5 @@ REACT_APP_API_URL=https://games.nergous.ru/api
 REACT_APP_IMG_SRC_URL=https://games.nergous.ru/uploads/
 
 REACT_APP_ID=1
+
+REACT_APP_UPDATES_PATH=./updates.json

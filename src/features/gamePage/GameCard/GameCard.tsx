@@ -74,11 +74,11 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
     const updateGame = async (key: string, value: string | number) => {
         try {
             await api()
-                .put(`/games/${gameInfo.id}`, {
+                .put(`/games/${gameInfo.id}/${key}`, {
                     ...gameInfo,
                     [key]: value,
                 })
-                .then((response) => {
+                .then(() => {
                     showSuccessNotification(`Было обновлено! Обновлено ${key} на ${value}`);
                 });
         } catch (err) {
@@ -108,9 +108,7 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
                     <div className={styles.title}>{gameInfo.title}</div>
                     <div className={styles.year}>{gameInfo.year}</div>
                 </header>
-
                 <div className={styles.genres}>Жанры: {gameInfo.genre}</div>
-
                 {/* <div className={styles.rating} >Ваша оценка: 8</div> */}
                 <ConfigProvider
                     theme={{
@@ -123,37 +121,45 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
                             },
                         },
                     }}>
-                    <Space className={styles.rating}>
-                        <div className={styles.rating__container}>
-                            Приоритет:
-                            <Rate className={styles.rating__rate} allowHalf defaultValue={gameInfo.priority / 2} onChange={changePriority} />
-                        </div>
-                        <Tag bordered={false} className={willUpdate ? styles.rating__update : styles.rating__update__hidden} onClick={updatePriority}>
-                            Обновить
-                        </Tag>
-                    </Space>
+                    {status !== undefined && (
+                        <Space className={styles.rating}>
+                            <div className={styles.rating__container}>
+                                Приоритет:
+                                <Rate className={styles.rating__rate} allowHalf defaultValue={gameInfo.priority / 2} onChange={changePriority} />
+                            </div>
+                            <Tag
+                                bordered={false}
+                                className={willUpdate ? styles.rating__update : styles.rating__update__hidden}
+                                onClick={updatePriority}>
+                                Обновить
+                            </Tag>
+                        </Space>
+                    )}
                 </ConfigProvider>
                 <Divider className={styles.divider} />
-
                 <div className={styles.description}>{gameInfo.preambula}</div>
-
                 <footer className={styles.footer}>
                     <div className={styles.developer}>
-                        <strong>Разработчик:</strong>
-                        <br />
-                        {gameInfo.developer}
+                        <div className={styles.developerContent}>
+                            <strong>Разработчик:</strong>
+                            <br />
+                            {gameInfo.developer}
+                        </div>
                     </div>
                     <div className={styles.publisher}>
-                        <strong>Издатель:</strong>
-                        <br />
-                        {gameInfo.publisher}
+                        <div className={styles.publisherContent}>
+                            <strong>Издатель:</strong>
+                            <br />
+                            {gameInfo.publisher}
+                        </div>
                     </div>
                 </footer>
                 {/* <div className={styles.status}>{gameInfo.status}</div> */}
                 <Dropdown menu={{ items: statuses, onClick: onChangeStatus }} trigger={["click"]} className={styles.status}>
                     <div onClick={(e) => e.preventDefault()}>
                         <CaretDownOutlined style={{ marginRight: "4px" }} />
-                        {status}
+
+                        {status !== undefined ? status : "Не выбрано"}
                     </div>
                 </Dropdown>
             </div>
