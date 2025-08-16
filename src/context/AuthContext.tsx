@@ -92,7 +92,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
             const decodeJWT = jwtDecode(auth_token as string);
             const parseJWT = await JSON.parse(JSON.stringify(decodeJWT));
 
-            setIsAdmin(parseJWT?.isAdmin || false);
+            setIsAdmin(parseJWT?.is_admin || false);
         } catch (error) {
             console.error(error);
         }

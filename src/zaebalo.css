@@ -25,3 +25,12 @@
     border-color: var(--primary-color) !important;
     box-shadow: none !important;
 }
+
+
+/* Тут оставил для ConfigProvider у DropDown */
+/* colorBgElevated: "#1a1a1a", // Фон меню
+colorText: "#fff", // Цвет текста
+controlItemBgHover: "#333", // Фон при наведении
+controlItemBgActive: "#444", // Фон активного элемента
+borderRadiusLG: 8, // Скругление углов
+paddingXS: 12, // Отступы внутри меню */

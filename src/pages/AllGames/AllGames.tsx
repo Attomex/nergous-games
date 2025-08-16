@@ -1,13 +1,14 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import GameCard from "../../features/gamePage/GameCard/GameCard";
 import styles from "./AllGames.module.css";
 import api from "../../api/api";
-import { Button, Dropdown, Space, Pagination, ConfigProvider, Tabs, Input, Select } from "antd";
+import { Button, Dropdown, Space, ConfigProvider, Input, Select } from "antd";
 import type { MenuProps } from "antd";
 import CreateGameModal from "../../features/gamePage/CreateGameModal/CreateGameModal";
 import AddGamesModal from "../../features/gamePage/AddGamesModal/AddGamesModal";
 import { useAuth } from "../../context/AuthContext";
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
+import Pagination from "../../features/Paginations/Paginations";
 
 export interface GameInfo {
     id: number;
@@ -106,7 +107,8 @@ const AllGames: React.FC = () => {
                                         defaultHoverBorderColor: "var(--secondary-color)",
                                     },
                                 },
-                            }}>
+                            }}
+                        >
                             <Button>Добавить</Button>
                         </ConfigProvider>
                     </Space>
@@ -147,19 +149,7 @@ const AllGames: React.FC = () => {
             </div>
 
             <>
-                <Pagination
-                    total={totalItems}
-                    current={page}
-                    align="center"
-                    showQuickJumper
-                    showSizeChanger={false}
-                    pageSize={pageSize}
-                    onChange={(p) => setPage(p)}
-                    locale={{
-                        page: "",
-                        jump_to: "Перейти к",
-                    }}
-                />
+                <Pagination totalItems={totalItems} currentPage={page} pageSize={pageSize} onChange={(p) => setPage(p)} />
 
                 <div className={styles.cardsWrapper}>
                     {userGames !== undefined && userGames.length > 0 ? (

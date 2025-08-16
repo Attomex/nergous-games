@@ -5,6 +5,7 @@ import style from "./modules/AppHeader.module.css";
 import { useTheme } from "../provider/ThemeProvider";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { DropdownStyled } from "../styled-components";
 
 const AppHeader = () => {
     const { theme, setTheme, themes } = useTheme();
@@ -74,13 +75,15 @@ const AppHeader = () => {
                                 textHoverBg: "var(--bg-color)",
                             },
                         },
-                    }}>
+                    }}
+                >
                     <Row align="middle">
                         <Col span={8} className={style.logo}>
                             <div
                                 onClick={() => {
                                     window.location.href = "https://i.ytimg.com/vi/PVyFj52G3no/maxresdefault.jpg";
-                                }}>
+                                }}
+                            >
                                 не тыкать
                             </div>
                         </Col>
@@ -90,7 +93,7 @@ const AppHeader = () => {
                                     Все игры
                                 </button>
                                 <button onClick={() => navigate("/games")} className={style.games__page__btn}>
-                                    Страница игр
+                                    Мои игры
                                 </button>
                                 <button onClick={() => navigate("/updates")} className={style.games__page__btn}>
                                     Обновления
@@ -98,30 +101,32 @@ const AppHeader = () => {
                             </div>
                         </Col>
                         <Col span={8} className={style.settings}>
-                            <Dropdown menu={{ items: items_theme, onClick: onClick_theme }} trigger={["click"]}>
-                                {/* <a onClick={(e) => e.preventDefault()}> */}
-                                <Space onClick={(e) => e.preventDefault()}>
-                                    <Button
-                                        color="default"
-                                        shape="circle"
-                                        variant="text"
-                                        icon={<BgColorsOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
-                                    />
-                                </Space>
-                                {/* </a> */}
-                            </Dropdown>
-                            <Dropdown menu={{ items: items_profile, onClick: onClick_profile }} trigger={["click"]}>
-                                {/* <a onClick={(e) => e.preventDefault()}> */}
-                                <Space onClick={(e) => e.preventDefault()}>
-                                    <Button
-                                        color="default"
-                                        shape="circle"
-                                        variant="text"
-                                        icon={<UserOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
-                                    />
-                                </Space>
-                                {/* </a> */}
-                            </Dropdown>
+                            <DropdownStyled>
+                                <Dropdown menu={{ items: items_theme, onClick: onClick_theme }} trigger={["click"]}>
+                                    {/* <a onClick={(e) => e.preventDefault()}> */}
+                                    <Space onClick={(e) => e.preventDefault()}>
+                                        <Button
+                                            color="default"
+                                            shape="circle"
+                                            variant="text"
+                                            icon={<BgColorsOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
+                                        />
+                                    </Space>
+                                    {/* </a> */}
+                                </Dropdown>
+                                <Dropdown menu={{ items: items_profile, onClick: onClick_profile }} trigger={["click"]}>
+                                    {/* <a onClick={(e) => e.preventDefault()}> */}
+                                    <Space onClick={(e) => e.preventDefault()}>
+                                        <Button
+                                            color="default"
+                                            shape="circle"
+                                            variant="text"
+                                            icon={<UserOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
+                                        />
+                                    </Space>
+                                    {/* </a> */}
+                                </Dropdown>
+                            </DropdownStyled>
                         </Col>
                     </Row>
                 </ConfigProvider>

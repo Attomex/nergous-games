@@ -2,14 +2,14 @@ import React, { useState, useMemo, useCallback, useEffect } from "react";
 import GameCard from "../../features/gamePage/GameCard/GameCard";
 import styles from "./GamePage.module.css";
 import api from "../../api/api";
-import { Button, Dropdown, Space, Pagination, ConfigProvider, Tabs, Input, Select } from "antd";
+import { Button, Dropdown, Space, ConfigProvider, Tabs, Input, Select } from "antd";
 import type { MenuProps } from "antd";
 import CreateGameModal from "../../features/gamePage/CreateGameModal/CreateGameModal";
 import AddGamesModal from "../../features/gamePage/AddGamesModal/AddGamesModal";
 import { useAuth } from "../../context/AuthContext";
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
-import Config from "chart.js/dist/core/core.config";
-import "./zaebalo.css";
+import { ButtonStyled, DropdownStyled, SelectStyled, InputSearchStyled } from "../../styled-components";
+import Pagination from "../../features/Paginations/Paginations";
 
 export interface GameInfo {
     id: number;
@@ -105,30 +105,21 @@ const GamePage: React.FC = () => {
     const GamesList = useMemo(() => {
         return (
             <>
-                <Pagination
-                    className="styled-pagination"
-                    total={totalItems}
-                    current={page}
-                    align="center"
-                    showQuickJumper
-                    showSizeChanger={false}
-                    pageSize={pageSize}
-                    onChange={(p) => setPage(p)}
-                    locale={{
-                        page: "",
-                        jump_to: "Перейти к",
-                    }}
-                />
-
                 <div className={styles.cardsWrapper}>
                     {userGames !== undefined && userGames.length > 0 ? (
                         userGames.map((g) => (
-                            <GameCard key={g.id} gameInfo={g} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })} />
+                            <GameCard
+                                key={g.id}
+                                gameInfo={g}
+                                updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })}
+                            />
                         ))
                     ) : (
                         <div>Пусто</div>
                     )}
                 </div>
+
+                <Pagination totalItems={totalItems} currentPage={page} pageSize={pageSize} onChange={setPage} />
 
                 {isPending && <div style={{ textAlign: "center", marginTop: 8 }}>Обновление...</div>}
                 {isError && <div style={{ color: "red" }}>Ошибка при загрузке игр.</div>}
@@ -154,58 +145,17 @@ const GamePage: React.FC = () => {
     return (
         <>
             <div style={{ marginBottom: 20, display: "flex", gap: 16, alignItems: "center" }}>
-                <Dropdown menu={{ items: itemsGame, onClick }} trigger={["click"]}>
-                    <Space>
-                        <ConfigProvider
-                            theme={{
-                                components: {
-                                    Button: {
-                                        colorText: "var(--text-color)",
-                                        defaultBg: "var(--primary-color)",
-                                        colorBorder: "var(--bg-color)",
-                                        defaultActiveColor: "var(--text-color)",
-                                        defaultActiveBg: "var(--primary-color)",
-                                        defaultActiveBorderColor: "var(--bg-color)",
-                                        defaultHoverColor: "var(--primary-color)",
-                                        defaultHoverBg: "var(--secondary-color)",
-                                        defaultHoverBorderColor: "var(--secondary-color)",
-                                    },
-                                },
-                            }}>
-                            <Button>Добавить</Button>
-                        </ConfigProvider>
-                    </Space>
-                </Dropdown>
-                <ConfigProvider
-                    theme={{
-                        token: {
-                            colorPrimary: "var(--primary-color)",
-                            colorIcon: "var(--primary-color)",
-                        },
-                        components: {
-                            Input: {
-                                activeBorderColor: "var(--primary-color)",
-                                activeShadow: "var(--primary-color)",
-                                hoverBorderColor: "var(--primary-color)",
-                            },
-                            Button: {
-                                defaultHoverBorderColor: "var(--primary-color)",
-                                defaultActiveBorderColor: "var(--primary-color)",
-                                defaultColor: "var(--primary-color)",
-                                defaultActiveColor: "var(--primary-color)",
-                                defaultHoverColor: "var(--primary-color)",
-                            },
-                            Select: {
-                                activeBorderColor: "var(--primary-color)",
-                                activeOutlineColor: "none",
-                                clearBg: "var(--text-color)",
-                                multipleItemBg: "white",
-                                selectorBg: "white",
-                                optionSelectedColor: "var(--primary-color)",
-                                optionSelectedBg: "var(--secondary-color)",
-                            },
-                        },
-                    }}>
+                <DropdownStyled>
+                    <ButtonStyled>
+                        <Dropdown menu={{ items: itemsGame, onClick }} trigger={["click"]}>
+                            <Space>
+                                <Button>Добавить</Button>
+                            </Space>
+                        </Dropdown>
+                    </ButtonStyled>
+                </DropdownStyled>
+
+                <InputSearchStyled globalToken={{ colorPrimary: "var(--primary-color)", colorIcon: "var(--primary-color)" }}>
                     <Input.Search
                         placeholder="Поиск игр..."
                         allowClear
@@ -213,6 +163,9 @@ const GamePage: React.FC = () => {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
+                </InputSearchStyled>
+
+                <SelectStyled>
                     <Select
                         value={sortBy}
                         onChange={(v) => {
@@ -239,7 +192,7 @@ const GamePage: React.FC = () => {
                             { label: "По возрастанию", value: "asc" },
                         ]}
                     />
-                </ConfigProvider>
+                </SelectStyled>
             </div>
 
             <ConfigProvider
@@ -254,7 +207,8 @@ const GamePage: React.FC = () => {
                             cardGutter: 10,
                         },
                     },
-                }}>
+                }}
+            >
                 <Tabs items={tabItems} type="card" defaultActiveKey="1" onChange={onChangeTab} />
             </ConfigProvider>
 

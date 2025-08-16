@@ -3,5 +3,6 @@
     flex-wrap: wrap;
     gap: 6px;
     justify-content: flex-start;
+    pointer-events: none;
     /* padding: 20px; */
 }
