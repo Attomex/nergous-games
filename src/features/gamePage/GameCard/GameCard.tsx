@@ -10,7 +10,7 @@ import EditGameInfoModal from "../EditGameInfoModal/EditGameInfoModal";
 import { showErrorNotification, showSuccessNotification } from "../../Notification/Notification";
 import { statsColors } from "../../../constants/statsColor";
 import { useAuth } from "../../../context/AuthContext";
-import { ButtonStyled, DropdownStyled } from "../../../styled-components";
+import { ButtonStyled, DropdownStyled, DividerStyled } from "../../../styled-components";
 import GameDetailModal from "../GameDetailModal/GameDetailModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSteam, faWikipediaW } from "@fortawesome/free-brands-svg-icons";
@@ -116,13 +116,16 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
             source: "",
         };
         if (url.includes("wikipedia")) {
-            set.color = "#f3956a";
+            // set.color = "#f3956a";
+            set.color = "#3366cc";
             set.source = "wikipedia";
         } else if (url.includes("steampowered")) {
-            set.color = "#bfbfbf";
+            // set.color = "#bfbfbf";
+            set.color = "#171a21";
             set.source = "steam";
         } else {
-            set.color = "#49aa19";
+            set.color = "#0facb8ff";
+            // set.color = "#8e44ad";
             set.source = "other";
         }
 
@@ -152,11 +155,10 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
                             Tag: {
                                 defaultBg: getColor(gameInfo.status),
                                 colorBorder: getColor(gameInfo.status),
-                                defaultColor: "#000000ff",
+                                defaultColor: "#ffffffff",
                             },
                         },
-                    }}
-                >
+                    }}>
                     <Tag className={styles.status__tag__text}>{status !== undefined ? status : "Не выбрано"}</Tag>
                 </ConfigProvider>
             </div>
@@ -168,11 +170,10 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
                             Tag: {
                                 defaultBg: set.color,
                                 colorBorder: set.color,
-                                defaultColor: "#000000ff",
+                                defaultColor: "#ffffffff",
                             },
                         },
-                    }}
-                >
+                    }}>
                     <Tag className={styles.source__tag}>
                         <FontAwesomeIcon
                             icon={set.source === "wikipedia" ? faWikipediaW : set.source === "steam" ? faSteam : faCircleQuestion}
@@ -184,23 +185,25 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
             </div>
 
             <div className={styles.details}>
-                <header className={styles.title}>{gameInfo.title}</header>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <header className={styles.title}>{gameInfo.title}</header>
+                    <div className={styles.year}>{gameInfo.year || "Не указано"}</div>
+                </div>
+
                 <div className={styles.genres}>{gameInfo.genre.replace(/,\s*/g, " / ")}</div>
-                <Divider className={styles.divider} />
+                <DividerStyled>
+                    <Divider className={styles.divider} />
+                </DividerStyled>
 
                 <div className={styles.rating__year}>
                     <ConfigProvider
                         theme={{
                             components: {
                                 Rate: {
-                                    starBg: "var(--bg-color)",
-                                },
-                                Tag: {
-                                    defaultBg: "var(--bg-color)",
+                                    starBg: "var(--third-color)",
                                 },
                             },
-                        }}
-                    >
+                        }}>
                         {/* Добавляем пустой контейнер для сохранения пространства слева */}
                         <div className={styles.rating__container}>
                             {status !== undefined && (
@@ -217,16 +220,13 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
                                     <Tag
                                         bordered={false}
                                         className={willUpdate ? styles.rating__update : styles.rating__update__hidden}
-                                        onClick={updatePriority}
-                                    >
+                                        onClick={updatePriority}>
                                         Обновить
                                     </Tag>
                                 </Space>
                             )}
                         </div>
                     </ConfigProvider>
-
-                    <div className={styles.year}>{gameInfo.year || "Не указано"}</div>
                 </div>
                 <DropdownStyled>
                     <ButtonStyled>
@@ -235,22 +235,18 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
                                 <CaretDownOutlined style={{ marginRight: "4px" }} />
                                 Изменить статус
                             </div> */}
-                            <Button icon={<CaretDownOutlined />}>Изменить статус</Button>
+                            <Button style={{ fontSize: "0.8rem" }}>Изменить статус</Button>
                         </Dropdown>
                     </ButtonStyled>
                 </DropdownStyled>
             </div>
-            {editGameInfoModal ? (
-                <EditGameInfoModal
-                    gameInfo={gameInfo}
-                    updateUsersGames={updateUsersGames}
-                    isModalOpen={editGameInfoModal}
-                    closeModal={() => setEditGameInfoModal(false)}
-                />
-            ) : null}
-            {gameDetails ? (
-                <GameDetailModal gameInfo={gameInfo} isModalOpen={gameDetails} closeModal={() => setGameDetails(false)} imgSource={img_source} />
-            ) : null}
+            <EditGameInfoModal
+                gameInfo={gameInfo}
+                updateUsersGames={updateUsersGames}
+                isModalOpen={editGameInfoModal}
+                closeModal={() => setEditGameInfoModal(false)}
+            />
+            <GameDetailModal gameInfo={gameInfo} isModalOpen={gameDetails} closeModal={() => setGameDetails(false)} imgSource={img_source} />
         </div>
     );
 };

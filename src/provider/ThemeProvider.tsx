@@ -28,8 +28,12 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const setTheme = (newTheme: Theme) => {
         if (itemsTheme.includes(newTheme)) {
-            // console.log("newTheme", newTheme);
-            setCurrentTheme(newTheme);
+            if (newTheme === "system") {
+                const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                setCurrentTheme(systemTheme ? "system-dark" : "system-light");
+            } else {
+                setCurrentTheme(newTheme);
+            }
         }
     };
 

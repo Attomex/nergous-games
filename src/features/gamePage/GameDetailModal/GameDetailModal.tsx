@@ -1,6 +1,7 @@
 import { GameInfo } from "../../../pages/GamePage/GamePage";
+import { DividerStyled } from "../../../styled-components";
 import styles from "./GameDetailModal.module.css";
-import { Modal, ConfigProvider, Rate, Button } from "antd";
+import { Modal, ConfigProvider, Rate, Button, Divider, Image } from "antd";
 
 interface GameDetailModalProps {
     gameInfo: GameInfo;
@@ -11,22 +12,10 @@ interface GameDetailModalProps {
 
 const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isModalOpen, closeModal, imgSource }) => {
     return (
-        <Modal
-            open={isModalOpen}
-            footer={
-                <div className={styles.footer}>
-                    <Button onClick={closeModal}>Cancel</Button>
-                    <Button type="primary">Play</Button>
-                </div>
-            }
-            closable
-            onCancel={closeModal}
-            className={styles.modal}
-            centered
-        >
+        <Modal open={isModalOpen} footer={null} closable onCancel={closeModal} centered>
             <div className={styles.content}>
                 <div className={styles.imageWrapper}>
-                    <img src={imgSource + gameInfo.image} alt={gameInfo.title} />
+                    <Image src={imgSource + gameInfo.image} alt={gameInfo.title} />
                 </div>
                 <div className={styles.info}>
                     <h2 className={styles.title}>{gameInfo.title}</h2>
@@ -36,11 +25,10 @@ const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isModalOpen
                             theme={{
                                 components: {
                                     Rate: {
-                                        starBg: "var(--bg-color)",
+                                        starBg: "var(--third-color)",
                                     },
                                 },
-                            }}
-                        >
+                            }}>
                             <Rate allowHalf defaultValue={gameInfo.priority / 2} disabled />
                         </ConfigProvider>
                         <span className={styles.year}>2025</span>
@@ -48,16 +36,20 @@ const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isModalOpen
                 </div>
             </div>
 
+            <DividerStyled>
+                <Divider />
+            </DividerStyled>
+
             <p className={styles.description}>{gameInfo.preambula}</p>
             <a className={styles.showMore} href={gameInfo.url} target="_blank" rel="noopener noreferrer">
-                Show more
+                Узнать больше
             </a>
 
             <p>
-                <strong>Developer:</strong> {gameInfo.developer}
+                <strong>Разработчик:</strong> {gameInfo.developer}
             </p>
             <p>
-                <strong>Publisher:</strong> {gameInfo.publisher}
+                <strong>Издатель:</strong> {gameInfo.publisher}
             </p>
         </Modal>
     );

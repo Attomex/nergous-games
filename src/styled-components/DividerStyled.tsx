@@ -1,14 +1,12 @@
 import { ConfigProvider, ThemeConfig } from "antd";
 import { GeneralInterfaceProps } from "./GeneralInterface";
 
-export const InputSearchStyled: React.FC<GeneralInterfaceProps> = ({ children, globalToken = {} }) => {
+export const DividerStyled: React.FC<GeneralInterfaceProps> = ({ children, globalToken = {} }) => {
     const theme: ThemeConfig = {
         token: globalToken,
         components: {
-            Input: {
-                activeBorderColor: "var(--secondary-color)",
-                activeShadow: "var(--primary-color)",
-                hoverBorderColor: "var(--secondary-color)",
+            Divider: {
+                colorSplit: "var(--third-color)",
             },
         },
     };

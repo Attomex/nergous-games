@@ -1,30 +1,114 @@
-body.milk-brown {
-    --primary-color: #ad8b73;
-    --bg-color: #ceab93;
-    --secondary-color: #e3caa5;
-    --text-color: #fffbe9;
+body.system-light,
+body.light {
+    /* --primary-color: #2e2e2e; */
+    --primary-color: #ffffff;
+    --secondary-color: #474747;
+    --third-color: #a1a1a1;
+    /* --text-color: #f4eeff; */
+    --text-color: #2e2e2e;
+    --text-reverse-color: #ffffff;
+    --bg-color: #ffffff;
+    --accent-color: #1677ff;
+
+    --primary-color-rgb: 255, 255, 255;
+    --secondary-color-rgb: 71, 71, 71;
+    --third-color-rgb: 161, 161, 161;
+    --text-color-rgb: 46, 46, 46;
+    --bg-color-rgb: 255, 255, 255;
+    --accent-color-rgb: 22, 119, 255;
 }
 
-body.milk-fiol {
-    --primary-color: #424874;
-    --bg-color: #a6b1e1;
-    --secondary-color: #dcd6f7;
-    --text-color: #f4eeff;
+body.system-dark,
+body.dark {
+    --primary-color: #1d1d1d; /* Был белым → стал тёмным */
+    --secondary-color: #474747; /* Был #474747 → сделал светлее */
+    --third-color: #414141; /* Был #a1a1a1 → затемнил */
+    --text-color: #ffffff; /* Был тёмным → стал светлым */
+    --text-reverse-color: #2e2e2e; /* Обратный к тексту */
+    --bg-color: #121212; /* Был белый → глубокий тёмный */
+    --accent-color: #ff0000; /* Акцент оставляем тем же */
+
+    --primary-color-rgb: 46, 46, 46;
+    --secondary-color-rgb: 184, 184, 184;
+    --third-color-rgb: 90, 90, 90;
+    --text-color-rgb: 244, 238, 255;
+    --bg-color-rgb: 18, 18, 18;
+    --accent-color-rgb: 255, 0, 0;
+}
+
+body.milk-brown {
+    --primary-color: #ad8b73; /* Основной, самый насыщенный коричневый */
+    --secondary-color: #e3caa5; /* Светлый, молочно-бежевый */
+    --third-color: #9a7c65; /* Дополнительный, чуть темнее основного для акцентов/рамок */
+    --text-color: #fffbe9; /* Текст, цвет топленого молока */
+    --text-reverse-color: #644d3d; /* Обратный цвет текста, глубокий кофейный */
+    --bg-color: #ceab93; /* Фон, цвет кофе с молоком */
+    --accent-color: #d97706; /* Акцентный, теплый карамельно-янтарный */
+    --gradient-bg: linear-gradient(180deg, var(--bg-color), var(--secondary-color)); /* Плавный градиент фона */
+
+    --primary-color-rgb: 173, 139, 115;
+    --secondary-color-rgb: 227, 202, 165;
+    --third-color-rgb: 154, 124, 101;
+    --text-color-rgb: 255, 251, 233;
+    --text-reverse-color-rgb: 100, 77, 61;
+    --bg-color-rgb: 206, 171, 147;
+    --accent-color-rgb: 217, 119, 6;
+}
+
+body.milk-green {
+    --primary-color: #798777; /* Основной, приглушенный зеленый, цвет мха */
+    --secondary-color: #bdd2b6; /* Очень светлый, пастельно-зеленый */
+    --third-color: #657165; /* Дополнительный, темный серо-зеленый для рамок */
+    --text-color: #f8ede3; /* Текст, теплый кремовый оттенок */
+    --text-reverse-color: #3c4d3a; /* Обратный цвет текста, глубокий лесной зеленый */
+    --bg-color: #a2b29f; /* Фон, цвет шалфея */
+    --accent-color: #64b5b0;
+    --gradient-bg: linear-gradient(180deg, var(--bg-color), var(--secondary-color)); /* Плавный градиент фона */
+
+    --primary-color-rgb: 121, 135, 119;
+    --secondary-color-rgb: 189, 210, 182;
+    --third-color-rgb: 101, 113, 101;
+    --text-color-rgb: 248, 237, 227;
+    --text-reverse-color-rgb: 60, 77, 58;
+    --bg-color-rgb: 162, 178, 159;
+    --accent-color-rgb: 100, 181, 176;
+}
+
+/* ========================================================================== */
+
+/* body.milk-brown {
+    --primary-color: #ad8b73;
+    --secondary-color: #e3caa5;
+    --third-color: #9c6c58;
+    --text-color: #2e2e2e;
+    --text-reverse-color: #ffffff;
+    --bg-color: #f4f0e9;
+    --accent-color: #795548;
+
+    --primary-color-rgb: 173, 139, 115;
+    --secondary-color-rgb: 227, 202, 165;
+    --third-color-rgb: 156, 108, 88;
+    --text-color-rgb: 46, 46, 46;
+    --bg-color-rgb: 244, 240, 233;
+    --accent-color-rgb: 121, 85, 72;
 }
 
 body.milk-green {
     --primary-color: #798777;
-    --bg-color: #a2b29f;
     --secondary-color: #bdd2b6;
-    --text-color: #f8ede3;
-}
+    --third-color: #556054;
+    --text-color: #2e2e2e;
+    --text-reverse-color: #ffffff;
+    --bg-color: #f0f4ee;
+    --accent-color: #4b6a4a;
 
-body.dark {
-    --primary-color: #222831;
-    --bg-color: #393e46;
-    --secondary-color: #00adb5;
-    --text-color: #eeeeee;
-}
+    --primary-color-rgb: 121, 135, 119;
+    --secondary-color-rgb: 189, 210, 182;
+    --third-color-rgb: 85, 96, 84;
+    --text-color-rgb: 46, 46, 46;
+    --bg-color-rgb: 240, 244, 238;
+    --accent-color-rgb: 75, 106, 74;
+} */
 
 body {
     margin: 0;

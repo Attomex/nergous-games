@@ -6,7 +6,7 @@ import Profile from "./pages/ProfilePage/Profile";
 import { AuthProvider } from "./context/AuthContext";
 import Lander from "./pages/LanderPage/Lander";
 import ProtectedRoute from "./provider/ProtectedRouteProvider";
-import Update from "./pages/UpdatePage/Update";
+import Update from "./pages/UpdatePage/UpdatePage";
 import AllGames from "./pages/AllGames/AllGames";
 
 function App() {

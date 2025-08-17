@@ -6,15 +6,19 @@ const { Title, Text } = Typography;
 const Update = () => {
     return (
         <div style={{ maxWidth: 800, margin: "0 auto", padding: "20px" }}>
-            <Title level={2}>Обновления</Title>
+            <Title level={2} style={{ color: "var(--text-color)" }}>
+                Обновления
+            </Title>
             <Divider />
             {sortedUpdates.map((updateItem, index) => (
                 <Card
                     key={index}
                     style={{ marginBottom: 20 }}
                     title={
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <Title level={3}>{updateItem.title}</Title>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", textAlign: "center" }}>
+                            <Title level={3} style={{ marginBottom: "24px" }}>
+                                {updateItem.title}
+                            </Title>
                             <Text type="secondary">{updateItem.date}</Text>
                         </div>
                     }>

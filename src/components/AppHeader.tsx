@@ -1,5 +1,5 @@
 import { Col, Row, Button, Dropdown, Space, ConfigProvider, Badge } from "antd";
-import { UserOutlined, BgColorsOutlined, MoonOutlined, InfoCircleOutlined, LogoutOutlined } from "@ant-design/icons";
+import { UserOutlined, BgColorsOutlined, MoonOutlined, InfoCircleOutlined, LogoutOutlined, SunOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import style from "./modules/AppHeader.module.css";
 import { useTheme } from "../provider/ThemeProvider";
@@ -33,21 +33,35 @@ const AppHeader = () => {
             label: "Молочно-коричневый",
             extra: theme === "milk-brown" ? <Badge status="processing" /> : null,
         },
+
         {
             key: "2",
-            label: "Молочно-фиолетовый",
-            extra: theme === "milk-fiol" ? <Badge status="processing" /> : null,
-        },
-        {
-            key: "3",
             label: "Молочно-зеленый",
             extra: theme === "milk-green" ? <Badge status="processing" /> : null,
         },
         {
+            type: "divider",
+        },
+        {
+            key: "3",
+            label: "Светлая тема",
+            icon: <SunOutlined style={{ color: "black" }} />,
+            extra: theme === "light" ? <Badge status="processing" /> : null,
+        },
+        {
             key: "4",
             label: "Темная тема",
-            icon: <MoonOutlined />,
+            icon: <MoonOutlined style={{ color: "black" }} />,
             extra: theme === "dark" ? <Badge status="processing" /> : null,
+        },
+        {
+            type: "divider",
+        },
+        {
+            key: "5",
+            label: "Системная тема",
+            icon: <UserOutlined style={{ color: "black" }} />,
+            extra: theme.includes("system") ? <Badge status="processing" /> : null,
         },
     ];
 
@@ -65,6 +79,13 @@ const AppHeader = () => {
         },
     ];
 
+    const isButtonActive = (url: string) => {
+        if (window.location.pathname === url) {
+            return true;
+        }
+        return false;
+    };
+
     return (
         <div className={style.header}>
             <div>
@@ -75,27 +96,31 @@ const AppHeader = () => {
                                 textHoverBg: "var(--bg-color)",
                             },
                         },
-                    }}
-                >
+                    }}>
                     <Row align="middle">
                         <Col span={8} className={style.logo}>
                             <div
                                 onClick={() => {
                                     window.location.href = "https://i.ytimg.com/vi/PVyFj52G3no/maxresdefault.jpg";
-                                }}
-                            >
+                                }}>
                                 не тыкать
                             </div>
                         </Col>
                         <Col span={8}>
                             <div className={style.menu}>
-                                <button onClick={() => navigate("/all-games")} className={style.games__page__btn}>
+                                <button
+                                    onClick={() => navigate("/all-games")}
+                                    className={style.games__page__btn + (isButtonActive("/all-games") ? " " + style.active : "")}>
                                     Все игры
                                 </button>
-                                <button onClick={() => navigate("/games")} className={style.games__page__btn}>
+                                <button
+                                    onClick={() => navigate("/games")}
+                                    className={style.games__page__btn + (isButtonActive("/games") ? " " + style.active : "")}>
                                     Мои игры
                                 </button>
-                                <button onClick={() => navigate("/updates")} className={style.games__page__btn}>
+                                <button
+                                    onClick={() => navigate("/updates")}
+                                    className={style.games__page__btn + (isButtonActive("/updates") ? " " + style.active : "")}>
                                     Обновления
                                 </button>
                             </div>

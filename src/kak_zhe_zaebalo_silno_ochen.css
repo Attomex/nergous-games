@@ -1,0 +1,88 @@
+/* КВАДРАТИК С ЦИФОРКОЙ ПРОСТО ТАК */
+.styled-pagination .ant-pagination-item {
+    border: 1px solid transparent;
+    background-color: var(--bg-color);
+    transition: all 0.2s ease-in-out !important;
+}
+
+.styled-pagination .ant-pagination-item a {
+    color: var(--text-color) !important;
+}
+
+/* КОГДА НА КВАДРАТИК НАВЕЛСЯ */
+.styled-pagination .ant-pagination-item:hover {
+    border-color: var(--third-color) !important;
+    background-color: var(--bg-color) !important;
+}
+
+.anticon {
+    color: var(--text-color);
+}
+
+/* АКТИВНЫЙ КВАДРАТИК */
+.styled-pagination .ant-pagination-item-active {
+    background-color: var(--accent-color);
+}
+
+/* А ЭТО ЦВЕТ ТЕКСТА АКТИВНОГО КВАДРАТИКА */
+.styled-pagination .ant-pagination-item-active a {
+    color: var(--text-reverse-color) !important;
+    transition: color 0.2s ease-in-out !important;
+}
+
+/* КОГДА НА АКТИВНЫЙ КВАДРАТИК НАВЕЛСЯ */
+.styled-pagination .ant-pagination-item-active a:hover {
+    color: var(--text-color) !important;
+}
+
+/* ============================================================= */
+
+/* ПОЛЕ БЫСТРОГО ПЕРЕХОДА */
+
+.ant-pagination-options-quick-jumper {
+    color: var(--text-color);
+}
+.ant-pagination-options-quick-jumper input:hover {
+    border-color: var(--secondary-color) !important;
+}
+
+.ant-pagination-options-quick-jumper input:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: none !important;
+}
+
+/* ============================================================= */
+
+.ant-dropdown-menu-item-active {
+    color: var(--text-reverse-color) !important;
+}
+
+.ant-dropdown-menu-item-active span {
+    color: var(--text-reverse-color) !important;
+}
+
+.ant-select-item-option {
+    margin-top: 2px !important;
+}
+
+.ant-select-item-option-active {
+    color: var(--text-reverse-color) !important;
+}
+
+/* ============================================================= */
+
+.ant-input-affix-wrapper .ant-input::placeholder {
+    color: var(--text-color);
+}
+
+.ant-select {
+    height: auto;
+}
+
+/* Тут оставил для ConfigProvider у DropDown */
+/* colorBgElevated: "#1a1a1a", // Фон меню
+colorText: "#fff", // Цвет текста
+controlItemBgHover: "#333", // Фон при наведении
+controlItemBgActive: "#444", // Фон активного элемента
+borderRadiusLG: 8, // Скругление углов
+paddingXS: 12, // Отступы внутри меню */

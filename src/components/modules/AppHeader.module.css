@@ -36,6 +36,12 @@
     margin: 0 auto;
 }
 
+.active {
+    background-color: var(--accent-color) !important;
+    color: white !important;
+    transition: color 0.3s ease-in-out;
+}
+
 .games__page__btn {
     width: 150px;
     padding: 8px;
@@ -48,9 +54,9 @@
     letter-spacing: 0.1rem;
     color: var(--text-color);
     cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
 }
 
-.games__page__btn:hover {  
-    background-color: var(--bg-color);
-    transition: background-color 0.3s ease-in-out;
+.games__page__btn:hover {
+    background-color: rgba(var(--accent-color-rgb), 0.1);
 }
