@@ -8,7 +8,7 @@
 
 .profile__image {
     grid-area: image;
-    padding: 10px;
+    border: 2px solid var(--accent-color);
 }
 
 .profile__info {

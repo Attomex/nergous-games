@@ -70,8 +70,10 @@ const Profile = () => {
     const items: DescriptionsProps["items"] = [
         {
             key: "1",
-            label: <div>Email</div>,
+            label: "Email",
             children: userInfo.email,
+            // label: "Email",
+            // children: userInfo.email,
         },
         {
             key: "2",
@@ -82,7 +84,8 @@ const Profile = () => {
                     onClick={() => {
                         navigator.clipboard.writeText(userInfo.steam_url);
                         console.log("Ссылка была скопирована");
-                    }}>
+                    }}
+                >
                     {userInfo.steam_url}
                 </div>
             ),
@@ -106,27 +109,34 @@ const Profile = () => {
                             token: {
                                 fontSize: 18,
                             },
-                        }}>
+                            components: {
+                                Descriptions: {
+                                    colorText: "var(--text-color)",
+                                    labelColor: "rgba(var(--text-color-rgb), 0.8)",
+                                },
+                            },
+                        }}
+                    >
                         <Descriptions title="Информация о пользователе" items={items} />
                     </ConfigProvider>
                 </div>
             </div>
 
-            <Divider style={{ backgroundColor: "var(--primary-color)" }} />
+            <Divider style={{ borderBlockStart: "1px solid var(--text-color)" }} />
             <div className="user__stats">
-                <h1>Статистика</h1>
+                <h1 style={{ color: "var(--text-color)" }}>Статистика</h1>
                 <div className="container" style={{ display: "flex", justifyContent: "space-between", width: "600px" }}>
                     <div className="stats" style={{ margin: "auto 0" }}>
-                        <p>
+                        <p style={{ color: "var(--text-color)" }}>
                             <Badge color={statsColors.finished} /> Завершено: {userInfo?.stats.finished}
                         </p>
-                        <p>
+                        <p style={{ color: "var(--text-color)" }}>
                             <Badge color={statsColors.planned} /> В планах: {userInfo?.stats.planned}
                         </p>
-                        <p>
+                        <p style={{ color: "var(--text-color)" }}>
                             <Badge color={statsColors.playing} /> В процессе: {userInfo?.stats.playing}
                         </p>
-                        <p>
+                        <p style={{ color: "var(--text-color)" }}>
                             <Badge color={statsColors.dropped} /> Брошено: {userInfo?.stats.dropped}
                         </p>
                     </div>
