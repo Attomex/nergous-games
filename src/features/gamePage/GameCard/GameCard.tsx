@@ -3,7 +3,7 @@ import styles from "./GameCard.module.css";
 import { Button, ConfigProvider, Divider, Dropdown, Rate, Space, Tag, Badge } from "antd";
 import type { MenuProps } from "antd";
 import { gameStatuse } from "../../../constants/gameStatuse";
-import { CaretDownOutlined, EditFilled } from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 import { GameInfo } from "../../../pages/GamePage/GamePage";
 import api from "../../../api/api";
 import EditGameInfoModal from "../EditGameInfoModal/EditGameInfoModal";
@@ -144,7 +144,7 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
             {/* Поверхностные кнопачки */}
             {isAdmin && (
                 <div className={styles.editGame}>
-                    <EditFilled onClick={() => setEditGameInfoModal(true)} />
+                    <EditFilled onClick={() => setEditGameInfoModal(true)} className={styles.editGame__icon} />
                 </div>
             )}
 
@@ -158,7 +158,8 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
                                 defaultColor: "#ffffffff",
                             },
                         },
-                    }}>
+                    }}
+                >
                     <Tag className={styles.status__tag__text}>{status !== undefined ? status : "Не выбрано"}</Tag>
                 </ConfigProvider>
             </div>
@@ -173,7 +174,8 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
                                 defaultColor: "#ffffffff",
                             },
                         },
-                    }}>
+                    }}
+                >
                     <Tag className={styles.source__tag}>
                         <FontAwesomeIcon
                             icon={set.source === "wikipedia" ? faWikipediaW : set.source === "steam" ? faSteam : faCircleQuestion}
@@ -196,37 +198,39 @@ const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
                 </DividerStyled>
 
                 <div className={styles.rating__year}>
-                    <ConfigProvider
-                        theme={{
-                            components: {
-                                Rate: {
-                                    starBg: "var(--third-color)",
-                                },
-                            },
-                        }}>
-                        {/* Добавляем пустой контейнер для сохранения пространства слева */}
-                        <div className={styles.rating__container}>
-                            {status !== undefined && (
-                                <Space className={styles.rating}>
-                                    <div className={styles.rating__content}>
-                                        Приоритет:
+                    {/* Добавляем пустой контейнер для сохранения пространства слева */}
+                    <div className={styles.rating__container}>
+                        {status !== undefined && (
+                            <Space className={styles.rating}>
+                                <div className={styles.rating__content}>
+                                    Приоритет:
+                                    <ConfigProvider
+                                        theme={{
+                                            components: {
+                                                Rate: {
+                                                    starBg: "var(--third-color)",
+                                                },
+                                            },
+                                        }}
+                                    >
                                         <Rate
                                             className={styles.rating__rate}
                                             allowHalf
                                             defaultValue={gameInfo.priority / 2}
                                             onChange={changePriority}
                                         />
-                                    </div>
-                                    <Tag
-                                        bordered={false}
-                                        className={willUpdate ? styles.rating__update : styles.rating__update__hidden}
-                                        onClick={updatePriority}>
-                                        Обновить
-                                    </Tag>
-                                </Space>
-                            )}
-                        </div>
-                    </ConfigProvider>
+                                    </ConfigProvider>
+                                </div>
+                                <Tag
+                                    bordered={false}
+                                    className={willUpdate ? styles.rating__update : styles.rating__update__hidden}
+                                    onClick={updatePriority}
+                                >
+                                    Обновить
+                                </Tag>
+                            </Space>
+                        )}
+                    </div>
                 </div>
                 <DropdownStyled>
                     <ButtonStyled>

@@ -16,20 +16,25 @@
     position: relative;
     transition: transform 0.3s ease;
     pointer-events: all;
-    transition: box-shadow ease-in-out 0.3s;
+    transition: box-shadow ease-in-out 0.3s, border ease-in-out 0.3s;
 }
 
 .card:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.55);
-    transition: box-shadow ease-in-out 0.3s;
+    box-shadow: 0 10px 20px rgba(var(--accent-color-rgb), 0.55);
+    border: rgba(var(--accent-color-rgb), 0.5) 1px dashed; /* Ну либо убрать вообще */
+    /* Либо */
+    /* box-shadow: 0 10px 20px rgba(var(--text-color-rgb), 0.55); */
 }
 
 .editGame {
     position: absolute;
     left: 10px;
     top: 10px;
-    color: white;
     cursor: pointer;
+}
+
+.editGame__icon {
+    color: white;
 }
 
 .status__tag {
@@ -164,7 +169,6 @@
 
 .rating__rate {
     font-size: 1rem;
-    background-color: var(--primary-color);
     margin: auto 0;
 }
 

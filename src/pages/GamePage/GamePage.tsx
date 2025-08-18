@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect, use } from "react";
 import GameCard from "../../features/gamePage/GameCard/GameCard";
 import styles from "./GamePage.module.css";
 import api from "../../api/api";
-import { Button, Dropdown, Space, ConfigProvider, Tabs, Input, Select, Flex, Divider } from "antd";
+import { Button, Dropdown, Space, ConfigProvider, Tabs, Input, Select, Flex, Divider, Spin } from "antd";
 import type { MenuProps, SelectProps } from "antd";
 import CreateGameModal from "../../features/gamePage/CreateGameModal/CreateGameModal";
 import AddGamesModal from "../../features/gamePage/AddGamesModal/AddGamesModal";
@@ -10,7 +10,10 @@ import { useAuth } from "../../context/AuthContext";
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { ButtonStyled, DropdownStyled, SelectStyled, InputSearchStyled, DividerStyled } from "../../styled-components";
 import Pagination from "../../features/Paginations/Paginations";
-import { CalendarOutlined, FileTextOutlined, StarOutlined } from "@ant-design/icons";
+import { CalendarOutlined, FileTextOutlined, LoadingOutlined, StarOutlined } from "@ant-design/icons";
+import { DescIcon, AscIcon } from "../../features/Icons";
+import { faArrowDownAZ, faArrowDownZA } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export interface GameInfo {
     id: number;
@@ -48,7 +51,7 @@ const GamePage: React.FC = () => {
     const [search, setSearch] = useState(""); // пользовательский ввод
     const [debouncedSearch, setDebouncedSearch] = useState(""); // значение с задержкой
 
-    const [generalSort, setGeneralSort] = useState<Sort>({ field: "title", order: "desc" });
+    const [generalSort, setGeneralSort] = useState<Sort>({ field: "title", order: "asc" });
 
     const [modalCreateGame, setModalCreateGame] = useState(false);
     const [modalAddGames, setModalAddGames] = useState(false);
@@ -100,25 +103,9 @@ const GamePage: React.FC = () => {
         priority: <StarOutlined />,
     };
 
-    const DescIcon = () => {
-        return (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ rotate: "90deg" }}>
-                <path d="M6 20V4M18 20V16M12 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-        );
-    };
-
-    const AscIcon = () => {
-        return (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ rotate: "90deg" }}>
-                <path d="M18 20V4M6 20V16M12 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-        );
-    };
-
     const options: SelectProps["options"] = [
-        { label: "Название", value: JSON.stringify({ field: "title", order: "desc" }), icon: <DescIcon /> }, // по убыванию
-        { label: "Название", value: JSON.stringify({ field: "title", order: "asc" }), icon: <AscIcon /> }, // по возрастанию
+        { label: "Название", value: JSON.stringify({ field: "title", order: "asc" }), icon: <FontAwesomeIcon icon={faArrowDownAZ} /> }, // по возрастанию
+        { label: "Название", value: JSON.stringify({ field: "title", order: "desc" }), icon: <FontAwesomeIcon icon={faArrowDownZA} /> }, // по убыванию
         { label: "Год", value: JSON.stringify({ field: "year", order: "desc" }), icon: <DescIcon /> }, // по убыванию
         { label: "Год", value: JSON.stringify({ field: "year", order: "asc" }), icon: <AscIcon /> }, // по возрастанию
         { label: "Приоритет", value: JSON.stringify({ field: "priority", order: "desc" }), icon: <DescIcon /> }, // по убыванию
@@ -279,9 +266,13 @@ const GamePage: React.FC = () => {
                     )}
                 </Flex>
                 {/* Пагинация и статус загрузки */}
-                <Pagination totalItems={totalItems} currentPage={page} pageSize={pageSize} onChange={setPage} />
-                {isPending && <div style={{ textAlign: "center", marginTop: 8 }}>Обновление...</div>}
+                {isPending && (
+                    <div style={{ textAlign: "center", marginTop: 8 }}>
+                        <Spin indicator={<LoadingOutlined spin />} size="large" tip="Загрузка..." />
+                    </div>
+                )}
                 {isError && <div style={{ color: "red" }}>Ошибка при загрузке игр.</div>}
+                {isPending ? null : <Pagination totalItems={totalItems} currentPage={page} pageSize={pageSize} onChange={setPage} />}
 
                 {/* Модалки */}
                 <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />

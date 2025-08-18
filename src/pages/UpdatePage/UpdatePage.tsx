@@ -3,6 +3,8 @@ import { updates } from "./updates";
 
 const { Title, Text } = Typography;
 
+// Можно сделать, чтобы у карточки border и у Divider цвет был --accent-color
+
 const Update = () => {
     return (
         <div style={{ maxWidth: 800, margin: "0 auto", padding: "20px" }}>

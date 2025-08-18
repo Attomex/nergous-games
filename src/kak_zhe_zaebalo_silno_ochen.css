@@ -15,10 +15,6 @@
     background-color: var(--bg-color) !important;
 }
 
-.anticon {
-    color: var(--text-color);
-}
-
 /* АКТИВНЫЙ КВАДРАТИК */
 .styled-pagination .ant-pagination-item-active {
     background-color: var(--accent-color);
