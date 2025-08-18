@@ -42,7 +42,7 @@ interface AuthContextProps {
 
 export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [isAdmin, setIsAdmin] = useState(true);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const getUserInfo = async (): Promise<User> => {
         // if (user !== null) return true;

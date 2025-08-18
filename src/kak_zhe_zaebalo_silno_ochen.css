@@ -69,10 +69,14 @@
     color: var(--text-reverse-color) !important;
 }
 
+.ant-select-item-option-content {
+    color: black !important;
+}
+
 /* ============================================================= */
 
 .ant-input-affix-wrapper .ant-input::placeholder {
-    color: var(--text-color);
+    color: black;
 }
 
 .ant-select {

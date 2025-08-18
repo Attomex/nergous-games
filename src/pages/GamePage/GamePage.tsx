@@ -1,15 +1,16 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback, useEffect, use } from "react";
 import GameCard from "../../features/gamePage/GameCard/GameCard";
 import styles from "./GamePage.module.css";
 import api from "../../api/api";
 import { Button, Dropdown, Space, ConfigProvider, Tabs, Input, Select, Flex, Divider } from "antd";
-import type { MenuProps } from "antd";
+import type { MenuProps, SelectProps } from "antd";
 import CreateGameModal from "../../features/gamePage/CreateGameModal/CreateGameModal";
 import AddGamesModal from "../../features/gamePage/AddGamesModal/AddGamesModal";
 import { useAuth } from "../../context/AuthContext";
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { ButtonStyled, DropdownStyled, SelectStyled, InputSearchStyled, DividerStyled } from "../../styled-components";
 import Pagination from "../../features/Paginations/Paginations";
+import { CalendarOutlined, FileTextOutlined, StarOutlined } from "@ant-design/icons";
 
 export interface GameInfo {
     id: number;
@@ -36,14 +37,18 @@ const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     return res.data; // { data: GameInfo[], pages, total }
 };
 
+interface Sort {
+    field: "title" | "year" | "priority";
+    order: "asc" | "desc";
+}
+
 const GamePage: React.FC = () => {
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState("");
     const [search, setSearch] = useState(""); // пользовательский ввод
     const [debouncedSearch, setDebouncedSearch] = useState(""); // значение с задержкой
 
-    const [sortBy, setSortBy] = useState<"title" | "year" | "priority">("title");
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+    const [generalSort, setGeneralSort] = useState<Sort>({ field: "title", order: "desc" });
 
     const [modalCreateGame, setModalCreateGame] = useState(false);
     const [modalAddGames, setModalAddGames] = useState(false);
@@ -62,7 +67,10 @@ const GamePage: React.FC = () => {
 
     const pageSize = 12;
     const { data, isPending, isError } = useQuery({
-        queryKey: ["userGames", { status, page, page_size: pageSize, search: debouncedSearch, sort_by: sortBy, sort_order: sortOrder }],
+        queryKey: [
+            "userGames",
+            { status, page, page_size: pageSize, search: debouncedSearch, sort_by: generalSort.field, sort_order: generalSort.order },
+        ],
         queryFn: fetchUserGames,
         placeholderData: keepPreviousData,
         // staleTime: 1000 * 60 * 2,
@@ -86,53 +94,36 @@ const GamePage: React.FC = () => {
         queryClient.invalidateQueries({ queryKey: ["userGames"] });
     }, [queryClient]);
 
-    const statuses: { [key: string]: string } = {
-        "1": "",
-        "2": "finished",
-        "3": "planned",
-        "4": "playing",
-        "5": "dropped",
+    const fieldIcons = {
+        title: <FileTextOutlined />,
+        year: <CalendarOutlined />,
+        priority: <StarOutlined />,
     };
 
-    const onChangeTab = useCallback(
-        (key: string) => {
-            setStatus(statuses[key]);
-            setPage(1);
-        },
-        [statuses]
-    );
-
-    const GamesList = useMemo(() => {
+    const DescIcon = () => {
         return (
-            <>
-                <div className={styles.cardsWrapper}>
-                    {userGames !== undefined && userGames.length > 0 ? (
-                        userGames.map((g) => (
-                            <GameCard key={g.id} gameInfo={g} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })} />
-                        ))
-                    ) : (
-                        <div>Пусто</div>
-                    )}
-                </div>
-
-                <Pagination totalItems={totalItems} currentPage={page} pageSize={pageSize} onChange={setPage} />
-
-                {isPending && <div style={{ textAlign: "center", marginTop: 8 }}>Обновление...</div>}
-                {isError && <div style={{ color: "red" }}>Ошибка при загрузке игр.</div>}
-            </>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ rotate: "90deg" }}>
+                <path d="M6 20V4M18 20V16M12 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
         );
-    }, [userGames, totalItems, page, isPending, isError, queryClient]);
+    };
 
-    const tabItems = useMemo(() => {
-        const commonProps = { children: GamesList };
-        return [
-            { key: "1", label: "Все", ...commonProps },
-            { key: "2", label: "Завершенные", ...commonProps },
-            { key: "3", label: "Запланировано", ...commonProps },
-            { key: "4", label: "В процессе", ...commonProps },
-            { key: "5", label: "Брошено", ...commonProps },
-        ];
-    }, [GamesList]);
+    const AscIcon = () => {
+        return (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ rotate: "90deg" }}>
+                <path d="M18 20V4M6 20V16M12 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        );
+    };
+
+    const options: SelectProps["options"] = [
+        { label: "Название", value: JSON.stringify({ field: "title", order: "desc" }), icon: <DescIcon /> }, // по убыванию
+        { label: "Название", value: JSON.stringify({ field: "title", order: "asc" }), icon: <AscIcon /> }, // по возрастанию
+        { label: "Год", value: JSON.stringify({ field: "year", order: "desc" }), icon: <DescIcon /> }, // по убыванию
+        { label: "Год", value: JSON.stringify({ field: "year", order: "asc" }), icon: <AscIcon /> }, // по возрастанию
+        { label: "Приоритет", value: JSON.stringify({ field: "priority", order: "desc" }), icon: <DescIcon /> }, // по убыванию
+        { label: "Приоритет", value: JSON.stringify({ field: "priority", order: "asc" }), icon: <AscIcon /> }, // по возрастанию
+    ];
 
     useEffect(() => {
         checkAdmin();
@@ -154,13 +145,15 @@ const GamePage: React.FC = () => {
                                                     colorBorder: "rgba(var(--third-color-rgb), 0.5)",
                                                 },
                                             },
-                                        }}>
+                                        }}
+                                    >
                                         <Button>Добавить новые игры</Button>
                                     </ConfigProvider>
                                 </Space>
                             </Dropdown>
                         </ButtonStyled>
                     </DropdownStyled>
+
                     <Flex gap="middle" style={{ width: "100%" }}>
                         <Flex gap="middle">
                             <ButtonStyled>
@@ -172,7 +165,8 @@ const GamePage: React.FC = () => {
                                     onClick={() => {
                                         setStatus("");
                                         setPage(1);
-                                    }}>
+                                    }}
+                                >
                                     Все
                                 </Button>
                                 <Button
@@ -183,7 +177,8 @@ const GamePage: React.FC = () => {
                                     onClick={() => {
                                         setStatus("finished");
                                         setPage(1);
-                                    }}>
+                                    }}
+                                >
                                     Завершенные
                                 </Button>
                                 <Button
@@ -194,7 +189,8 @@ const GamePage: React.FC = () => {
                                     onClick={() => {
                                         setStatus("planned");
                                         setPage(1);
-                                    }}>
+                                    }}
+                                >
                                     Запланировано
                                 </Button>
                                 <Button
@@ -205,7 +201,8 @@ const GamePage: React.FC = () => {
                                     onClick={() => {
                                         setStatus("playing");
                                         setPage(1);
-                                    }}>
+                                    }}
+                                >
                                     В процессе
                                 </Button>
                                 <Button
@@ -216,7 +213,8 @@ const GamePage: React.FC = () => {
                                     onClick={() => {
                                         setStatus("dropped");
                                         setPage(1);
-                                    }}>
+                                    }}
+                                >
                                     Брошено
                                 </Button>
                             </ButtonStyled>
@@ -239,31 +237,30 @@ const GamePage: React.FC = () => {
 
                             <SelectStyled>
                                 <Select
-                                    value={sortBy}
+                                    value={JSON.stringify(generalSort)}
                                     onChange={(v) => {
-                                        setSortBy(v);
+                                        setGeneralSort(JSON.parse(v));
                                         setPage(1);
                                     }}
-                                    style={{ width: 160 }}
-                                    options={[
-                                        { label: "Название", value: "title" },
-                                        { label: "Год", value: "year" },
-                                        { label: "Приоритет", value: "priority" },
-                                    ]}
-                                />
-
-                                <Select
-                                    value={sortOrder}
-                                    onChange={(v) => {
-                                        setSortOrder(v);
-                                        setPage(1);
-                                    }}
-                                    style={{ width: 160 }}
-                                    options={[
-                                        { label: "По убыванию", value: "desc" },
-                                        { label: "По возрастанию", value: "asc" },
-                                    ]}
-                                />
+                                    style={{ width: 200 }}
+                                    optionLabelProp="label"
+                                >
+                                    {options.map((option) => (
+                                        <Select.Option
+                                            key={option.value}
+                                            value={option.value}
+                                            label={
+                                                <span>
+                                                    {option.icon} {option.label}
+                                                </span>
+                                            }
+                                        >
+                                            <span>
+                                                {option.icon} {option.label}
+                                            </span>
+                                        </Select.Option>
+                                    ))}
+                                </Select>
                             </SelectStyled>
                         </Flex>
                     </Flex>
@@ -290,81 +287,6 @@ const GamePage: React.FC = () => {
                 <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
                 <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
             </Flex>
-
-            {/* <ConfigProvider
-                    theme={{
-                        components: {
-                            Tabs: {
-                                cardBg: "var(--primary-color)",
-                                itemColor: "var(--text-color)",
-                                itemActiveColor: "var(--bg-color)",
-                                itemHoverColor: "var(--secondary-color)",
-                                itemSelectedColor: "var(--primary-color)",
-                                cardGutter: 10,
-                            },
-                        },
-                    }}>
-                    <Tabs items={tabItems} style={{ maxWidth: "1400px" }} type="card" defaultActiveKey="1" onChange={onChangeTab} />
-                </ConfigProvider> */}
-
-            {/* <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, marginLeft: 10 }}>
-                    <Button
-                        type={status === "" ? "primary" : "default"}
-                        onClick={() => {
-                            setStatus("");
-                            setPage(1);
-                        }}
-                        aria-pressed={status === ""}>
-                        Все
-                    </Button>
-
-                    <Button
-                        type={status === "finished" ? "primary" : "default"}
-                        onClick={() => {
-                            setStatus("finished");
-                            setPage(1);
-                        }}
-                        aria-pressed={status === "finished"}>
-                        Завершенные
-                    </Button>
-
-                    <Button
-                        type={status === "planned" ? "primary" : "default"}
-                        onClick={() => {
-                            setStatus("planned");
-                            setPage(1);
-                        }}
-                        aria-pressed={status === "planned"}>
-                        Запланировано
-                    </Button>
-
-                    <Button
-                        type={status === "playing" ? "primary" : "default"}
-                        onClick={() => {
-                            setStatus("playing");
-                            setPage(1);
-                        }}
-                        aria-pressed={status === "playing"}>
-                        В процессе
-                    </Button>
-
-                    <Button
-                        type={status === "dropped" ? "primary" : "default"}
-                        onClick={() => {
-                            setStatus("dropped");
-                            setPage(1);
-                        }}
-                        aria-pressed={status === "dropped"}>
-                        Брошено
-                    </Button>
-                </div>
-
-                {/* Список карточек */}
-            {/* <div style={{ maxWidth: "1400px" }}>{GamesList}</div> */}
-
-            {/* <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} /> */}
-            {/* <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} /> */}
-            {/* </div> */}
         </>
     );
 };

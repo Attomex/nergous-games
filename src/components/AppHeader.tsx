@@ -32,12 +32,14 @@ const AppHeader = () => {
             key: "1",
             label: "Молочно-коричневый",
             extra: theme === "milk-brown" ? <Badge status="processing" /> : null,
+            disabled: true,
         },
 
         {
             key: "2",
             label: "Молочно-зеленый",
             extra: theme === "milk-green" ? <Badge status="processing" /> : null,
+            disabled: true,
         },
         {
             type: "divider",
