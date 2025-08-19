@@ -2,25 +2,21 @@ import React, { useState, useCallback, useEffect } from "react";
 import { GameCard } from "features/game-card";
 import styles from "./UserGames.module.css";
 import { api } from "shared/api";
-import { Button, Dropdown, Space, ConfigProvider, Input, Select, Flex, Divider, Spin } from "antd";
-import type { MenuProps, SelectProps } from "antd";
+import { Flex, Divider, Spin } from "antd";
 import { CreateGameModal } from "features/create-game";
 import { AddGamesModal } from "features/add-games";
 import { useAuth } from "features/auth";
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
-import { ButtonStyled, DropdownStyled, SelectStyled, InputSearchStyled, DividerStyled } from "shared/ui";
-import {Paginations} from "features/pagination";
-import { CalendarOutlined, FileTextOutlined, LoadingOutlined, StarOutlined } from "@ant-design/icons";
-import { DescIcon, AscIcon } from "features/icons";
-import { faArrowDownAZ, faArrowDownZA } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DividerStyled } from "shared/ui";
+import { Paginations } from "features/pagination";
+import { LoadingOutlined } from "@ant-design/icons";
 import { StatusButtonsGroup } from "./StatusButtonsGroup";
 import { GameInfo } from "shared/types";
-
-const itemsGame: MenuProps["items"] = [
-    { key: "1", label: "Создать игру" },
-    { key: "2", label: "Добавить игры" },
-];
+import { SortButton } from "widgets/sort-button";
+import { Sort } from "shared/types";
+import { AddGameButton } from "widgets/add-game-button";
+import { useDebouncedSearch } from "shared/hooks";
+import { SearchInput } from "widgets/search-input";
 
 const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
@@ -28,16 +24,10 @@ const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     return res.data; // { data: GameInfo[], pages, total }
 };
 
-interface Sort {
-    field: "title" | "year" | "priority";
-    order: "asc" | "desc";
-}
-
 export const UserGames: React.FC = () => {
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState("");
-    const [search, setSearch] = useState(""); // пользовательский ввод
-    const [debouncedSearch, setDebouncedSearch] = useState(""); // значение с задержкой
+    const { search, debouncedSearch, setSearch } = useDebouncedSearch("", setPage, 500);
 
     const [generalSort, setGeneralSort] = useState<Sort>({ field: "title", order: "asc" });
 
@@ -47,15 +37,6 @@ export const UserGames: React.FC = () => {
     const { checkAdmin } = useAuth();
     const queryClient = useQueryClient();
 
-    // debounce на 500 мс
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedSearch(search);
-            setPage(1); // при изменении поиска сбрасываем на первую страницу
-        }, 500);
-        return () => clearTimeout(handler);
-    }, [search]);
-
     const pageSize = 12;
     const { data, isPending, isError } = useQuery({
         queryKey: [
@@ -64,17 +45,11 @@ export const UserGames: React.FC = () => {
         ],
         queryFn: fetchUserGames,
         placeholderData: keepPreviousData,
-        // staleTime: 1000 * 60 * 2,
         refetchOnWindowFocus: false,
     });
 
     const userGames: GameInfo[] = data?.data ?? [];
     const totalItems: number = data?.total ?? 0;
-
-    const onClick: MenuProps["onClick"] = ({ key }) => {
-        if (key === "1") setModalCreateGame(true);
-        else if (key === "2") setModalAddGames(true);
-    };
 
     const closeModal = () => {
         setModalCreateGame(false);
@@ -85,21 +60,6 @@ export const UserGames: React.FC = () => {
         queryClient.invalidateQueries({ queryKey: ["userGames"] });
     }, [queryClient]);
 
-    const fieldIcons = {
-        title: <FileTextOutlined />,
-        year: <CalendarOutlined />,
-        priority: <StarOutlined />,
-    };
-
-    const options: SelectProps["options"] = [
-        { label: "Название", value: JSON.stringify({ field: "title", order: "asc" }), icon: <FontAwesomeIcon icon={faArrowDownAZ} /> }, // по возрастанию
-        { label: "Название", value: JSON.stringify({ field: "title", order: "desc" }), icon: <FontAwesomeIcon icon={faArrowDownZA} /> }, // по убыванию
-        { label: "Год", value: JSON.stringify({ field: "year", order: "desc" }), icon: <DescIcon /> }, // по убыванию
-        { label: "Год", value: JSON.stringify({ field: "year", order: "asc" }), icon: <AscIcon /> }, // по возрастанию
-        { label: "Приоритет", value: JSON.stringify({ field: "priority", order: "desc" }), icon: <DescIcon /> }, // по убыванию
-        { label: "Приоритет", value: JSON.stringify({ field: "priority", order: "asc" }), icon: <AscIcon /> }, // по возрастанию
-    ];
-
     useEffect(() => {
         checkAdmin();
     }, [checkAdmin]);
@@ -109,25 +69,7 @@ export const UserGames: React.FC = () => {
             <Flex vertical style={{ maxWidth: 1400, margin: "0 auto", gap: 16 }}>
                 {/* Верхняя панель */}
                 <Flex vertical align="start" gap="middle">
-                    <DropdownStyled>
-                        <ButtonStyled>
-                            <Dropdown menu={{ items: itemsGame, onClick }} trigger={["click"]}>
-                                <Space>
-                                    <ConfigProvider
-                                        theme={{
-                                            components: {
-                                                Button: {
-                                                    colorBorder: "rgba(var(--third-color-rgb), 0.5)",
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        <Button>Добавить новые игры</Button>
-                                    </ConfigProvider>
-                                </Space>
-                            </Dropdown>
-                        </ButtonStyled>
-                    </DropdownStyled>
+                    <AddGameButton openModalCreateGame={setModalCreateGame} openModalAddGames={setModalAddGames} />
 
                     <Flex gap="middle" style={{ width: "100%" }}>
                         <Flex gap="middle">
@@ -135,47 +77,9 @@ export const UserGames: React.FC = () => {
                         </Flex>
 
                         <Flex gap="middle" style={{ marginLeft: "auto" }}>
-                            <InputSearchStyled globalToken={{ colorPrimary: "var(--secondary-color)", colorIcon: "var(--secondary-color)" }}>
-                                <Input
-                                    style={{
-                                        maxWidth: 300,
-                                        height: "100%",
-                                    }}
-                                    placeholder="Поиск игр..."
-                                    allowClear
-                                    value={search}
-                                    suffix={null}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                            </InputSearchStyled>
+                            <SearchInput value={search} onChange={setSearch} placeholder="Поиск игр..." width={300} />
 
-                            <SelectStyled>
-                                <Select
-                                    value={JSON.stringify(generalSort)}
-                                    onChange={(v) => {
-                                        setGeneralSort(JSON.parse(v));
-                                        setPage(1);
-                                    }}
-                                    style={{ width: 200 }}
-                                    optionLabelProp="label"
-                                >
-                                    {options.map((option) => (
-                                        <Select.Option
-                                            key={option.value}
-                                            value={option.value}
-                                            label={
-                                                <span>
-                                                    {option.icon} {option.label}
-                                                </span>
-                                            }
-                                        >
-                                            <span>
-                                                {option.icon} {option.label}
-                                            </span>
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </SelectStyled>
+                            <SortButton value={generalSort} onChange={setGeneralSort} onPageReset={setPage} />
                         </Flex>
                     </Flex>
                 </Flex>

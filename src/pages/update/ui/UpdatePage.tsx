@@ -15,6 +15,9 @@ export const UpdatePage = () => {
                             colorBgContainer: "var(--primary-color)",
                             colorBorderSecondary: "var(--secondary-color)",
                         },
+                        List: {
+                            colorSplit: "var(--secondary-color)",
+                        }
                     },
                 }}
             >

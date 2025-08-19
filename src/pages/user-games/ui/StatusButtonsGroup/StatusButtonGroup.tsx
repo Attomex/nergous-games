@@ -8,68 +8,46 @@ interface StatusButtonsGroupProps {
 }
 
 export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, setStatus, setPage }) => {
+    const buttons: { title: string; status: string }[] = [
+        {
+            title: "Все",
+            status: "",
+        },
+        {
+            title: "Завершенные",
+            status: "finished",
+        },
+        {
+            title: "Запланировано",
+            status: "planned",
+        },
+        {
+            title: "В процессе",
+            status: "playing",
+        },
+        {
+            title: "Отложено",
+            status: "dropped",
+        },
+    ]
+
     return (
         <ButtonStyled>
-            <Button
-                style={{
-                    backgroundColor: status === "" ? "var(--accent-color)" : "var(--primary-color)",
-                    color: status === "" ? "white" : "var(--text-color)",
-                }}
-                onClick={() => {
-                    setStatus("");
-                    setPage(1);
-                }}
-            >
-                Все
-            </Button>
-            <Button
-                style={{
-                    backgroundColor: status === "finished" ? "var(--accent-color)" : "var(--primary-color)",
-                    color: status === "finished" ? "white" : "var(--text-color)",
-                }}
-                onClick={() => {
-                    setStatus("finished");
-                    setPage(1);
-                }}
-            >
-                Завершенные
-            </Button>
-            <Button
-                style={{
-                    backgroundColor: status === "planned" ? "var(--accent-color)" : "var(--primary-color)",
-                    color: status === "planned" ? "white" : "var(--text-color)",
-                }}
-                onClick={() => {
-                    setStatus("planned");
-                    setPage(1);
-                }}
-            >
-                Запланировано
-            </Button>
-            <Button
-                style={{
-                    backgroundColor: status === "playing" ? "var(--accent-color)" : "var(--primary-color)",
-                    color: status === "playing" ? "white" : "var(--text-color)",
-                }}
-                onClick={() => {
-                    setStatus("playing");
-                    setPage(1);
-                }}
-            >
-                В процессе
-            </Button>
-            <Button
-                style={{
-                    backgroundColor: status === "dropped" ? "var(--accent-color)" : "var(--primary-color)",
-                    color: status === "dropped" ? "white" : "var(--text-color)",
-                }}
-                onClick={() => {
-                    setStatus("dropped");
-                    setPage(1);
-                }}
-            >
-                Брошено
-            </Button>
+            {buttons.map((button) => (
+                <Button
+                    key={button.status}
+                    style={{
+                        backgroundColor: status === button.status ? "var(--accent-color)" : "var(--primary-color)",
+                        color: status === button.status ? "white" : "var(--text-color)",
+                    }}
+                    onClick={() => {
+                        setStatus(button.status);
+                        setPage(1);
+                    }}
+                >
+                    {button.title}
+                </Button>
+            ))}
         </ButtonStyled>
     );
 };
