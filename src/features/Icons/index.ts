@@ -1,2 +1,1 @@
-export { AscIcon } from "./AscIcon";
-export { DescIcon } from "./DescIcon";
+export { AscIcon, DescIcon} from "./ui";

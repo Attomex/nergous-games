@@ -1,0 +1,1 @@
+export { EditGameInfoModal } from "./EditGameInfoModal";

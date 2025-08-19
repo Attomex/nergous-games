@@ -1,0 +1,1 @@
+export { LoginRegPage } from "./ui";
