@@ -14,6 +14,7 @@ import { CalendarOutlined, FileTextOutlined, LoadingOutlined, StarOutlined } fro
 import { DescIcon, AscIcon } from "../../features/Icons";
 import { faArrowDownAZ, faArrowDownZA } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import StatusButtonsGroup from "../../features/StatusButtonsGroup/StatusButtonGroup";
 
 export interface GameInfo {
     id: number;
@@ -143,68 +144,7 @@ const GamePage: React.FC = () => {
 
                     <Flex gap="middle" style={{ width: "100%" }}>
                         <Flex gap="middle">
-                            <ButtonStyled>
-                                <Button
-                                    style={{
-                                        backgroundColor: status === "" ? "var(--accent-color)" : "var(--primary-color)",
-                                        color: status === "" ? "white" : "var(--text-color)",
-                                    }}
-                                    onClick={() => {
-                                        setStatus("");
-                                        setPage(1);
-                                    }}
-                                >
-                                    Все
-                                </Button>
-                                <Button
-                                    style={{
-                                        backgroundColor: status === "finished" ? "var(--accent-color)" : "var(--primary-color)",
-                                        color: status === "finished" ? "white" : "var(--text-color)",
-                                    }}
-                                    onClick={() => {
-                                        setStatus("finished");
-                                        setPage(1);
-                                    }}
-                                >
-                                    Завершенные
-                                </Button>
-                                <Button
-                                    style={{
-                                        backgroundColor: status === "planned" ? "var(--accent-color)" : "var(--primary-color)",
-                                        color: status === "planned" ? "white" : "var(--text-color)",
-                                    }}
-                                    onClick={() => {
-                                        setStatus("planned");
-                                        setPage(1);
-                                    }}
-                                >
-                                    Запланировано
-                                </Button>
-                                <Button
-                                    style={{
-                                        backgroundColor: status === "playing" ? "var(--accent-color)" : "var(--primary-color)",
-                                        color: status === "playing" ? "white" : "var(--text-color)",
-                                    }}
-                                    onClick={() => {
-                                        setStatus("playing");
-                                        setPage(1);
-                                    }}
-                                >
-                                    В процессе
-                                </Button>
-                                <Button
-                                    style={{
-                                        backgroundColor: status === "dropped" ? "var(--accent-color)" : "var(--primary-color)",
-                                        color: status === "dropped" ? "white" : "var(--text-color)",
-                                    }}
-                                    onClick={() => {
-                                        setStatus("dropped");
-                                        setPage(1);
-                                    }}
-                                >
-                                    Брошено
-                                </Button>
-                            </ButtonStyled>
+                            <StatusButtonsGroup status={status} setStatus={setStatus} setPage={setPage} />
                         </Flex>
 
                         <Flex gap="middle" style={{ marginLeft: "auto" }}>
