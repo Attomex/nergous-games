@@ -1,0 +1,36 @@
+.card__user {
+    display: grid;
+    width: 100%;
+    grid-template-areas: "image info button";
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    padding: 16px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 16px;
+}
+
+.user__image {
+    grid-area: image;
+    border: 1px solid var(--accent-color);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user__info {
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
+    margin: auto 0;
+    gap: 8px;
+    color: var(--text-color);
+}
+
+.user__title {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.user__button {
+    grid-area: button;
+    margin: auto 0;
+}

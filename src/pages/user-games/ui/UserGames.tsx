@@ -1,21 +1,26 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { GameCard } from "features/game-card";
-import styles from "./UserGames.module.css";
-import { api } from "shared/api";
 import { Flex, Divider, Spin } from "antd";
+import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
+
+import styles from "./UserGames.module.css";
+
+import { LoadingOutlined } from "@ant-design/icons";
+import { StatusButtonsGroup } from "./StatusButtonsGroup";
+
+import { GameCard } from "features/game-card";
 import { CreateGameModal } from "features/create-game";
 import { AddGamesModal } from "features/add-games";
 import { useAuth } from "features/auth";
-import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
+
+import { api } from "shared/api";
 import { DividerStyled } from "shared/ui";
-import { Paginations } from "features/pagination";
-import { LoadingOutlined } from "@ant-design/icons";
-import { StatusButtonsGroup } from "./StatusButtonsGroup";
 import { GameInfo } from "shared/types";
-import { SortButton } from "widgets/sort-button";
 import { Sort } from "shared/types";
-import { AddGameButton } from "widgets/add-game-button";
 import { useDebouncedSearch } from "shared/hooks";
+
+import { Paginations } from "widgets/pagination";
+import { SortButton } from "widgets/sort-button";
+import { AddGameButton } from "widgets/add-game-button";
 import { SearchInput } from "widgets/search-input";
 
 const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {

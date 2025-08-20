@@ -10,7 +10,7 @@ interface AuthContextType {
     login: (auth_token: string) => void;
     logout: () => void;
     getUserInfo: () => Promise<User>;
-    isAdmin: boolean;
+    isAdmin: boolean | string;
     checkAdmin: () => Promise<void>;
 }
 
@@ -29,11 +29,9 @@ interface AuthContextProps {
 
 export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState<boolean | string>("");
 
     const getUserInfo = async (): Promise<User> => {
-        // if (user !== null) return true;
-
         try {
             const auth_token = Cookies.get("auth_token");
             if (!auth_token) logout();

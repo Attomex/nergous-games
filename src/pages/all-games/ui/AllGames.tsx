@@ -7,7 +7,7 @@ import { CreateGameModal } from "features/create-game";
 import { AddGamesModal } from "features/add-games";
 import { useAuth } from "features/auth";
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
-import { Paginations } from "features/pagination";
+import { Paginations } from "widgets/pagination";
 import { DividerStyled } from "shared/ui";
 import { LoadingOutlined } from "@ant-design/icons";
 import { GameInfo } from "shared/types";

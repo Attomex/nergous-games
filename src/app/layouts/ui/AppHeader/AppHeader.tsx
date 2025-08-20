@@ -1,7 +1,7 @@
 import { Col, Row, Button, Dropdown, Space, ConfigProvider, Badge } from "antd";
-import { UserOutlined, BgColorsOutlined, MoonOutlined, InfoCircleOutlined, LogoutOutlined, SunOutlined } from "@ant-design/icons";
+import { UserOutlined, BgColorsOutlined, MoonOutlined, InfoCircleOutlined, LogoutOutlined, SunOutlined, ToolOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import style from "./modules/AppHeader.module.css";
+import style from "./AppHeader.module.css";
 import { useTheme } from "shared/theme";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "features/auth";
@@ -9,7 +9,7 @@ import { DropdownStyled } from "shared/ui";
 
 export const AppHeader = () => {
     const { theme, setTheme, themes } = useTheme();
-    const { logout } = useAuth();
+    const { logout, isAdmin, checkAdmin } = useAuth();
     const navigate = useNavigate();
 
     const onClick_theme: MenuProps["onClick"] = ({ key }) => {
@@ -18,12 +18,15 @@ export const AppHeader = () => {
     };
 
     const onClick_profile: MenuProps["onClick"] = ({ key }) => {
+        if (key === "1") {
+            navigate("/profile");
+        }
         if (key === "2") {
             logout();
             navigate("/login");
         }
-        if (key === "1") {
-            navigate("/profile");
+        if (key === "3") {
+            navigate("/admin");
         }
     };
 
@@ -81,6 +84,22 @@ export const AppHeader = () => {
         },
     ];
 
+    if (isAdmin === "") {
+        checkAdmin();
+    }
+
+    const adminPriv: MenuProps["items"] =
+        isAdmin === true
+            ? [
+                  {
+                      type: "divider",
+                  },
+                  { key: "3", label: "Панелька секретов", icon: <ToolOutlined /> },
+              ]
+            : [];
+
+    const items = [...items_profile, ...adminPriv] as MenuProps["items"];
+
     const isButtonActive = (url: string) => {
         if (window.location.pathname === url) {
             return true;
@@ -98,13 +117,15 @@ export const AppHeader = () => {
                                 textHoverBg: "var(--bg-color)",
                             },
                         },
-                    }}>
+                    }}
+                >
                     <Row align="middle">
                         <Col span={8} className={style.logo}>
                             <div
                                 onClick={() => {
                                     window.location.href = "https://i.ytimg.com/vi/PVyFj52G3no/maxresdefault.jpg";
-                                }}>
+                                }}
+                            >
                                 не тыкать
                             </div>
                         </Col>
@@ -112,17 +133,20 @@ export const AppHeader = () => {
                             <div className={style.menu}>
                                 <button
                                     onClick={() => navigate("/all-games")}
-                                    className={style.games__page__btn + (isButtonActive("/all-games") ? " " + style.active : "")}>
+                                    className={style.games__page__btn + (isButtonActive("/all-games") ? " " + style.active : "")}
+                                >
                                     Все игры
                                 </button>
                                 <button
                                     onClick={() => navigate("/games")}
-                                    className={style.games__page__btn + (isButtonActive("/games") ? " " + style.active : "")}>
+                                    className={style.games__page__btn + (isButtonActive("/games") ? " " + style.active : "")}
+                                >
                                     Мои игры
                                 </button>
                                 <button
                                     onClick={() => navigate("/updates")}
-                                    className={style.games__page__btn + (isButtonActive("/updates") ? " " + style.active : "")}>
+                                    className={style.games__page__btn + (isButtonActive("/updates") ? " " + style.active : "")}
+                                >
                                     Обновления
                                 </button>
                             </div>
@@ -141,7 +165,7 @@ export const AppHeader = () => {
                                     </Space>
                                     {/* </a> */}
                                 </Dropdown>
-                                <Dropdown menu={{ items: items_profile, onClick: onClick_profile }} trigger={["click"]}>
+                                <Dropdown menu={{ items: items, onClick: onClick_profile }} trigger={["click"]}>
                                     {/* <a onClick={(e) => e.preventDefault()}> */}
                                     <Space onClick={(e) => e.preventDefault()}>
                                         <Button

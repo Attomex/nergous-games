@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import style from "./modules/AppSidebar.module.css";
+import style from "./AppSidebar.module.css";
 
 export const AppSidebar = () => {
     const navigate = useNavigate();

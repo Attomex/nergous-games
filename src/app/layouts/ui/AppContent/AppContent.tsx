@@ -1,4 +1,4 @@
-import style from "./modules/AppContent.module.css";
+import style from "./AppContent.module.css";
 
 interface AppContentProps {
     children: React.ReactNode;

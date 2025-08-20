@@ -1,7 +1,7 @@
 import { GameInfo } from "shared/types";
 import { DividerStyled } from "shared/ui";
 import styles from "./GameDetailModal.module.css";
-import { Modal, ConfigProvider, Rate, Button, Divider, Image } from "antd";
+import { Modal, ConfigProvider, Rate, Divider, Image } from "antd";
 
 interface GameDetailModalProps {
     gameInfo: GameInfo;

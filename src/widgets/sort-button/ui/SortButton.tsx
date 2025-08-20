@@ -1,7 +1,7 @@
 import { faArrowDownAZ, faArrowDownZA } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select, SelectProps } from "antd";
-import { AscIcon, DescIcon } from "features/icons";
+import { AscIcon, DescIcon } from "widgets/icons";
 import { Sort } from "shared/types";
 import { SelectStyled } from "shared/ui";
 

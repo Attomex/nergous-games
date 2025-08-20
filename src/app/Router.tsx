@@ -8,6 +8,7 @@ import { Lander } from "pages/lander";
 import { ProtectedRoute } from "app/provider";
 import { UpdatePage } from "pages/update";
 import { AllGames } from "pages/all-games";
+import { AdminUsers } from "pages/admin-users";
 
 export const Router = () => {
     return (
@@ -20,11 +21,12 @@ export const Router = () => {
                             <ProtectedRoute>
                                 <MainLayout>
                                     <Routes>
+                                        <Route path="/*" element={<Navigate to="/profile" />} />
                                         <Route path="/games" element={<UserGames />} />
                                         <Route path="/profile" element={<Profile />} />
-                                        <Route path="/*" element={<Navigate to="/profile" />} />
                                         <Route path="/updates" element={<UpdatePage />} />
                                         <Route path="/all-games" element={<AllGames />} />
+                                        <Route path="/admin" element={<AdminUsers />} />
                                     </Routes>
                                 </MainLayout>
                             </ProtectedRoute>

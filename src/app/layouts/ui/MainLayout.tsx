@@ -1,4 +1,6 @@
-import { AppHeader, AppContent, AppSidebar } from "./ui";
+import { AppHeader } from "./AppHeader";
+import { AppContent } from "./AppContent";
+// import { AppSidebar } from "./AppSidebar";
 import style from "./MainLayout.module.css";
 import { Notification } from "shared/ui";
 
