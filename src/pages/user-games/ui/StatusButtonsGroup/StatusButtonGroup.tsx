@@ -26,7 +26,7 @@ export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, 
             status: "playing",
         },
         {
-            title: "Отложено",
+            title: "Брошено",
             status: "dropped",
         },
     ];

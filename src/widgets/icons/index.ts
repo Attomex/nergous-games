@@ -1,1 +1,1 @@
-export { AscIcon, DescIcon} from "./ui";
+export { AscIcon, DescIcon, SteamIcon, WikipediaIcon, EditIcon } from "./ui";
