@@ -6,7 +6,7 @@ export const DividerStyled: React.FC<GeneralInterfaceProps> = ({ children, globa
         token: globalToken,
         components: {
             Divider: {
-                colorSplit: "var(--third-color)",
+                colorSplit: "var(--main-third-color)",
             },
         },
     };

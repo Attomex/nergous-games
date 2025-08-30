@@ -158,8 +158,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                                 defaultColor: "#ffffffff",
                             },
                         },
-                    }}
-                >
+                    }}>
                     <Tag className={styles.status__tag__text}>{status !== undefined ? status : "Не выбрано"}</Tag>
                 </ConfigProvider>
             </div>
@@ -174,8 +173,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                                 defaultColor: "#ffffffff",
                             },
                         },
-                    }}
-                >
+                    }}>
                     <Tag className={styles.source__tag}>
                         <FontAwesomeIcon
                             icon={set.source === "wikipedia" ? faWikipediaW : set.source === "steam" ? faSteam : faCircleQuestion}
@@ -208,11 +206,10 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                                         theme={{
                                             components: {
                                                 Rate: {
-                                                    starBg: "var(--third-color)",
+                                                    starBg: "var(--card-third-text-color)",
                                                 },
                                             },
-                                        }}
-                                    >
+                                        }}>
                                         <Rate
                                             className={styles.rating__rate}
                                             allowHalf
@@ -224,8 +221,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                                 <Tag
                                     bordered={false}
                                     className={willUpdate ? styles.rating__update : styles.rating__update__hidden}
-                                    onClick={updatePriority}
-                                >
+                                    onClick={updatePriority}>
                                     Обновить
                                 </Tag>
                             </Space>
@@ -239,7 +235,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                                 <CaretDownOutlined style={{ marginRight: "4px" }} />
                                 Изменить статус
                             </div> */}
-                            <Button style={{ fontSize: "0.8rem" }}>Изменить статус</Button>
+                            <Button style={{ fontSize: "var(--card-secondary-font-size)" }}>Изменить статус</Button>
                         </Dropdown>
                     </ButtonStyled>
                 </DropdownStyled>

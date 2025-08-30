@@ -6,21 +6,20 @@ export const SelectStyled: React.FC<GeneralInterfaceProps> = ({ children, global
         token: globalToken,
         components: {
             Select: {
-                activeBorderColor: "var(--third-color)",
-                hoverBorderColor: "var(--secondary-color)",
+                activeBorderColor: "var(--main-secondary-color)",
+                hoverBorderColor: "var(--main-secondary-color)",
 
                 activeOutlineColor: "none",
                 clearBg: "var(--text-color)",
 
-                multipleItemBg: "white",
-                selectorBg: "var(--primary-color)",
+                multipleItemBg: "var(--main-background-color)",
+                selectorBg: "var(--main-background-color)",
                 colorText: "var(--text-color)",
 
-                optionSelectedColor: "var(--text-reverse-color)",
+                optionSelectedColor: "var(--text-secondary-color)",
                 optionSelectedBg: "var(--accent-color)",
 
-                controlItemBgHover: "var(--secondary-color)",
-                controlItemBgActiveHover: "var(--text-reverse-color)",
+                controlItemBgHover: "var(--main-third-color)",
             },
         },
     };

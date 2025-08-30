@@ -10,33 +10,29 @@ const itemsGame: MenuProps["items"] = [
     { key: "2", label: "Добавить игры" },
 ];
 
-export const AddGameButton: React.FC<AddGameButtonProps> = ({
-    openModalCreateGame,
-    openModalAddGames
-}) => {
+export const AddGameButton: React.FC<AddGameButtonProps> = ({ openModalCreateGame, openModalAddGames }) => {
     const onClick: MenuProps["onClick"] = ({ key }) => {
         if (key === "1") openModalCreateGame(true);
         else if (key === "2") openModalAddGames(true);
     };
     return (
         <DropdownStyled>
-                        <ButtonStyled>
-                            <Dropdown menu={{ items: itemsGame, onClick }} trigger={["click"]}>
-                                <Space>
-                                    <ConfigProvider
-                                        theme={{
-                                            components: {
-                                                Button: {
-                                                    colorBorder: "rgba(var(--third-color-rgb), 0.5)",
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        <Button>Добавить новые игры</Button>
-                                    </ConfigProvider>
-                                </Space>
-                            </Dropdown>
-                        </ButtonStyled>
-                    </DropdownStyled>
+            <ButtonStyled>
+                <Dropdown menu={{ items: itemsGame, onClick }} trigger={["click"]}>
+                    <Space>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Button: {
+                                        colorBorder: "var(--main-third-color)",
+                                    },
+                                },
+                            }}>
+                            <Button className="add-game-button">Добавить новые игры</Button>
+                        </ConfigProvider>
+                    </Space>
+                </Dropdown>
+            </ButtonStyled>
+        </DropdownStyled>
     );
 };

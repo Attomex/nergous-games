@@ -84,8 +84,7 @@ export const Profile = () => {
                     onClick={() => {
                         navigator.clipboard.writeText(userInfo.steam_url);
                         console.log("Ссылка была скопирована");
-                    }}
-                >
+                    }}>
                     {userInfo.steam_url}
                 </div>
             ),
@@ -112,11 +111,10 @@ export const Profile = () => {
                             components: {
                                 Descriptions: {
                                     colorText: "var(--text-color)",
-                                    labelColor: "rgba(var(--text-color-rgb), 0.8)",
+                                    labelColor: "var(--text-color)",
                                 },
                             },
-                        }}
-                    >
+                        }}>
                         <Descriptions title="Информация о пользователе" items={items} />
                     </ConfigProvider>
                 </div>

@@ -6,7 +6,7 @@ export const DropdownStyled: React.FC<GeneralInterfaceProps> = ({ children, glob
         token: globalToken,
         components: {
             Dropdown: {
-                controlItemBgHover: "var(--secondary-color)", // Фон при наведении
+                controlItemBgHover: "var(--main-secondary-color)", // Фон при наведении
             },
         },
     };

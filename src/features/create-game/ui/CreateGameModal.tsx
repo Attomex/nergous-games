@@ -1,17 +1,9 @@
-import React, { useState } from "react";
-import { Modal, Form, Input, InputNumber, DatePicker, Select, Upload, Button } from "antd";
-import { UploadOutlined, PictureOutlined } from "@ant-design/icons";
-import type { UploadFile, UploadProps } from "antd/es/upload/interface";
+import React, { useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { api } from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
-
-// Интерфейс для ответа сервера
-interface ApiResponse {
-    success: boolean;
-    message?: string;
-    data?: any;
-    error?: string;
-}
+import { ArrowUpOnSquareIcon, PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import style from "./CreateGameModal.module.css";
 
 interface CreateGameModalProps {
     isModalOpen: boolean;
@@ -20,9 +12,21 @@ interface CreateGameModalProps {
 }
 
 export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, closeModal, onGameCreated }) => {
-    const [form] = Form.useForm();
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [formData, setFormData] = useState({
+        title: "",
+        preambula: "",
+        year: "",
+        genre: "",
+        url: "",
+        priority: 0,
+        status: "planned",
+        developer: "",
+        publisher: "",
+        image: null as File | null,
+    });
+    const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const statusOptions = [
         { value: "planned", label: "В планах" },
@@ -31,39 +35,93 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
         { value: "dropped", label: "Брошено" },
     ];
 
-    const onFinish = async (values: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files ? e.target.files[0] : null;
+
+        if (file) {
+            const isImage = file.type.startsWith("image/");
+            if (!isImage) {
+                showErrorNotification("Вы можете загрузить только изображения!");
+                return;
+            }
+
+            const isLt5M = file.size / 1024 / 1024 < 5;
+            if (!isLt5M) {
+                showErrorNotification("Изображение должно быть меньше 5MB!");
+                return;
+            }
+
+            setFormData((prev) => ({ ...prev, image: file }));
+            setPreviewImage(URL.createObjectURL(file));
+        } else {
+            setFormData((prev) => ({ ...prev, image: null }));
+            setPreviewImage(null);
+        }
+    };
+
+    const handleRemoveImage = () => {
+        setFormData((prev) => ({ ...prev, image: null }));
+        setPreviewImage(null);
+    };
+
+    const onFinish = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // Ручная валидация
+        if (
+            !formData.title ||
+            !formData.preambula ||
+            !formData.year ||
+            !formData.genre ||
+            !formData.url ||
+            formData.priority === null ||
+            !formData.status ||
+            !formData.developer ||
+            !formData.publisher
+        ) {
+            showErrorNotification("Пожалуйста, заполните все обязательные поля.");
+            return;
+        }
+
+        if (!formData.image) {
+            showErrorNotification("Пожалуйста, загрузите обложку игры.");
+            return;
+        }
+
         try {
             setIsLoading(true);
 
-            // Формируем FormData для отправки файла
-            const formData = new FormData();
+            const data = new FormData();
+            Object.entries(formData).forEach(([key, value]) => {
+                // Пропускаем null-значения
+                if (value === null) {
+                    return;
+                }
 
-            // Добавляем все поля из формы
-            Object.keys(values).forEach((key) => {
-                if (key === "year") {
-                    // Преобразуем год в число
-                    formData.append(key, values[key].year());
-                } else if (key !== "image") {
-                    formData.append(key, values[key]);
+                // Если значение - это File (изображение), добавляем его напрямую
+                if (key === "image" && value instanceof File) {
+                    data.append(key, value);
+                } else {
+                    // Для всех остальных значений (строки, числа), приводим их к строке
+                    data.append(key, String(value));
                 }
             });
 
-            // Добавляем файл изображения, если он есть
-            if (fileList.length > 0 && fileList[0].originFileObj) {
-                formData.append("image", fileList[0].originFileObj);
-            }
-
-            // Отправка данных на сервер
             await api()
-                .post<ApiResponse>("/games", formData)
-                .then((response) => {
+                .post("/games", data)
+                .then(() => {
                     showSuccessNotification("Игра успешно создана!");
                     closeModalForm();
                     onGameCreated();
-                }).catch((error) => {
+                })
+                .catch((error) => {
                     showErrorNotification(error.response.data.error || "Произошла ошибка при создании игры");
                 });
-
         } catch (error) {
             showErrorNotification(`Ошибка при создании игры: ${error}`);
         } finally {
@@ -72,204 +130,233 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
     };
 
     const closeModalForm = () => {
-        form.resetFields();
-        setFileList([]);
+        setFormData({
+            title: "",
+            preambula: "",
+            year: "",
+            genre: "",
+            url: "",
+            priority: 0,
+            status: "planned",
+            developer: "",
+            publisher: "",
+            image: null,
+        });
+        setPreviewImage(null);
         closeModal();
     };
 
-    const beforeUpload: UploadProps["beforeUpload"] = (file) => {
-        const isImage = file.type.startsWith("image/");
-        if (!isImage) {
-            showErrorNotification("Вы можете загрузить только изображения!");
-            return false;
-        }
+    if (!isModalOpen) return null;
 
-        const isLt5M = file.size / 1024 / 1024 < 5;
-        if (!isLt5M) {
-            showErrorNotification("Изображение должно быть меньше 5MB!");
-            return false;
-        }
+    return createPortal(
+        <div className={style.modalOverlay}>
+            <div className={style.modal}>
+                <div className={style.modalHeader}>
+                    <h2 className={style.modalTitle}>Создание игры</h2>
+                </div>
+                <form ref={formRef} onSubmit={onFinish} className={style.form}>
+                    <div className={style.formBody}>
+                        {/* Поле Название */}
+                        <div className={style.formItem}>
+                            <label htmlFor="title" className={style.formLabel}>
+                                Название игры
+                            </label>
+                            <input
+                                type="text"
+                                id="title"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleChange}
+                                className={style.formInput}
+                                placeholder="Название игры"
+                                required
+                            />
+                        </div>
 
-        return false;
-    };
+                        {/* Поле Описание */}
+                        <div className={style.formItem}>
+                            <label htmlFor="preambula" className={style.formLabel}>
+                                Описание игры
+                            </label>
+                            <textarea
+                                id="preambula"
+                                name="preambula"
+                                value={formData.preambula}
+                                onChange={handleChange}
+                                className={style.formTextarea}
+                                placeholder="Описание игры"
+                                rows={3}
+                                required
+                            />
+                        </div>
 
-    const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-        setFileList(newFileList.slice(-1)); // Оставляем только последний файл
-    };
+                        {/* Поле Год */}
+                        <div className={style.formItem}>
+                            <label htmlFor="year" className={style.formLabel}>
+                                Год игры
+                            </label>
+                            <input
+                                type="number"
+                                id="year"
+                                name="year"
+                                value={formData.year}
+                                onChange={handleChange}
+                                className={style.formInput}
+                                placeholder="Год игры"
+                                min={1900}
+                                max={2100}
+                                required
+                            />
+                        </div>
 
-    return (
-        <Modal
-            title="Создание игры"
-            open={isModalOpen}
-            onCancel={closeModalForm}
-            footer={[
-                <Button key="back" onClick={closeModalForm}>
-                    Отмена
-                </Button>,
-                <Button key="submit" type="primary" icon={<UploadOutlined />} loading={isLoading} onClick={() => form.submit()}>
-                    Создать
-                </Button>,
-            ]}
-        >
-            <Form form={form} onFinish={onFinish} layout="vertical" autoComplete="off" style={{ maxHeight: "60vh", overflowY: "auto" }}>
-                <Form.Item
-                    label="Название игры"
-                    name="title"
-                    style={{ width: "50%" }}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, введите название игры",
-                        },
-                    ]}
-                >
-                    <Input placeholder="Название игры" />
-                </Form.Item>
-                <Form.Item
-                    label="Описание игры"
-                    name="preambula"
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, введите описание игры",
-                        },
-                    ]}
-                >
-                    <Input placeholder="Описание игры" />
-                </Form.Item>
-                <Form.Item
-                    label="Год игры"
-                    name="year"
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, выберите год игры",
-                        },
-                    ]}
-                >
-                    <DatePicker
-                        picker="year"
-                        placeholder="Выберите год игры"
-                        disabledDate={(current) => {
-                            // Отключаем даты вне диапазона 1900-2100
-                            return current && (current.year() < 1900 || current.year() > 2100);
-                        }}
-                    />
-                </Form.Item>
-                <Form.Item
-                    label="Жанр игры"
-                    name="genre"
-                    style={{ width: "75%" }}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, введите жанры игры",
-                        },
-                    ]}
-                >
-                    <Input placeholder="Жанр игры" />
-                </Form.Item>
-                <Form.Item
-                    label="Ссылка на игру"
-                    name="url"
-                    style={{ width: "75%" }}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, введите ссылку на игры",
-                        },
-                    ]}
-                >
-                    <Input type="url" placeholder="Ссылка на игру" />
-                </Form.Item>
-                <Form.Item
-                    label="Приоритет игры"
-                    name="priority"
-                    style={{ width: "30%" }}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, введите приоритет игры",
-                        },
-                    ]}
-                >
-                    <InputNumber min={0} max={10} style={{ width: "100%" }} placeholder="Приоритет игры" />
-                </Form.Item>
-                <Form.Item
-                    label="Статус игры"
-                    name="status"
-                    style={{ width: "50%" }}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, выберите статус игры",
-                        },
-                    ]}
-                >
-                    <Select placeholder="Выберите статус">
-                        {statusOptions.map((option) => (
-                            <Select.Option key={option.value} value={option.value}>
-                                {option.label}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-                <Form.Item
-                    label="Разработчик игры"
-                    name="developer"
-                    style={{ width: "50%" }}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, введите разработчика игры",
-                        },
-                    ]}
-                >
-                    <Input placeholder="Разработчик игры" />
-                </Form.Item>
-                <Form.Item
-                    label="Издатель игры"
-                    name="publisher"
-                    style={{ width: "50%" }}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, введите издателя игры",
-                        },
-                    ]}
-                >
-                    <Input placeholder="Издатель игры" />
-                </Form.Item>
-                <Form.Item
-                    label="Обложка игры"
-                    name="image"
-                    valuePropName="fileList"
-                    getValueFromEvent={(e) => e.fileList}
-                    rules={[
-                        {
-                            required: true,
-                            message: "Пожалуйста, загрузите обложку игры",
-                        },
-                    ]}
-                >
-                    <Upload
-                        listType="picture-card"
-                        fileList={fileList}
-                        beforeUpload={beforeUpload}
-                        onChange={handleChange}
-                        accept=".jpg, .jpeg, .png"
-                        maxCount={1}
-                        onPreview={() => window.open(fileList[0]?.thumbUrl)}
-                    >
-                        {fileList.length >= 1 ? null : (
-                            <div className="ant-upload-drag-icon">
-                                <PictureOutlined style={{ fontSize: "24px", color: "#1890ff" }} />
-                                <p style={{ marginTop: 8 }}>Загрузить обложку</p>
+                        {/* Поле Жанр */}
+                        <div className={style.formItem}>
+                            <label htmlFor="genre" className={style.formLabel}>
+                                Жанр игры
+                            </label>
+                            <input
+                                type="text"
+                                id="genre"
+                                name="genre"
+                                value={formData.genre}
+                                onChange={handleChange}
+                                className={style.formInput}
+                                placeholder="Жанр игры"
+                                required
+                            />
+                        </div>
+
+                        {/* Поле Ссылка */}
+                        <div className={style.formItem}>
+                            <label htmlFor="url" className={style.formLabel}>
+                                Ссылка на игру
+                            </label>
+                            <input
+                                type="url"
+                                id="url"
+                                name="url"
+                                value={formData.url}
+                                onChange={handleChange}
+                                className={style.formInput}
+                                placeholder="Ссылка на игру"
+                                required
+                            />
+                        </div>
+
+                        {/* Поле Приоритет */}
+                        <div className={style.formItem}>
+                            <label htmlFor="priority" className={style.formLabel}>
+                                Приоритет игры (0-10)
+                            </label>
+                            <input
+                                type="number"
+                                id="priority"
+                                name="priority"
+                                value={formData.priority}
+                                onChange={handleChange}
+                                className={style.formInput}
+                                placeholder="Приоритет игры"
+                                min={0}
+                                max={10}
+                                required
+                            />
+                        </div>
+
+                        {/* Поле Статус */}
+                        <div className={style.formItem}>
+                            <label htmlFor="status" className={style.formLabel}>
+                                Статус игры
+                            </label>
+                            <select id="status" name="status" value={formData.status} onChange={handleChange} className={style.formSelect} required>
+                                {statusOptions.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Поле Разработчик */}
+                        <div className={style.formItem}>
+                            <label htmlFor="developer" className={style.formLabel}>
+                                Разработчик игры
+                            </label>
+                            <input
+                                type="text"
+                                id="developer"
+                                name="developer"
+                                value={formData.developer}
+                                onChange={handleChange}
+                                className={style.formInput}
+                                placeholder="Разработчик игры"
+                                required
+                            />
+                        </div>
+
+                        {/* Поле Издатель */}
+                        <div className={style.formItem}>
+                            <label htmlFor="publisher" className={style.formLabel}>
+                                Издатель игры
+                            </label>
+                            <input
+                                type="text"
+                                id="publisher"
+                                name="publisher"
+                                value={formData.publisher}
+                                onChange={handleChange}
+                                className={style.formInput}
+                                placeholder="Издатель игры"
+                                required
+                            />
+                        </div>
+
+                        {/* Поле Обложка */}
+                        <div className={style.formItem}>
+                            <label className={style.formLabel}>Обложка игры</label>
+                            <div className={style.uploadContainer}>
+                                {previewImage ? (
+                                    <div className={style.imagePreview}>
+                                        <img src={previewImage} alt="Превью обложки" className={style.previewImg} />
+                                        <button type="button" className={style.removeImageBtn} onClick={handleRemoveImage}>
+                                            <XMarkIcon className={style.removeIcon} />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <label htmlFor="image-upload" className={style.uploadLabel}>
+                                        <PhotoIcon className={style.uploadIcon} />
+                                        <p>Загрузить обложку</p>
+                                    </label>
+                                )}
+                                <input
+                                    type="file"
+                                    id="image-upload"
+                                    name="image"
+                                    accept="image/jpeg,image/png"
+                                    onChange={handleFileChange}
+                                    className={style.uploadInput}
+                                    required
+                                />
                             </div>
+                        </div>
+                    </div>
+                </form>
+                <div className={style.modalFooter}>
+                    <button type="button" className={style.button} onClick={closeModalForm}>
+                        Отмена
+                    </button>
+                    <button type="button" className={`${style.button} ${style.buttonPrimary}`} onClick={onFinish} disabled={isLoading}>
+                        {isLoading ? (
+                            "Создание..."
+                        ) : (
+                            <>
+                                <ArrowUpOnSquareIcon className={style.iconLeft} />
+                                Создать
+                            </>
                         )}
-                    </Upload>
-                </Form.Item>
-            </Form>
-        </Modal>
+                    </button>
+                </div>
+            </div>
+        </div>,
+        document.body
     );
 };

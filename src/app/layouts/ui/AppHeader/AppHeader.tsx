@@ -1,187 +1,234 @@
-import { Col, Row, Button, Dropdown, Space, ConfigProvider, Badge } from "antd";
-import { UserOutlined, BgColorsOutlined, MoonOutlined, InfoCircleOutlined, LogoutOutlined, SunOutlined, ToolOutlined } from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import style from "./AppHeader.module.css";
+import { useState, useMemo } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import {
+    UserCircleIcon,
+    PaintBrushIcon,
+    MoonIcon,
+    SunIcon,
+    InformationCircleIcon,
+    ArrowLeftOnRectangleIcon,
+    WrenchScrewdriverIcon,
+    Bars3Icon,
+    Squares2X2Icon,
+    ArrowPathIcon,
+    BookOpenIcon,
+    XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useTheme } from "shared/theme";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "features/auth";
-import { DropdownStyled } from "shared/ui";
+import style from "./AppHeader.module.css";
+import { createPortal } from "react-dom";
+
+const pageTitles = {
+    "/all-games": "Все игры",
+    "/games": "Мои игры",
+    "/updates": "Обновления",
+    "/profile": "Профиль",
+    "/admin": "Панель администратора",
+};
 
 export const AppHeader = () => {
     const { theme, setTheme, themes } = useTheme();
     const { logout, isAdmin, checkAdmin } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
+    const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
-    const onClick_theme: MenuProps["onClick"] = ({ key }) => {
+    const currentTitle = useMemo(() => {
+        const path = location.pathname as keyof typeof pageTitles;
+        return pageTitles[path] || "Главная";
+    }, [location.pathname]);
+
+    const onClickTheme = (key: string) => {
         const selectedTheme = themes[Number(key) - 1];
         setTheme(selectedTheme);
+        setIsThemeDropdownOpen(false);
     };
 
-    const onClick_profile: MenuProps["onClick"] = ({ key }) => {
-        if (key === "1") {
-            navigate("/profile");
-        }
+    const onClickProfile = (key: string) => {
+        if (key === "1") navigate("/profile");
         if (key === "2") {
             logout();
             navigate("/login");
         }
-        if (key === "3") {
-            navigate("/admin");
-        }
+        if (key === "3") navigate("/admin");
+        setIsProfileDropdownOpen(false);
     };
 
-    const items_theme: MenuProps["items"] = [
-        {
-            key: "1",
-            label: "Молочно-коричневый",
-            extra: theme === "milk-brown" ? <Badge status="processing" /> : null,
-            disabled: true,
-        },
+    if (isAdmin === "") checkAdmin();
 
-        {
-            key: "2",
-            label: "Молочно-зеленый",
-            extra: theme === "milk-green" ? <Badge status="processing" /> : null,
-            disabled: true,
-        },
-        {
-            type: "divider",
-        },
+    const iconMenuItems = [
+        { key: "/all-games", icon: <Squares2X2Icon />, label: "Все игры" },
+        { key: "/games", icon: <BookOpenIcon />, label: "Мои игры" },
+        { key: "/updates", icon: <ArrowPathIcon />, label: "Обновления" },
+    ];
+
+    const menuItemsTheme = [
         {
             key: "3",
             label: "Светлая тема",
-            icon: <SunOutlined style={{ color: "black" }} />,
-            extra: theme === "light" ? <Badge status="processing" /> : null,
+            icon: <SunIcon />,
+            active: theme === "light",
         },
         {
             key: "4",
             label: "Темная тема",
-            icon: <MoonOutlined style={{ color: "black" }} />,
-            extra: theme === "dark" ? <Badge status="processing" /> : null,
-        },
-        {
-            type: "divider",
+            icon: <MoonIcon />,
+            active: theme === "dark",
         },
         {
             key: "5",
             label: "Системная тема",
-            icon: <UserOutlined style={{ color: "black" }} />,
-            extra: theme.includes("system") ? <Badge status="processing" /> : null,
+            icon: <UserCircleIcon />,
+            active: theme.includes("system"),
         },
     ];
 
-    const items_profile: MenuProps["items"] = [
-        {
-            key: "1",
-            label: "Информация",
-            icon: <InfoCircleOutlined />,
-        },
-        {
-            key: "2",
-            label: "Выход",
-            icon: <LogoutOutlined />,
-            danger: true,
-        },
+    const menuItemsProfile = [
+        { key: "1", label: "Информация", icon: <InformationCircleIcon /> },
+        { key: "2", label: "Выход", icon: <ArrowLeftOnRectangleIcon />, danger: true },
     ];
 
-    if (isAdmin === "") {
-        checkAdmin();
+    if (isAdmin) {
+        menuItemsProfile.push({
+            key: "3",
+            label: "Панель администратора",
+            icon: <WrenchScrewdriverIcon />,
+        });
     }
 
-    const adminPriv: MenuProps["items"] =
-        isAdmin === true
-            ? [
-                  {
-                      type: "divider",
-                  },
-                  { key: "3", label: "Панелька секретов", icon: <ToolOutlined /> },
-              ]
-            : [];
-
-    const items = [...items_profile, ...adminPriv] as MenuProps["items"];
-
-    const isButtonActive = (url: string) => {
-        if (window.location.pathname === url) {
-            return true;
-        }
-        return false;
-    };
-
     return (
-        <div className={style.header}>
-            <div>
-                <ConfigProvider
-                    theme={{
-                        components: {
-                            Button: {
-                                textHoverBg: "var(--bg-color)",
-                            },
-                        },
-                    }}
-                >
-                    <Row align="middle">
-                        <Col span={8} className={style.logo}>
-                            <div
-                                onClick={() => {
-                                    window.location.href = "https://i.ytimg.com/vi/PVyFj52G3no/maxresdefault.jpg";
-                                }}
-                            >
-                                не тыкать
+        <header className={style.header}>
+            <div className={style.header__inner}>
+                {/* Бургер + Заголовок */}
+                <div className={style.header__group}>
+                    <button className={style.iconButton} onClick={() => setDrawerOpen(true)}>
+                        <Bars3Icon className={style.icon} />
+                    </button>
+                    <span className={style.title}>{currentTitle}</span>
+                </div>
+
+                {/* Настройки */}
+                <div className={style.header__group}>
+                    {/* Дропдаун темы */}
+                    <div className={style.dropdown}>
+                        <button className={style.iconButton} onClick={() => setIsThemeDropdownOpen(!isThemeDropdownOpen)}>
+                            <PaintBrushIcon className={style.icon} />
+                        </button>
+                        {isThemeDropdownOpen && (
+                            <div className={style.dropdownMenu}>
+                                {menuItemsTheme.map((item) => (
+                                    <button
+                                        key={item.key}
+                                        className={`${style.dropdownItem} ${item.active ? style.dropdownItemActive : ""}`}
+                                        onClick={() => onClickTheme(item.key)}>
+                                        <div className={style.dropdownItemIcon}>{item.icon}</div>
+                                        <span>{item.label}</span>
+                                        {item.active && <span className={style.badge}></span>}
+                                    </button>
+                                ))}
                             </div>
-                        </Col>
-                        <Col span={8}>
-                            <div className={style.menu}>
-                                <button
-                                    onClick={() => navigate("/all-games")}
-                                    className={style.games__page__btn + (isButtonActive("/all-games") ? " " + style.active : "")}
-                                >
-                                    Все игры
-                                </button>
-                                <button
-                                    onClick={() => navigate("/games")}
-                                    className={style.games__page__btn + (isButtonActive("/games") ? " " + style.active : "")}
-                                >
-                                    Мои игры
-                                </button>
-                                <button
-                                    onClick={() => navigate("/updates")}
-                                    className={style.games__page__btn + (isButtonActive("/updates") ? " " + style.active : "")}
-                                >
-                                    Обновления
-                                </button>
+                        )}
+                    </div>
+
+                    {/* Дропдаун профиля */}
+                    <div className={style.dropdown}>
+                        <button className={style.iconButton} onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}>
+                            <UserCircleIcon className={style.icon} />
+                        </button>
+                        {isProfileDropdownOpen && (
+                            <div className={style.dropdownMenu}>
+                                {menuItemsProfile.map((item) => (
+                                    <button
+                                        key={item.key}
+                                        className={`${style.dropdownItem} ${item.danger ? style.dropdownItemDanger : ""}`}
+                                        onClick={() => onClickProfile(item.key)}>
+                                        <div className={style.dropdownItemIcon}>{item.icon}</div>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
                             </div>
-                        </Col>
-                        <Col span={8} className={style.settings}>
-                            <DropdownStyled>
-                                <Dropdown menu={{ items: items_theme, onClick: onClick_theme }} trigger={["click"]}>
-                                    {/* <a onClick={(e) => e.preventDefault()}> */}
-                                    <Space onClick={(e) => e.preventDefault()}>
-                                        <Button
-                                            color="default"
-                                            shape="circle"
-                                            variant="text"
-                                            icon={<BgColorsOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
-                                        />
-                                    </Space>
-                                    {/* </a> */}
-                                </Dropdown>
-                                <Dropdown menu={{ items: items, onClick: onClick_profile }} trigger={["click"]}>
-                                    {/* <a onClick={(e) => e.preventDefault()}> */}
-                                    <Space onClick={(e) => e.preventDefault()}>
-                                        <Button
-                                            color="default"
-                                            shape="circle"
-                                            variant="text"
-                                            icon={<UserOutlined style={{ color: "var(--text-color)", fontSize: "16px" }} />}
-                                        />
-                                    </Space>
-                                    {/* </a> */}
-                                </Dropdown>
-                            </DropdownStyled>
-                        </Col>
-                    </Row>
-                </ConfigProvider>
+                        )}
+                    </div>
+                </div>
             </div>
-        </div>
+
+            {/* Drawer с меню */}
+            {drawerOpen &&
+                createPortal(
+                    <div className={style.drawerOverlay}>
+                        <div className={style.drawer}>
+                            <div className={style.drawerHeader}>
+                                <h2 className={style.drawerTitle}>Меню</h2>
+                                <button className={style.iconButton} onClick={() => setDrawerOpen(false)}>
+                                    <XMarkIcon className={style.icon} />
+                                </button>
+                            </div>
+                            <nav className={style.drawerBody}>
+                                <ul className={style.drawerList}>
+                                    {iconMenuItems.map((item) => (
+                                        <li key={item.key}>
+                                            <button
+                                                className={`${style.drawerListItem} ${
+                                                    location.pathname === item.key ? style.drawerListItemActive : ""
+                                                }`}
+                                                onClick={() => {
+                                                    navigate(item.key);
+                                                    setDrawerOpen(false);
+                                                }}>
+                                                <div className={style.drawerListItemIcon}>{item.icon}</div>
+                                                <span>{item.label}</span>
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <div className={style.drawerFooter}>
+                                    <button
+                                        className={`${style.drawerFooterItem} ${location.pathname === "/profile" ? style.drawerListItemActive : ""}`}
+                                        onClick={() => {
+                                            navigate("/profile");
+                                            setDrawerOpen(false);
+                                        }}>
+                                        <div className={style.drawerListItemIcon}>
+                                            <InformationCircleIcon />
+                                        </div>
+                                        <span>Профиль</span>
+                                    </button>
+                                    {isAdmin && (
+                                        <button
+                                            className={`${style.drawerFooterItem} ${
+                                                location.pathname === "/admin" ? style.drawerListItemActive : ""
+                                            }`}
+                                            onClick={() => {
+                                                navigate("/admin");
+                                                setDrawerOpen(false);
+                                            }}>
+                                            <div className={style.drawerListItemIcon}>
+                                                <WrenchScrewdriverIcon />
+                                            </div>
+                                            <span>Панель администратора</span>
+                                        </button>
+                                    )}
+                                    <button
+                                        className={`${style.drawerFooterItem} ${style.drawerFooterItemDanger}`}
+                                        onClick={() => {
+                                            logout();
+                                            navigate("/login");
+                                            setDrawerOpen(false);
+                                        }}>
+                                        <div className={style.drawerListItemIcon}>
+                                            <ArrowLeftOnRectangleIcon />
+                                        </div>
+                                        <span>Выход</span>
+                                    </button>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>,
+                    document.body
+                )}
+        </header>
     );
 };

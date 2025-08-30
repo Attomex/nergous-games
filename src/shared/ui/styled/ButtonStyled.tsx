@@ -10,16 +10,15 @@ export const ButtonStyled: React.FC<GeneralInterfaceProps> = ({ children, global
                 controlHeight: 35,
 
                 colorText: "var(--text-color)",
-                defaultBg: "var(--primary-color)",
-                colorBorder: "var(--bg-color)",
+                defaultBg: "var(--main-background-color)",
+                colorBorder: "var(--main-third-color)",
 
-                defaultActiveColor: "var(--text-color)",
+                defaultActiveColor: "white",
                 defaultActiveBg: "var(--accent-color)",
-                defaultActiveBorderColor: "var(--bg-color)",
 
                 defaultHoverColor: "white",
-                defaultHoverBg: "var(--secondary-color)",
-                defaultHoverBorderColor: "var(--secondary-color)",
+                defaultHoverBg: "var(--main-secondary-color)",
+                defaultHoverBorderColor: "var(--main-secondary-color)",
             },
         },
     };

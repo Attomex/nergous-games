@@ -1,16 +1,12 @@
 .card {
-    font-family: Arial, Helvetica, sans-serif;
-    /* max-width: 385.1162791px; */
-    /* min-width: 385.1162791px; */
-
     max-width: 300px;
     min-width: 300px;
     margin: 1em auto;
-    background-color: var(--primary-color);
+    background-color: var(--card-background-color);
     border-radius: 12px 12px 12px 12px;
     overflow: hidden;
     /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); */
-    border: rgba(var(--secondary-color-rgb), 0.2) 1px dashed;
+    border: var(--main-third-color) 1px solid;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -20,10 +16,7 @@
 }
 
 .card:hover {
-    box-shadow: 0 10px 20px rgba(var(--accent-color-rgb), 0.55);
-    border: rgba(var(--accent-color-rgb), 0.5) 1px dashed; /* Ну либо убрать вообще */
-    /* Либо */
-    /* box-shadow: 0 10px 20px rgba(var(--text-color-rgb), 0.55); */
+    box-shadow: 0 5px 10px 5px var(--main-third-color);
 }
 
 .editGame {
@@ -41,7 +34,6 @@
     position: absolute;
     right: -3px;
     top: 113px;
-    color: red;
 }
 
 /* .status__tag__text {
@@ -108,9 +100,9 @@
 
 .title {
     grid-area: title;
-    font-weight: bold;
-    font-size: 1.3rem;
-    color: var(--text-color);
+    font-weight: var(--card-font-weight);
+    font-size: var(--card-font-size);
+    color: var(--card-text-color);
     line-clamp: 2;
     -webkit-line-clamp: 2;
     display: -webkit-box;
@@ -120,8 +112,8 @@
 
 .genres {
     grid-area: genres;
-    font-size: 0.8rem;
-    color: var(--text-color);
+    font-size: var(--card-secondary-font-size);
+    color: var(--card-secondary-text-color);
     letter-spacing: 1px;
 }
 
@@ -146,18 +138,17 @@
 }
 
 .year {
-    color: var(--third-color);
-    font-size: 0.9rem;
+    color: var(--card-third-text-color);
+    font-size: var(--card-secondary-font-size);
     margin-left: auto; /* Прижимаем год к правому краю */
 }
 
 .rating {
-    font-size: 0.8rem;
+    font-size: var(--card-secondary-font-size);
     display: flex;
     align-items: center;
 
-    font-weight: 500;
-    color: var(--text-color);
+    color: var(--card-text-color);
 }
 
 .rating__content {
@@ -168,17 +159,17 @@
 }
 
 .rating__rate {
-    font-size: 1rem;
+    font-size: var(--card-secondary-font-size);
     margin: auto 0;
 }
 
 .rating__update__hidden,
 .rating__update {
     cursor: pointer;
-    color: var(--text-color);
+    color: var(--card-text-color);
     margin-left: 5px;
-    background-color: var(--bg-color);
-    border: rgba(var(--secondary-color-rgb), 1) 1px solid;
+    background-color: var(--card-background-color);
+    border: var(--main-third-color) 1px solid;
 }
 
 .rating__update__hidden {
@@ -196,8 +187,8 @@
 .rating__update:hover {
     /* text-decoration: underline; */
     /* box-shadow: 0 0 4px 1px var(--secondary-color); */
-    background-color: var(--secondary-color);
-    color: var(--text-reverse-color);
+    background-color: var(--main-secondary-color);
+    color: var(--text-secondary-color);
 }
 
 .status {
@@ -205,14 +196,14 @@
     grid-area: status;
     justify-self: center;
     padding: 6px 12px;
-    border: 1px solid var(--secondary-color);
+    border: 1px solid var(--main-third-color);
     border-radius: 6px;
     /* text-transform: uppercase; */
     font-weight: 500;
     font-size: 0.8rem;
-    background: var(--primary-color);
+    background: var(--card-background-color);
     height: 20px;
-    color: var(--text-color);
+    color: var(--card-text-color);
     letter-spacing: 1px;
     height: 30px;
 }
