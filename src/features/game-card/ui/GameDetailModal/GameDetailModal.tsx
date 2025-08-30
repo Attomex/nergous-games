@@ -25,7 +25,7 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
                             theme={{
                                 components: {
                                     Rate: {
-                                        starBg: "var(--third-color)",
+                                        starBg: "var(--card-third-text-color)",
                                     },
                                 },
                             }}>

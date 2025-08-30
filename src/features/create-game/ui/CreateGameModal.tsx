@@ -60,10 +60,10 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                     showSuccessNotification("Игра успешно создана!");
                     closeModalForm();
                     onGameCreated();
-                }).catch((error) => {
+                })
+                .catch((error) => {
                     showErrorNotification(error.response.data.error || "Произошла ошибка при создании игры");
                 });
-
         } catch (error) {
             showErrorNotification(`Ошибка при создании игры: ${error}`);
         } finally {
@@ -109,47 +109,46 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                 <Button key="submit" type="primary" icon={<UploadOutlined />} loading={isLoading} onClick={() => form.submit()}>
                     Создать
                 </Button>,
-            ]}
-        >
+            ]}>
             <Form form={form} onFinish={onFinish} layout="vertical" autoComplete="off" style={{ maxHeight: "60vh", overflowY: "auto" }}>
                 <Form.Item
                     label="Название игры"
                     name="title"
-                    style={{ width: "50%" }}
+                    style={{ width: "90%" }}
                     rules={[
                         {
                             required: true,
                             message: "Пожалуйста, введите название игры",
                         },
-                    ]}
-                >
+                    ]}>
                     <Input placeholder="Название игры" />
                 </Form.Item>
                 <Form.Item
                     label="Описание игры"
                     name="preambula"
+                    style={{ width: "90%" }}
                     rules={[
                         {
                             required: true,
                             message: "Пожалуйста, введите описание игры",
                         },
-                    ]}
-                >
-                    <Input placeholder="Описание игры" />
+                    ]}>
+                    <Input.TextArea autoSize={{ minRows: 3 }} placeholder="Описание игры" />
                 </Form.Item>
                 <Form.Item
                     label="Год игры"
                     name="year"
+                    style={{ width: "90%" }}
                     rules={[
                         {
                             required: true,
                             message: "Пожалуйста, выберите год игры",
                         },
-                    ]}
-                >
+                    ]}>
                     <DatePicker
                         picker="year"
                         placeholder="Выберите год игры"
+                        style={{ width: "100%" }}
                         disabledDate={(current) => {
                             // Отключаем даты вне диапазона 1900-2100
                             return current && (current.year() < 1900 || current.year() > 2100);
@@ -159,53 +158,49 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                 <Form.Item
                     label="Жанр игры"
                     name="genre"
-                    style={{ width: "75%" }}
+                    style={{ width: "90%" }}
                     rules={[
                         {
                             required: true,
                             message: "Пожалуйста, введите жанры игры",
                         },
-                    ]}
-                >
+                    ]}>
                     <Input placeholder="Жанр игры" />
                 </Form.Item>
                 <Form.Item
                     label="Ссылка на игру"
                     name="url"
-                    style={{ width: "75%" }}
+                    style={{ width: "90%" }}
                     rules={[
                         {
                             required: true,
                             message: "Пожалуйста, введите ссылку на игры",
                         },
-                    ]}
-                >
+                    ]}>
                     <Input type="url" placeholder="Ссылка на игру" />
                 </Form.Item>
                 <Form.Item
                     label="Приоритет игры"
                     name="priority"
-                    style={{ width: "30%" }}
+                    style={{ width: "90%" }}
                     rules={[
                         {
                             required: true,
                             message: "Пожалуйста, введите приоритет игры",
                         },
-                    ]}
-                >
+                    ]}>
                     <InputNumber min={0} max={10} style={{ width: "100%" }} placeholder="Приоритет игры" />
                 </Form.Item>
                 <Form.Item
                     label="Статус игры"
                     name="status"
-                    style={{ width: "50%" }}
+                    style={{ width: "90%" }}
                     rules={[
                         {
                             required: true,
                             message: "Пожалуйста, выберите статус игры",
                         },
-                    ]}
-                >
+                    ]}>
                     <Select placeholder="Выберите статус">
                         {statusOptions.map((option) => (
                             <Select.Option key={option.value} value={option.value}>
@@ -217,31 +212,30 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                 <Form.Item
                     label="Разработчик игры"
                     name="developer"
-                    style={{ width: "50%" }}
+                    style={{ width: "90%" }}
                     rules={[
                         {
                             required: true,
                             message: "Пожалуйста, введите разработчика игры",
                         },
-                    ]}
-                >
+                    ]}>
                     <Input placeholder="Разработчик игры" />
                 </Form.Item>
                 <Form.Item
                     label="Издатель игры"
                     name="publisher"
-                    style={{ width: "50%" }}
+                    style={{ width: "90%" }}
                     rules={[
                         {
                             required: true,
                             message: "Пожалуйста, введите издателя игры",
                         },
-                    ]}
-                >
+                    ]}>
                     <Input placeholder="Издатель игры" />
                 </Form.Item>
                 <Form.Item
                     label="Обложка игры"
+                    style={{ width: "90%" }}
                     name="image"
                     valuePropName="fileList"
                     getValueFromEvent={(e) => e.fileList}
@@ -250,20 +244,19 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             required: true,
                             message: "Пожалуйста, загрузите обложку игры",
                         },
-                    ]}
-                >
+                    ]}>
                     <Upload
+                        style={{ width: "100%" }}
                         listType="picture-card"
                         fileList={fileList}
                         beforeUpload={beforeUpload}
                         onChange={handleChange}
                         accept=".jpg, .jpeg, .png"
                         maxCount={1}
-                        onPreview={() => window.open(fileList[0]?.thumbUrl)}
-                    >
+                        onPreview={() => window.open(fileList[0]?.thumbUrl)}>
                         {fileList.length >= 1 ? null : (
                             <div className="ant-upload-drag-icon">
-                                <PictureOutlined style={{ fontSize: "24px", color: "#1890ff" }} />
+                                <PictureOutlined style={{ fontSize: "24px", color: "var(--accent-color)" }} />
                                 <p style={{ marginTop: 8 }}>Загрузить обложку</p>
                             </div>
                         )}

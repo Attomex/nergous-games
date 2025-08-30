@@ -86,3 +86,64 @@ controlItemBgHover: "#333", // Фон при наведении
 controlItemBgActive: "#444", // Фон активного элемента
 borderRadiusLG: 8, // Скругление углов
 paddingXS: 12, // Отступы внутри меню */
+
+.ant-drawer-content {
+    background-color: var(--header-background-color) !important;
+    color: var(--header-text-color) !important;
+}
+
+.ant-drawer-close {
+    color: var(--header-text-color) !important;
+}
+
+.ant-menu {
+    background-color: var(--header-background-color) !important;
+    color: var(--header-text-color) !important;
+}
+
+.ant-menu-item {
+    color: var(--header-text-color) !important;
+}
+
+.ant-menu-item:hover {
+    background-color: var(--header-secondary-color) !important;
+    color: var(--header-text-color) !important;
+}
+
+:where(.css-dev-only-do-not-override-1d63w90).ant-menu-light .ant-menu-item-selected {
+    background-color: var(--header-secondary-color) !important;
+    color: var(--header-text-color) !important;
+}
+
+:where(.css-dev-only-do-not-override-1d63w90).ant-btn-variant-text:hover {
+    background-color: purple;
+}
+
+.add-game-button:active {
+    border-color: var(--main-secondary-color) !important;
+}
+
+:where(.css-dev-only-do-not-override-9lz6di).ant-dropdown .ant-dropdown-menu {
+    background-color: var(--main-background-color) !important;
+    border-color: var(--main-third-color) !important;
+}
+
+:where(.css-dev-only-do-not-override-9lz6di).ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item {
+    color: var(--text-color);
+}
+
+:where(.css-dev-only-do-not-override-9lz6di).ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item:hover {
+    background-color: var(--main-secondary-color) !important;
+    color: var(--text-color) !important;
+}
+
+:where(.css-dev-only-do-not-override-9lz6di).ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item:active {
+    background-color: var(--accent-color) !important;
+    color: var(--text-color) !important;
+}
+
+:where(.css-dev-only-do-not-override-9lz6di).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover,
+:where(.css-dev-only-do-not-override-9lz6di).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):active {
+    border-color: var(--main-secondary-color) !important;
+    color: var(--text-color) !important;
+}

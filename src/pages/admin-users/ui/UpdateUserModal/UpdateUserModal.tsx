@@ -54,8 +54,7 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag,
                 </Button>,
             ]}
             onCancel={handleCloseModal}
-            centered
-        >
+            centered>
             <Form form={form} onFinish={onFinish} labelCol={{ span: 5 }}>
                 <FormItem label="Аватар">
                     <Image
@@ -91,11 +90,10 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag,
                             theme={{
                                 components: {
                                     Button: {
-                                        colorBorder: "rgba(var(--third-color-rgb), 0.5)",
+                                        colorBorder: "var(--main-third-color)",
                                     },
                                 },
-                            }}
-                        >
+                            }}>
                             <Button onClick={() => setChangeRole(!changeRole)}>Изменить</Button>
                         </ConfigProvider>
                     </ButtonStyled>

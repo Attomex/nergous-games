@@ -29,7 +29,7 @@ export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, 
             title: "Отложено",
             status: "dropped",
         },
-    ]
+    ];
 
     return (
         <ButtonStyled>
@@ -37,14 +37,13 @@ export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, 
                 <Button
                     key={button.status}
                     style={{
-                        backgroundColor: status === button.status ? "var(--accent-color)" : "var(--primary-color)",
+                        backgroundColor: status === button.status ? "var(--accent-color)" : "var(--main-background-color)",
                         color: status === button.status ? "white" : "var(--text-color)",
                     }}
                     onClick={() => {
                         setStatus(button.status);
                         setPage(1);
-                    }}
-                >
+                    }}>
                     {button.title}
                 </Button>
             ))}

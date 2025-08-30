@@ -76,7 +76,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
             const mergedData = {
                 ...gameInfo,
                 ...valuesWithoutImage,
-            }
+            };
 
             const formData = new FormData();
 
@@ -122,7 +122,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
             setIsLoading(false);
             closeModalForm();
         }
-    }
+    };
 
     const closeModalForm = () => {
         setNewImageFile(null);
@@ -140,14 +140,13 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                 <Button key="back" onClick={closeModal}>
                     Отмена
                 </Button>,
-                <Button key="delete" onClick={deleteGame} icon={<DeleteOutlined style={{ color: "red" }}/>}>
+                <Button key="delete" onClick={deleteGame} icon={<DeleteOutlined style={{ color: "red" }} />}>
                     Удалить игру
                 </Button>,
                 <Button key="submit" type="primary" icon={<SyncOutlined />} loading={isLoading} onClick={() => form.submit()}>
                     Обновить
                 </Button>,
-            ]}
-        >
+            ]}>
             <Form form={form} onFinish={onFinish} labelCol={{ span: 5 }}>
                 <Form.Item name="title" initialValue={gameInfo.title} label="Название игры">
                     <Input placeholder="Название игры" />
@@ -158,7 +157,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                 </Form.Item>
 
                 <Form.Item name="preambula" initialValue={gameInfo.preambula} label="Описание">
-                    <Input.TextArea placeholder="Описание игры" autoSize={{ minRows: 3, maxRows: 6 }} />
+                    <Input.TextArea placeholder="Описание игры" autoSize={{ minRows: 3 }} />
                 </Form.Item>
 
                 <Form.Item name="developer" initialValue={gameInfo.developer} label="Разработчик">
@@ -192,8 +191,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                                         onClick={() => {
                                             setNewImageFile(null);
                                             setPreviewImage(IMG_LINK + gameInfo.image);
-                                        }}
-                                    >
+                                        }}>
                                         Отменить
                                     </Button>
                                 </div>
