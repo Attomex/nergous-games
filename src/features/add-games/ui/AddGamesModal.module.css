@@ -1,0 +1,167 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalHeader {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.modalTitle {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.form {
+    padding: 24px;
+}
+
+.formList {
+    display: flex;
+    flex-direction: column;
+}
+
+.formItemContainer {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.formItem {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.formLabel {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.85);
+    margin-bottom: 4px;
+}
+
+.formInput {
+    border: 1px solid #d9d9d9;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.formInput:focus {
+    outline: none;
+    border-color: #40a9ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.radioGroup {
+    display: flex;
+    gap: 16px;
+}
+
+.radioLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.deleteButton {
+    background: none;
+    border: none;
+    color: #ff4d4f;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 0;
+    height: 32px;
+}
+
+.addButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 8px;
+    border: 1px dashed #d9d9d9;
+    background-color: #fafafa;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 8px;
+}
+
+.addButton:hover {
+    border-color: #40a9ff;
+    color: #40a9ff;
+}
+
+.modalFooter {
+    border-top: 1px solid #f0f0f0;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.button {
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    border-color: #40a9ff;
+    color: #40a9ff;
+}
+
+.buttonPrimary {
+    background-color: #1890ff;
+    color: #fff;
+    border-color: #1890ff;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.buttonPrimary:hover {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+    color: #fff;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+.iconLeft {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
