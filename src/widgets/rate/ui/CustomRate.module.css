@@ -1,0 +1,40 @@
+/* File: /components/CustomRate/CustomRate.module.css */
+.ratingContainer {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px; /* Расстояние между звездами */
+}
+
+.star {
+    font-size: var(--card-font-size); /* Размер звезд */
+    color: #e0e0e0; /* Цвет пустой звезды */
+    cursor: pointer;
+    transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    position: relative;
+    display: inline-block;
+    user-select: none; /* Запретить выделение текста звезды */
+}
+
+.star:hover {
+    transform: scale(1.15); /* Эффект увеличения при наведении */
+}
+
+/* Полностью заполненная звезда */
+.star.full {
+    color: #ffc107; /* Цвет заполненной звезды */
+}
+
+/* Наполовину заполненная звезда */
+.star.half {
+    color: #e0e0e0; /* Основной символ будет пустым */
+}
+
+.star.half::before {
+    content: "★";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    overflow: hidden;
+    color: #ffc107; /* Цвет для заполненной половины */
+}

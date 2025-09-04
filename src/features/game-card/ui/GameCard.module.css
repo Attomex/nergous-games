@@ -4,7 +4,6 @@
     margin: 1em auto;
     background-color: var(--card-background-color);
     border-radius: 12px 12px 12px 12px;
-    overflow: hidden;
     /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); */
     border: var(--main-third-color) 1px solid;
     display: flex;
@@ -32,21 +31,31 @@
 
 .status__tag {
     position: absolute;
-    right: -3px;
-    top: 113px;
+    right: 5px;
+    bottom: 3px;
 }
 
-/* .status__tag__text {
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    font-weight: 600;
-} */
+.tag {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    line-height: 20px;
+    list-style: none;
+    display: inline-block;
+    height: auto;
+    padding-inline: 7px;
+    white-space: nowrap;
+    border: 1px solid #171a21;
+    border-radius: 4px;
+    opacity: 1;
+    text-align: start;
+    color: #ffffffff;
+}
 
 .source {
     position: absolute;
     left: 5px;
     top: 113px;
-    color: white;
 }
 
 .image {
@@ -60,6 +69,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 12px 12px 0 0;
 }
 
 .image::after {
@@ -119,8 +129,10 @@
 
 .divider {
     grid-area: divider;
-    height: 4px;
+    height: 0px;
     margin: 0;
+    border: none;
+    border-top: 1px solid var(--main-third-color);
 }
 
 .rating__year {
@@ -167,7 +179,8 @@
 .rating__update {
     cursor: pointer;
     color: var(--card-text-color);
-    margin-left: 5px;
+    margin: 0;
+    margin-left: 37px;
     background-color: var(--card-background-color);
     border: var(--main-third-color) 1px solid;
 }
@@ -178,10 +191,6 @@
 
 .rating__update {
     display: block;
-}
-
-.rating__update.hidden {
-    display: none;
 }
 
 .rating__update:hover {
@@ -206,4 +215,28 @@
     color: var(--card-text-color);
     letter-spacing: 1px;
     height: 30px;
+}
+
+.status-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.planned {
+    background-color: #008cff;
+}
+
+.processing {
+    background-color: #ffe600;
+}
+
+.finished {
+    background-color: #55ff00;
+}
+
+.dropped {
+    background-color: #ff0000;
 }

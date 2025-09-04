@@ -33,6 +33,7 @@ export const AppHeader = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
     const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
@@ -99,12 +100,20 @@ export const AppHeader = () => {
         });
     }
 
+    const handleCloseMenu = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setIsClosing(false);
+            setDrawerOpen(false);
+        }, 300);
+    };
+
     return (
         <header className={style.header}>
             <div className={style.header__inner}>
                 {/* Бургер + Заголовок */}
-                <div className={style.header__group}>
-                    <button className={style.iconButton} onClick={() => setDrawerOpen(true)}>
+                <div className={style.header__group} onClick={() => setDrawerOpen(true)}>
+                    <button className={style.iconButton}>
                         <Bars3Icon className={style.icon} />
                     </button>
                     <span className={style.title}>{currentTitle}</span>
@@ -158,11 +167,13 @@ export const AppHeader = () => {
             {/* Drawer с меню */}
             {drawerOpen &&
                 createPortal(
-                    <div className={style.drawerOverlay}>
-                        <div className={style.drawer}>
+                    <div className={`${style.drawerOverlay} ${isClosing ? style["drawerOverlayClosing"] : ""}`} onClick={handleCloseMenu}>
+                        <div
+                            className={`${style.drawer} ${drawerOpen ? style["drawer-open"] : ""} ${isClosing ? style["drawer-closing"] : ""}`}
+                            onClick={(event) => event.stopPropagation()}>
                             <div className={style.drawerHeader}>
                                 <h2 className={style.drawerTitle}>Меню</h2>
-                                <button className={style.iconButton} onClick={() => setDrawerOpen(false)}>
+                                <button className={style.iconButton} onClick={handleCloseMenu}>
                                     <XMarkIcon className={style.icon} />
                                 </button>
                             </div>
@@ -185,44 +196,54 @@ export const AppHeader = () => {
                                     ))}
                                 </ul>
                                 <div className={style.drawerFooter}>
-                                    <button
-                                        className={`${style.drawerFooterItem} ${location.pathname === "/profile" ? style.drawerListItemActive : ""}`}
-                                        onClick={() => {
-                                            navigate("/profile");
-                                            setDrawerOpen(false);
-                                        }}>
-                                        <div className={style.drawerListItemIcon}>
-                                            <InformationCircleIcon />
-                                        </div>
-                                        <span>Профиль</span>
-                                    </button>
-                                    {isAdmin && (
-                                        <button
-                                            className={`${style.drawerFooterItem} ${
-                                                location.pathname === "/admin" ? style.drawerListItemActive : ""
-                                            }`}
-                                            onClick={() => {
-                                                navigate("/admin");
-                                                setDrawerOpen(false);
-                                            }}>
-                                            <div className={style.drawerListItemIcon}>
-                                                <WrenchScrewdriverIcon />
-                                            </div>
-                                            <span>Панель администратора</span>
-                                        </button>
-                                    )}
-                                    <button
-                                        className={`${style.drawerFooterItem} ${style.drawerFooterItemDanger}`}
-                                        onClick={() => {
-                                            logout();
-                                            navigate("/login");
-                                            setDrawerOpen(false);
-                                        }}>
-                                        <div className={style.drawerListItemIcon}>
-                                            <ArrowLeftOnRectangleIcon />
-                                        </div>
-                                        <span>Выход</span>
-                                    </button>
+                                    <ul className={style.drawerList}>
+                                        <li>
+                                            <button
+                                                className={`${style.drawerFooterItem} ${
+                                                    location.pathname === "/profile" ? style.drawerListItemActive : ""
+                                                }`}
+                                                onClick={() => {
+                                                    navigate("/profile");
+                                                    setDrawerOpen(false);
+                                                }}>
+                                                <div className={style.drawerListItemIcon}>
+                                                    <InformationCircleIcon />
+                                                </div>
+                                                <span>Профиль</span>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            {isAdmin && (
+                                                <button
+                                                    className={`${style.drawerFooterItem} ${
+                                                        location.pathname === "/admin" ? style.drawerListItemActive : ""
+                                                    }`}
+                                                    onClick={() => {
+                                                        navigate("/admin");
+                                                        setDrawerOpen(false);
+                                                    }}>
+                                                    <div className={style.drawerListItemIcon}>
+                                                        <WrenchScrewdriverIcon />
+                                                    </div>
+                                                    <span>Панель администратора</span>
+                                                </button>
+                                            )}
+                                        </li>
+                                        <li>
+                                            <button
+                                                className={`${style.drawerFooterItem} ${style.drawerFooterItemDanger}`}
+                                                onClick={() => {
+                                                    logout();
+                                                    navigate("/login");
+                                                    setDrawerOpen(false);
+                                                }}>
+                                                <div className={style.drawerListItemIcon}>
+                                                    <ArrowLeftOnRectangleIcon />
+                                                </div>
+                                                <span>Выход</span>
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                             </nav>
                         </div>

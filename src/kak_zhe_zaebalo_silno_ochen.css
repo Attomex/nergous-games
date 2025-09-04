@@ -142,8 +142,13 @@ paddingXS: 12, // Отступы внутри меню */
     color: var(--text-color) !important;
 }
 
-:where(.css-dev-only-do-not-override-9lz6di).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover,
-:where(.css-dev-only-do-not-override-9lz6di).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):active {
+.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover,
+.ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):active {
+    border-color: var(--main-secondary-color) !important;
+    color: var(--text-color) !important;
+}
+
+.ant-btn-default:focus {
     border-color: var(--main-secondary-color) !important;
     color: var(--text-color) !important;
 }

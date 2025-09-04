@@ -38,7 +38,7 @@ body.light {
     --main-button-active-border-color: #fff;
 
     /* card */
-    --card-background-color: #1d1d1d;
+    --card-background-color: #ffffff;
     --card-button-color: #000;
     --card-font-size: 1.15rem;
     --card-font-weight: 600;
@@ -173,6 +173,7 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
 }
 
 code {

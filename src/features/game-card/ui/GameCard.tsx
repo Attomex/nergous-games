@@ -15,6 +15,9 @@ import { GameDetailModal } from "./GameDetailModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSteam, faWikipediaW } from "@fortawesome/free-brands-svg-icons";
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+import { EditIcon, WikipediaIcon, SteamIcon } from "widgets/icons";
+import { CustomRate } from "widgets/rate";
+import { CustomDropdown } from "widgets/dropdown";
 
 const img_source = process.env.REACT_APP_IMG_SRC_URL;
 
@@ -48,32 +51,32 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
         setWillUpdate(false);
     };
 
-    const onChangeStatus: MenuProps["onClick"] = ({ key }) => {
+    const onChangeStatus = ({ id }: { id: number }) => {
         const keysStatuses = Object.keys(gameStatuse);
-        const keyStatus = keysStatuses[Number(key) - 1];
+        const keyStatus = keysStatuses[id - 1];
         updateGame("status", keyStatus);
     };
 
-    const statuses: MenuProps["items"] = [
+    const statuses = [
         {
-            key: "1",
+            id: 1,
             label: "В планах",
-            extra: <Badge color={statsColors.planned} status="processing" />,
+            extra: <span className={`${styles["status-badge"]} ${styles.planned}`}></span>,
         },
         {
-            key: "2",
+            id: 2,
             label: "В процессе",
-            extra: <Badge color={statsColors.playing} status="processing" />,
+            extra: <span className={`${styles["status-badge"]} ${styles.processing}`}></span>,
         },
         {
-            key: "3",
+            id: 3,
             label: "Завершен",
-            extra: <Badge color={statsColors.finished} status="processing" />,
+            extra: <span className={`${styles["status-badge"]} ${styles.finished}`}></span>,
         },
         {
-            key: "4",
+            id: 4,
             label: "Брошено",
-            extra: <Badge color={statsColors.dropped} status="processing" />,
+            extra: <span className={`${styles["status-badge"]} ${styles.dropped}`}></span>,
         },
     ];
 
@@ -139,49 +142,38 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
             {/* Левый столбец — изображение */}
             <div className={styles.image} onClick={() => setGameDetails(true)}>
                 <img src={img_source + gameInfo.image} alt={gameInfo.title} />
-            </div>
 
-            {/* Поверхностные кнопачки */}
-            {isAdmin && (
-                <div className={styles.editGame}>
-                    <EditFilled onClick={() => setEditGameInfoModal(true)} className={styles.editGame__icon} />
+                {/* Поверхностные кнопачки */}
+                {isAdmin && (
+                    <div className={styles.editGame}>
+                        <div onClick={() => setEditGameInfoModal(true)} className={styles.editGame__icon}>
+                            <EditIcon />
+                        </div>
+                    </div>
+                )}
+
+                <div className={styles.status__tag}>
+                    <span
+                        className={styles.tag}
+                        style={{
+                            backgroundColor: getColor(gameInfo.status),
+                            borderColor: getColor(gameInfo.status),
+                        }}>
+                        {status !== undefined ? status : "Не выбрано"}
+                    </span>
                 </div>
-            )}
 
-            <div className={styles.status__tag}>
-                <ConfigProvider
-                    theme={{
-                        components: {
-                            Tag: {
-                                defaultBg: getColor(gameInfo.status),
-                                colorBorder: getColor(gameInfo.status),
-                                defaultColor: "#ffffffff",
-                            },
-                        },
-                    }}>
-                    <Tag className={styles.status__tag__text}>{status !== undefined ? status : "Не выбрано"}</Tag>
-                </ConfigProvider>
-            </div>
-
-            <div className={styles.source}>
-                <ConfigProvider
-                    theme={{
-                        components: {
-                            Tag: {
-                                defaultBg: set.color,
-                                colorBorder: set.color,
-                                defaultColor: "#ffffffff",
-                            },
-                        },
-                    }}>
-                    <Tag className={styles.source__tag}>
-                        <FontAwesomeIcon
-                            icon={set.source === "wikipedia" ? faWikipediaW : set.source === "steam" ? faSteam : faCircleQuestion}
-                            style={{ marginRight: "5px" }}
-                        />
-                        {set.source}
-                    </Tag>
-                </ConfigProvider>
+                <div className={styles.source}>
+                    <span
+                        className={styles.tag}
+                        style={{
+                            backgroundColor: set.color,
+                            borderColor: set.color,
+                        }}>
+                        {set.source === "wikipedia" ? <WikipediaIcon /> : set.source === "steam" ? <SteamIcon /> : <></>}
+                        {" " + set.source}
+                    </span>
+                </div>
             </div>
 
             <div className={styles.details}>
@@ -191,54 +183,33 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                 </div>
 
                 <div className={styles.genres}>{gameInfo.genre.replace(/,\s*/g, " / ")}</div>
-                <DividerStyled>
-                    <Divider className={styles.divider} />
-                </DividerStyled>
+
+                <hr className={styles.divider} />
 
                 <div className={styles.rating__year}>
                     {/* Добавляем пустой контейнер для сохранения пространства слева */}
                     <div className={styles.rating__container}>
                         {status !== undefined && (
-                            <Space className={styles.rating}>
+                            <div className={styles.rating}>
                                 <div className={styles.rating__content}>
                                     Приоритет:
-                                    <ConfigProvider
-                                        theme={{
-                                            components: {
-                                                Rate: {
-                                                    starBg: "var(--card-third-text-color)",
-                                                },
-                                            },
-                                        }}>
-                                        <Rate
-                                            className={styles.rating__rate}
-                                            allowHalf
-                                            defaultValue={gameInfo.priority / 2}
-                                            onChange={changePriority}
-                                        />
-                                    </ConfigProvider>
+                                    <CustomRate
+                                        className={styles.rating__rate}
+                                        allowHalf={true}
+                                        defaultValue={gameInfo.priority / 2}
+                                        onChange={changePriority}
+                                    />
                                 </div>
-                                <Tag
-                                    bordered={false}
-                                    className={willUpdate ? styles.rating__update : styles.rating__update__hidden}
-                                    onClick={updatePriority}>
-                                    Обновить
-                                </Tag>
-                            </Space>
+                                <div onClick={updatePriority}>
+                                    <span className={`${willUpdate ? styles.rating__update : styles.rating__update__hidden} ${styles.tag}`}>
+                                        Обновить
+                                    </span>
+                                </div>
+                            </div>
                         )}
                     </div>
                 </div>
-                <DropdownStyled>
-                    <ButtonStyled>
-                        <Dropdown menu={{ items: statuses, onClick: onChangeStatus }} trigger={["click"]} className={styles.status}>
-                            {/* <div onClick={(e) => e.preventDefault()}>
-                                <CaretDownOutlined style={{ marginRight: "4px" }} />
-                                Изменить статус
-                            </div> */}
-                            <Button style={{ fontSize: "var(--card-secondary-font-size)" }}>Изменить статус</Button>
-                        </Dropdown>
-                    </ButtonStyled>
-                </DropdownStyled>
+                <CustomDropdown items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
             </div>
             <EditGameInfoModal
                 gameInfo={gameInfo}
