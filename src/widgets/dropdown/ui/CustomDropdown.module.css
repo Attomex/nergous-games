@@ -11,8 +11,8 @@
     justify-content: space-between;
     width: 100%;
     border-radius: 0.5rem;
-    border: 1px solid var(--main-third-color);
-    background-color: var(--main-background-color);
+    border: 1px solid var(--card-dropdown-border-color);
+    background-color: var(--card-dropdown-bg-color);
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
     font-weight: 500;
@@ -23,14 +23,13 @@
 }
 
 .dropdownButton:hover {
-    background-color: var(--main-secondary-color);
-    border-color: var(--main-secondary-color);
-    color: white;
+    background-color: var(--card-dropdown-hover-bg-color);
+    border-color: var(--card-dropdown-hover-border-color);
+    color: var(--card-dropdown-hover-text-color);
 }
 
 .dropdownButton:focus {
     outline: transparent;
-    box-shadow: 0 0 0 2px var(--accent-color);
 }
 
 .buttonLabel {
@@ -51,9 +50,9 @@
     min-width: 14rem;
     transform-origin: top right;
     border-radius: 0.375rem;
-    background-color: var(--main-background-color);
+    background-color: var(--card-dropdown-bg-color);
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    border: 1px solid var(--main-third-color);
+    border: 1px solid var(--card-dropdown-border-color);
     overflow: hidden;
     animation: fadeUp 0.2s linear forwards;
 }
@@ -81,12 +80,13 @@
     justify-content: space-between;
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
-    color: var(--text-color);
+    color: var(--card-dropdown-text-color);
     cursor: pointer;
     transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
 }
 
 .dropdownItem:hover {
-    background-color: var(--main-secondary-color);
-    color: white;
+    background-color: var(--card-dropdown-hover-bg-color);
+    color: var(--card-dropdown-hover-text-color);
+    border-color: var(--card-dropdown-hover-border-color);
 }

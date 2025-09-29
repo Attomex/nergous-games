@@ -1,6 +1,6 @@
 .header {
     position: fixed;
-    background-color: var(--header-background-color);
+    background-color: var(--header-bg-color);
     color: var(--header-text-color);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     height: 64px;
@@ -64,8 +64,9 @@
     top: 100%;
     right: 0;
     margin-top: 8px;
-    background-color: var(--header-background-color);
-    border: 1px solid var(--header-border-color);
+    background-color: var(--header-dropdown-bg-color);
+    border: 1px solid var(--header-dropdown-border-color);
+    color: var(--header-dropdown-text-color);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     padding: 8px 0;
@@ -86,12 +87,17 @@
     border: none;
     cursor: pointer;
     font-size: 14px;
-    color: var(--header-text-color);
+
+    background-color: var(--header-dropdown-bg-color);
+    color: var(--header-dropdown-text-color);
+    border-color: var(--header-dropdown-border-color);
     transition: background-color 0.2s ease;
 }
 
 .dropdownItem:hover {
-    background-color: var(--header-secondary-color);
+    background-color: var(--header-dropdown-hover-bg-color);
+    color: var(--header-dropdown-hover-text-color);
+    border-color: var(--header-dropdown-hover-border-color);
 }
 
 .dropdownItemActive {
@@ -137,7 +143,7 @@
     left: -300px;
     width: 300px;
     height: 100%;
-    background-color: var(--header-background-color); /* Убедитесь, что этот цвет непрозрачный */
+    background-color: var(--sidebar-bg-color);
     z-index: 1003;
     box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -175,16 +181,16 @@
 
 .drawerHeader {
     padding: 16px;
-    border-bottom: 1px solid var(--header-border-color);
+    border-bottom: 1px solid var(--sidebar-border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 .drawerTitle {
-    font-size: var(--header-font-size);
-    font-weight: var(--header-font-weight);
-    color: var(--header-text-color);
+    font-size: var(--sidebar-font-size);
+    font-weight: var(--sidebar-font-weight);
+    color: var(--sidebar-text-color);
 }
 
 .drawerBody {
@@ -197,7 +203,7 @@
 }
 
 .drawerFooter {
-    border-top: 1px solid var(--header-border-color);
+    border-top: 1px solid var(--sidebar-border-color);
     padding: 5px;
     display: flex;
     flex-direction: column;
@@ -225,19 +231,23 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    color: var(--header-text-color);
+    background-color: var(--sidebar-button-bg-color);
+    color: var(--sidebar-button-text-color);
+    border-color: var(--sidebar-button-border-color);
     transition: background-color 0.2s ease;
 }
 
 .drawerListItem:hover {
-    background-color: var(--header-button-hover-color);
-    color: var(--header-button-hover-text-color);
+    background-color: var(--sidebar-button-hover-bg-color);
+    color: var(--sidebar-button-hover-text-color);
+    border-color: var(--sidebar-button-hover-border-color);
 }
 
 .drawerListItemActive {
-    background-color: var(--accent-color) !important;
+    background-color: var(--sidebar-button-active-bg-color) !important;
+    color: var(--sidebar-button-active-text-color);
+    border-color: var(--sidebar-button-active-border-color);
     font-weight: bold;
-    color: var(--header-button-hover-text-color);
 }
 
 .drawerListItemIcon {
@@ -257,14 +267,17 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--header-text-color);
+    color: var(--sidebar-button-text-color);
+    background-color: var(--sidebar-button-bg-color);
+    border-color: var(--sidebar-button-border-color);
     transition: background-color 0.2s ease;
     border-radius: 15px;
 }
 
 .drawerFooterItem:hover {
-    background-color: var(--header-button-hover-color);
-    color: var(--header-button-hover-text-color);
+    background-color: var(--sidebar-button-hover-bg-color);
+    color: var(--sidebar-button-hover-text-color);
+    border-color: var(--sidebar-button-hover-border-color);
 }
 
 .drawerFooterItemDanger {

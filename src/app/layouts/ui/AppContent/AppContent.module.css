@@ -4,5 +4,5 @@
     /* height: calc(100vh - 60px); */
     min-height: 0;
     padding: 20px;
-    background-color: var(--main-background-color);
+    background-color: var(--main-bg-color);
 }

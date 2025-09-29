@@ -20,40 +20,39 @@ body.light {
     --header-button-active-text-color: #fff;
     --header-button-active-border-color: #fff;
 
-    --dropdown-bg-color: #fff;
-    --dropdown-text-color: #fff;
-    --dropdown-border-color: #fff;
+    --header-dropdown-bg-color: #fff;
+    --header-dropdown-text-color: #000;
+    --header-dropdown-border-color: #fff;
 
-    --dropdown-hover-bg-color: #5f5f5f;
-    --dropdown-hover-text-color: #fff;
-    --dropdown-hover-border-color: #fff;
+    --header-dropdown-hover-bg-color: red;
+    --header-dropdown-hover-text-color: blue;
+    --header-dropdown-hover-border-color: #fff;
 
     /* Sidebar */
 
-    --sidebar-background-color: #fff;
+    --sidebar-bg-color: #fff;
     --sidebar-secondary-color: #424242;
-    --sidebar-text-color: #fff;
+    --sidebar-text-color: #000;
     --sidebar-font-size: 1.15rem;
     --sidebar-font-weight: 600;
     --sidebar-border-color: #bbbbbb;
     
-    --sidebar-button-background-color: #fff;
-    --sidebar-button-color: #000;
-    --sidebar-button-text-color: #fff;
+    --sidebar-button-bg-color: #fff;
+    --sidebar-button-text-color: #000;
     --sidebar-button-border-color: #fff;
 
-    --sidebar-button-hover-color: #5f5f5f;
+    --sidebar-button-hover-bg-color: #5f5f5f;
     --sidebar-button-hover-text-color: #fff;
     --sidebar-button-hover-border-color: #fff;
 
-    --sidebar-button-active-background-color: #fff;
+    --sidebar-button-active-bg-color: #5f5f5f;
     --sidebar-button-active-text-color: #fff;
     --sidebar-button-active-border-color: #fff;
 
     /* Main */
 
     /* main elements */
-    --main-background-color: #ffffff;
+    --main-bg-color: #ffffff;
     --main-secondary-color: #474747;
     --main-text-color: #000;
 
@@ -82,22 +81,116 @@ body.light {
     --second-button-active-text-color: #fff;
     --second-button-active-border-color: #fff;
 
+    --search-input-bg-color: #fff;
+    --search-input-text-color: #000;
+    --search-input-border-color: #fff;
+
+    --search-input-hover-bg-color: #fff;
+    --search-input-hover-text-color: #000;
+    --search-input-hover-border-color: #fff;
+
+    --search-input-active-bg-color: #fff;
+    --search-input-active-text-color: #000;
+    --search-input-active-border-color: #fff;
+
+    --filter-button-bg-color: #fff;
+    --filter-button-text-color: #000;
+    --filter-button-border-color: #fff;
+
+    --filter-button-hover-bg-color: #fff;
+    --filter-button-hover-text-color: #000;
+    --filter-button-hover-border-color: #fff;
+
+    --filter-button-active-bg-color: #fff;
+    --filter-button-active-text-color: #000;
+    --filter-button-active-border-color: #fff;
+
+    --filter-dropdown-bg-color: #fff;
+    --filter-dropdown-text-color: #000;
+    --filter-dropdown-border-color: #fff;
+
+    --filter-dropdown-hover-bg-color: #fff;
+    --filter-dropdown-hover-text-color: #000;
+    --filter-dropdown-hover-border-color: #fff;
+
+    --filter-dropdown-active-bg-color: #fff;
+    --filter-dropdown-active-text-color: #000;
+    --filter-dropdown-active-border-color: #fff;
+
     /* card */
-    --card-background-color: #ffffff;
+    --card-bg-color: #ffffff;
     --card-font-size: 1.15rem;
     --card-font-weight: 600;
     --card-text-color: #000;
     --card-secondary-font-size: 0.8rem;
     --card-secondary-text-color: #5f5f5f;
     --card-third-text-color: #a1a1a1;
+    --card-border-color: #bbbbbb;
     
     --card-button-bg-color: #000;
-    
-    
+    --card-button-text-color: #fff;
+    --card-button-border-color: #fff;
 
-    --text-color: #000000;
-    --text-secondary-color: #000000;
-    --accent-color: rgb(69, 128, 255);
+    --card-button-hover-bg-color: #5f5f5f;
+    --card-button-hover-text-color: #fff;
+    --card-button-hover-border-color: #fff;
+
+    --card-button-active-bg-color: #fff;
+    --card-button-active-text-color: #000;
+    --card-button-active-border-color: #fff;
+
+    --card-dropdown-bg-color: #fff;
+    --card-dropdown-text-color: #000;
+    --card-dropdown-border-color: #fff;
+
+    --card-dropdown-hover-bg-color: #fff;
+    --card-dropdown-hover-text-color: #000;
+    --card-dropdown-hover-border-color: #fff;
+
+    --card-dropdown-active-bg-color: #fff;
+    --card-dropdown-active-text-color: #000;
+    --card-dropdown-active-border-color: #fff;
+
+    --card-modal-bg-color: #fff;
+    --card-modal-text-color: #000;
+    --card-modal-border-color: #fff;
+
+    /* Modal create game */
+
+    --modal-create-game-bg-color: #fff;
+    --modal-create-game-text-color: #000;
+    --modal-create-game-border-color: #fff;
+
+    --modal-create-multi-game-bg-color: #fff;
+    --modal-create-multi-game-text-color: #000;
+    --modal-create-multi-game-border-color: #fff;
+
+
+    /* Pagination */
+
+    --pagination-bg-color: #fff;
+    --pagination-text-color: #000;
+    --pagintation-second-text-color: #5f5f5f;
+    --pagination-border-color: #fff;
+
+    /* Updates */
+
+    --update-bg-color: #fff;
+    --update-text-color: #000;
+    --update-border-color: #fff;
+
+    /* Profile */
+
+    --profile-bg-color: #fff;
+    --profile-text-color: #000;
+    --profile-border-color: #fff;
+
+    /* Admin */
+
+    --admin-bg-color: #fff;
+    --admin-text-color: #000;
+    --admin-border-color: #fff;
+
 }
 
 body.system-dark,
