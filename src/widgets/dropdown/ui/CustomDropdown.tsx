@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./CustomDropdown.module.css";
 
-/**
- * Переиспользуемый компонент выпадающего списка.
- * @param {object[]} items - Массив элементов для списка. Каждый элемент должен иметь `id` и `label`.
- * @param {object} initialSelectedItem - Элемент, выбранный по умолчанию.
- * @param {function} onChange - Callback-функция, вызываемая при выборе элемента.
- */
 interface ItemsProps {
     id: number;
     label: string;

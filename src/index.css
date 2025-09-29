@@ -20,6 +20,7 @@ body.light {
     --header-button-active-text-color: #fff;
     --header-button-active-border-color: #fff;
 
+    /* main elements */
     --main-background-color: #ffffff;
     --main-secondary-color: #474747;
     --main-third-color: #e0e0e0;
@@ -42,13 +43,13 @@ body.light {
     --card-button-color: #000;
     --card-font-size: 1.15rem;
     --card-font-weight: 600;
-    --card-text-color: #fff;
+    --card-text-color: #000;
     --card-secondary-font-size: 0.8rem;
     --card-secondary-text-color: #5f5f5f;
     --card-third-text-color: #a1a1a1;
 
-    --text-color: #fff;
-    --text-secondary-color: #fff;
+    --text-color: #000000;
+    --text-secondary-color: #000000;
     --accent-color: rgb(69, 128, 255);
 }
 

@@ -12,8 +12,8 @@ export const UpdatePage = () => {
                 theme={{
                     components: {
                         Card: {
-                            colorBgContainer: "var(--primary-color)",
-                            colorBorderSecondary: "var(--secondary-color)",
+                            colorBgContainer: "var(--main-background-color)",
+                            colorBorderSecondary: "var(--main-secondary-color)",
                         },
                         List: {
                             colorSplit: "var(--secondary-color)",

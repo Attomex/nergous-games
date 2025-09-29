@@ -6,6 +6,7 @@ import { ReactNode, useState } from "react";
 import { api } from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { ButtonStyled, SelectStyled } from "shared/ui";
+import { IMG_SRC } from "shared/const";
 
 interface UpdateUserModalProps {
     user: TUser;
@@ -14,7 +15,6 @@ interface UpdateUserModalProps {
     closeModal: () => void;
     updateUsers: () => void;
 }
-const img_src = process.env.REACT_APP_IMG_SRC_URL;
 
 export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag, isModalOpen, closeModal, updateUsers }) => {
     const [form] = Form.useForm();
@@ -58,7 +58,7 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag,
             <Form form={form} onFinish={onFinish} labelCol={{ span: 5 }}>
                 <FormItem label="Аватар">
                     <Image
-                        src={img_src + user.path_to_photo}
+                        src={IMG_SRC + user.path_to_photo}
                         preview={false}
                         width={64}
                         height={64}

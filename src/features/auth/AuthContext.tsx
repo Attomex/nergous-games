@@ -2,8 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { User } from "shared/types";
-
-const url = process.env.REACT_APP_API_URL;
+import { URL } from "shared/const";
 
 interface AuthContextType {
     user: User | null;
@@ -36,7 +35,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
             const auth_token = Cookies.get("auth_token");
             if (!auth_token) logout();
 
-            const responseInfo = await fetch(`${url}/games/user/info`, {
+            const responseInfo = await fetch(`${URL}/games/user/info`, {
                 headers: {
                     Authorization: `Bearer ${auth_token}`,
                 },
@@ -44,7 +43,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
             });
             if (!responseInfo.ok) throw new Error("Ошибка при получении информации о пользователе");
 
-            const responseStats = await fetch(`${url}/games/user/stats`, {
+            const responseStats = await fetch(`${URL}/games/user/stats`, {
                 headers: {
                     Authorization: `Bearer ${auth_token}`,
                 },

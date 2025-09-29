@@ -29,8 +29,7 @@
 }
 
 .dropdownButton:focus {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
+    outline: transparent;
     box-shadow: 0 0 0 2px var(--accent-color);
 }
 
@@ -55,6 +54,19 @@
     background-color: var(--main-background-color);
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     border: 1px solid var(--main-third-color);
+    overflow: hidden;
+    animation: fadeUp 0.2s linear forwards;
+}
+
+@keyframes fadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .dropdownList {

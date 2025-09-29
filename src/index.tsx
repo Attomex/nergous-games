@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App } from "app";
 import { ThemeProvider } from "shared/theme";
 import { ConfigProvider } from "antd";
+import { Notification } from "shared/ui";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ root.render(
                 }}>
                 <ThemeProvider>
                     <App />
+                    <Notification />
                 </ThemeProvider>
             </ConfigProvider>
         </QueryClientProvider>

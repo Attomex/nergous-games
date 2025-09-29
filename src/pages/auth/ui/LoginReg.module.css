@@ -20,6 +20,11 @@
     margin: 0;
 }
 
+.loginReg__h1__signUp,
+.loginReg__h1__signIn {
+    margin-bottom: 20px;
+}
+
 .loginReg__h2 {
     text-align: center;
 }

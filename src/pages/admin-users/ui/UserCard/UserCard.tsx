@@ -5,13 +5,13 @@ import { ToolOutlined, UserOutlined } from "@ant-design/icons";
 import { ButtonStyled } from "shared/ui";
 import { ReactNode, useState } from "react";
 import { UpdateUserModal } from "../UpdateUserModal";
+import { IMG_SRC } from "shared/const";
 
 interface UserCardProps {
     user: TUser;
     refetch: () => void;
 }
 
-const img_src = process.env.REACT_APP_IMG_SRC_URL;
 const whoIs = (whoIs: boolean | string): { role: string; icon: ReactNode } => {
     if (whoIs) {
         return { role: "Администратор", icon: <ToolOutlined /> };
@@ -38,7 +38,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, refetch }) => {
                 width={128}
                 height={128}
                 preview={false}
-                src={img_src + user.path_to_photo}
+                src={IMG_SRC + user.path_to_photo}
                 className={styles.user__image}
             />
             <div className={styles.user__info}>

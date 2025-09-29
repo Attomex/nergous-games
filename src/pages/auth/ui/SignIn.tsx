@@ -3,11 +3,13 @@ import styles from "./LoginReg.module.css";
 import { useAuth } from "features/auth";
 import { useNavigate } from "react-router-dom";
 import { api } from "shared/api";
+import { APP_ID } from "shared/const";
+import { showErrorNotification } from "shared/lib";
 
 interface LoginFormState {
     email: string;
     password: string;
-    app_id: number;
+    app_id: number | undefined;
 }
 
 export const SignInForm = () => {
@@ -17,7 +19,7 @@ export const SignInForm = () => {
     const [state, setState] = React.useState<LoginFormState>({
         email: "",
         password: "",
-        app_id: 1
+        app_id: Number(APP_ID)
     });
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,23 +39,23 @@ export const SignInForm = () => {
             await api().post('/login', { email, password, app_id }).then(
                 (response) => {
                     const data = response.data;
-                    // console.log(data) // ТУТ ПОЧЕМУ ТОКЕН
-                    login(data); // А ТУТ НЕТ!?!??!
+                    // console.log(data)
+                    login(data);
                     navigate("/games");
                 }
             ).catch((error) => {
-                throw new Error(error.response.data.message);
+                throw (error.response.data);
             });
         }
         catch (error) {
-            alert(error);
+            showErrorNotification(error as string);
         }
     };
 
     return (
         <div className={styles.loginReg__formContainer + " " + styles.loginReg__signInContainer}>
             <form className={styles.loginReg__form} onSubmit={handleOnSubmit}>
-                <h1 className={styles.loginReg__h1}>Авторизация</h1>
+                <h1 className={styles.loginReg__h1 + " " + styles.loginReg__h1__signIn}>Авторизация</h1>
                 <input
                     className={styles.loginReg__input}
                     type="email"

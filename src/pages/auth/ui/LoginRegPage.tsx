@@ -21,10 +21,8 @@ export const LoginRegPage = () => {
                 <div className={styles.loginReg__overlayContainer}>
                     <div className={styles.loginReg__overlay}>
                         <div className={`${styles.loginReg__overlayPanel} ${styles.loginReg__overlayLeft}`}>
-                            <h1 className={styles.loginReg__h1}>Добро пожаловать!</h1>
-                            <p className={styles.loginReg__p}>
-                                Чтобы оставаться на связи с нами, пожалуйста, войдите в систему, указав свои персональные данные.
-                            </p>
+                            <h1 className={styles.loginReg__h1}>Вход в аккаунт</h1>
+                            <p className={styles.loginReg__p}>Уже есть учетная запись? Просто войдите, и вы в деле.</p>
                             <button
                                 className={`${styles.loginReg__button} ${styles.loginReg__ghost}`}
                                 id="signIn"
@@ -34,8 +32,10 @@ export const LoginRegPage = () => {
                             </button>
                         </div>
                         <div className={`${styles.loginReg__overlayPanel} ${styles.loginReg__overlayRight}`}>
-                            <h1 className={styles.loginReg__h1}>Привет, друзья!</h1>
-                            <p className={styles.loginReg__p}>Введите свои персональные данные и начните путешествие с нами.</p>
+                            <h1 className={styles.loginReg__h1}>Один аккаунт для всего!</h1>
+                            <p className={styles.loginReg__p}>
+                                Зарегистрируйтесь, чтобы получить доступ ко всем нашим сервисам с единой учетной записью.
+                            </p>
                             <button
                                 className={`${styles.loginReg__button} ${styles.loginReg__ghost}`}
                                 id="signUp"

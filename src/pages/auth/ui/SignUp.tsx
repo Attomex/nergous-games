@@ -1,6 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./LoginReg.module.css";
 import { api } from "shared/api";
+import { APP_ID } from "shared/const";
+import { useAuth } from "features/auth";
+import { showErrorNotification, showSuccessNotification } from "shared/lib";
 
 interface RegisterFormState {
     email: string;
@@ -11,12 +15,29 @@ interface RegisterFormState {
 
 export const SignUpForm = () => {
     const inputFile = useRef<HTMLInputElement>(null);
+    const { login } = useAuth();
+    const navigate = useNavigate();
     const [state, setState] = useState<RegisterFormState>({
         email: "",
         password: "",
         steam_url: "",
         image: null,
     });
+
+    const [redirect, setRedirect] = useState<boolean>(false);
+    const [timerRedirect, setTimerRedirect] = useState<number>(0);
+
+    useEffect(() => {
+        if (redirect && timerRedirect > 0) {
+            const id = setInterval(() => {
+                setTimerRedirect((prev) => prev - 1);
+            }, 1000);
+
+            return () => clearInterval(id);
+        } else if (timerRedirect === 0 && redirect) {
+            navigate("/games");
+        }
+    }, [timerRedirect, redirect]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.name === "image" && event.target.files && event.target.files.length > 0) {
@@ -41,7 +62,7 @@ export const SignUpForm = () => {
             image: null,
         });
 
-        if(inputFile.current) {
+        if (inputFile.current) {
             inputFile.current.value = "";
         }
     };
@@ -60,19 +81,27 @@ export const SignUpForm = () => {
         try {
             await api()
                 .post("/register", formData)
-                .then((response) => {
-                    const data = response.data;
-                    alert(data);
-                })
                 .catch((error) => {
-                    throw new Error(error.response.data);
+                    throw error.response.data;
                 });
 
-            console.log("Успешная регистрация.");
+            const email = formData.get("email");
+            const password = formData.get("password");
 
-            resetFields();
+            await api()
+                .post("/login", { email, password, app_id: Number(APP_ID) })
+                .then((response) => {
+                    login(response.data);
+                    setRedirect(true);
+                    setTimerRedirect(3);
+                    showSuccessNotification("Вы успешно зарегистрировались! Перенаправление через 3 секунды...");
+                })
+                .catch((error) => {
+                    throw error.response.data;
+                });
         } catch (error) {
-            console.error("Ошибка при регистрации:", error);
+            showErrorNotification(`Ошибка при регистрации: ${error as string}`);
+        } finally {
             resetFields();
         }
     };
@@ -80,7 +109,7 @@ export const SignUpForm = () => {
     return (
         <div className={styles.loginReg__formContainer + " " + styles.loginReg__signUpContainer}>
             <form className={styles.loginReg__form} onSubmit={handleOnSubmit}>
-                <h1 className={styles.loginReg__h1}>Создать аккаунт</h1>
+                <h1 className={styles.loginReg__h1 + " " + styles.loginReg__h1__signUp}>Регистрация</h1>
                 <input
                     className={styles.loginReg__input}
                     type="email"
@@ -117,7 +146,13 @@ export const SignUpForm = () => {
                     ref={inputFile}
                     required
                 />
-                <button className={styles.loginReg__button}>Регистрация</button>
+                {redirect ? (
+                    <button className={styles.loginReg__button} disabled>
+                        {timerRedirect > 1 ? "Перенаправление через " + timerRedirect + " секунд..." : "Перенаправление..."}
+                    </button>
+                ) : (
+                    <button className={styles.loginReg__button}>Регистрация</button>
+                )}
             </form>
         </div>
     );

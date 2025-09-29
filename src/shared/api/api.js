@@ -1,7 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-
-const url = process.env.REACT_APP_API_URL;
+import { URL } from "shared/const";
 
 const logout = () => {
     Cookies.remove("auth_token");
@@ -10,7 +9,7 @@ const logout = () => {
 
 export const api = () => {
     const api = axios.create({
-        baseURL: url,
+        baseURL: URL,
         withCredentials: true,
     });
 

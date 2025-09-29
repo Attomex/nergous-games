@@ -4,6 +4,7 @@ import { Button, Form, Input, InputNumber, Modal, Image } from "antd";
 import { api } from "shared/api";
 import { DeleteOutlined, SyncOutlined, UploadOutlined } from "@ant-design/icons";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
+import { IMG_SRC } from "shared/const";
 
 interface EditGameInfoModalProps {
     gameInfo: GameInfo;
@@ -13,7 +14,6 @@ interface EditGameInfoModalProps {
 }
 
 export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, updateUsersGames, isModalOpen, closeModal }) => {
-    const IMG_LINK = process.env.REACT_APP_IMG_SRC_URL;
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
@@ -21,7 +21,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
 
     useEffect(() => {
         // При открытии модалки сбрасываем превью
-        setPreviewImage(IMG_LINK + gameInfo.image);
+        setPreviewImage(IMG_SRC + gameInfo.image);
         setNewImageFile(null);
     }, [gameInfo, isModalOpen]);
 
@@ -126,7 +126,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
 
     const closeModalForm = () => {
         setNewImageFile(null);
-        setPreviewImage(IMG_LINK + gameInfo.image);
+        setPreviewImage(IMG_SRC + gameInfo.image);
         closeModal();
     };
 
@@ -190,7 +190,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                                         danger
                                         onClick={() => {
                                             setNewImageFile(null);
-                                            setPreviewImage(IMG_LINK + gameInfo.image);
+                                            setPreviewImage(IMG_SRC + gameInfo.image);
                                         }}>
                                         Отменить
                                     </Button>

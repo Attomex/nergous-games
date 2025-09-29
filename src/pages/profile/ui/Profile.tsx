@@ -8,8 +8,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Badge } from "./Badge";
 import { statsColors } from "shared/const";
-
-const img_src = process.env.REACT_APP_IMG_SRC_URL;
+import { IMG_SRC } from "shared/const";
 
 export const Profile = () => {
     const { user, getUserInfo } = useAuth();
@@ -84,7 +83,8 @@ export const Profile = () => {
                     onClick={() => {
                         navigator.clipboard.writeText(userInfo.steam_url);
                         console.log("Ссылка была скопирована");
-                    }}>
+                    }}
+                >
                     {userInfo.steam_url}
                 </div>
             ),
@@ -98,7 +98,7 @@ export const Profile = () => {
                     width={250}
                     height={250}
                     preview={false}
-                    src={`${img_src}${userInfo.photo}`}
+                    src={`${IMG_SRC}${userInfo.photo}`}
                     className={styles.profile__image}
                     style={{ borderRadius: "50%", objectFit: "cover" }}
                 />
@@ -114,7 +114,8 @@ export const Profile = () => {
                                     labelColor: "var(--text-color)",
                                 },
                             },
-                        }}>
+                        }}
+                    >
                         <Descriptions title="Информация о пользователе" items={items} />
                     </ConfigProvider>
                 </div>
