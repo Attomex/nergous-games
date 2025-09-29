@@ -1,31 +1,63 @@
 body.system-light,
 body.light {
-    /* header */
-    --header-background-color: #fff;
+    /* Header */
+    --header-bg-color: #fff;
     --header-secondary-color: #424242;
     --header-text-color: #000;
     --header-font-size: 1.15rem;
     --header-font-weight: 600;
     --header-border-color: #bbbbbb;
 
-    --header-button-color: #000;
+    --header-button-bg-color: #000;
     --header-button-text-color: #fff;
     --header-button-border-color: #fff;
 
-    --header-button-hover-color: #5f5f5f;
+    --header-button-hover-bg-color: #5f5f5f;
     --header-button-hover-text-color: #fff;
     --header-button-hover-border-color: #fff;
 
-    --header-button-active-color: #fff;
+    --header-button-active-bg-color: #fff;
     --header-button-active-text-color: #fff;
     --header-button-active-border-color: #fff;
+
+    --dropdown-bg-color: #fff;
+    --dropdown-text-color: #fff;
+    --dropdown-border-color: #fff;
+
+    --dropdown-hover-bg-color: #5f5f5f;
+    --dropdown-hover-text-color: #fff;
+    --dropdown-hover-border-color: #fff;
+
+    /* Sidebar */
+
+    --sidebar-background-color: #fff;
+    --sidebar-secondary-color: #424242;
+    --sidebar-text-color: #fff;
+    --sidebar-font-size: 1.15rem;
+    --sidebar-font-weight: 600;
+    --sidebar-border-color: #bbbbbb;
+    
+    --sidebar-button-background-color: #fff;
+    --sidebar-button-color: #000;
+    --sidebar-button-text-color: #fff;
+    --sidebar-button-border-color: #fff;
+
+    --sidebar-button-hover-color: #5f5f5f;
+    --sidebar-button-hover-text-color: #fff;
+    --sidebar-button-hover-border-color: #fff;
+
+    --sidebar-button-active-background-color: #fff;
+    --sidebar-button-active-text-color: #fff;
+    --sidebar-button-active-border-color: #fff;
+
+    /* Main */
 
     /* main elements */
     --main-background-color: #ffffff;
     --main-secondary-color: #474747;
-    --main-third-color: #e0e0e0;
+    --main-text-color: #000;
 
-    /* buttons */
+    /* Buttons */
     --main-button-color: #000;
     --main-button-text-color: #fff;
     --main-button-border-color: #fff;
@@ -38,15 +70,30 @@ body.light {
     --main-button-active-text-color: #fff;
     --main-button-active-border-color: #fff;
 
+    --second-button-color: #000;
+    --second-button-text-color: #fff;
+    --second-button-border-color: #fff;
+
+    --second-button-hover-color: #fff;
+    --second-button-hover-text-color: #fff;
+    --second-button-hover-border-color: #fff;
+
+    --second-button-active-color: #fff;
+    --second-button-active-text-color: #fff;
+    --second-button-active-border-color: #fff;
+
     /* card */
     --card-background-color: #ffffff;
-    --card-button-color: #000;
     --card-font-size: 1.15rem;
     --card-font-weight: 600;
     --card-text-color: #000;
     --card-secondary-font-size: 0.8rem;
     --card-secondary-text-color: #5f5f5f;
     --card-third-text-color: #a1a1a1;
+    
+    --card-button-bg-color: #000;
+    
+    
 
     --text-color: #000000;
     --text-secondary-color: #000000;
