@@ -1,6 +1,8 @@
 {
     "docTitle": {
         "pages": {
+            "title": "Manager games",
+
             "userGames": "My games",
             "allGames": "All games",
             "profile": "Profile",
@@ -8,7 +10,7 @@
             "admin": "Admin-users",
             "login": "Login",
             "test": "Test",
-            "title": "Manager games"
+            "lander": "Welcome!"
         }
     },
     "landing": {
@@ -46,5 +48,133 @@
             "updates": "Updates",
             "logout": "Logout"
         }
+    },
+    "appHeader": {
+        "theme": {
+            "light": "Light theme",
+            "dark": "Dark theme",
+            "system": "System theme"
+        },
+        "settings": {
+            "profile": "Profile",
+            "logout": "Logout",
+            "admin-users": "Admin-users"
+        }
+    },
+    "addGame": {
+        "label": "Add game",
+        "options": {
+            "add-new": "Add new game",
+            "add-several": "Add several games"
+        },
+        "modal": {
+            "add-new": {
+                "title": "Creating a game",
+                "form": {
+                    "name": "Game name",
+                    "desc": "Game description",
+                    "year": "Release year",
+                    "genre": "Genre",
+                    "source": "Game link",
+                    "priority": "Priority (0-10)",
+                    "status": {
+                        "label": "Status",
+                        "finished": "Finished",
+                        "planned": "Planned",
+                        "playing": "Playing",
+                        "dropped": "Dropped"
+                    },
+                    "developer": "Developer",
+                    "publisher": "Publisher",
+                    "img": "Game cover",
+
+                    "new-img-btn": "Choose file"
+                }
+            },
+            "add-several": {
+                "title": "Adding games",
+                "form": {
+                    "name": "Game name",
+                    "source": "Source",
+
+                    "plus-btn": "Add game"
+                }
+            },
+            "cancel-btn": "Cancel",
+            "create-btn": "Create"
+        }
+    },
+    "filterGames": {
+        "button": {
+            "all": "All",
+            "finished": "Finished",
+            "planned": "Planned",
+            "playing": "Playing",
+            "dropped": "Dropped"
+        }
+    },
+    "sortOptions": {
+        "title": "Title",
+        "year": "Year",
+        "priority": "Priority"
+    },
+    "searchButton": {
+        "placeholder": "Search games..."
+    },
+    "gameCard": {
+        "status": {
+            "finished": "Finish",
+            "planned": "Planned",
+            "playing": "Playing",
+            "dropped": "Dropped",
+            "no-select": "Not selected"
+        },
+        "year": {
+            "no-year": "Not specified"
+        },
+        "priority": {
+            "text": "Priority",
+            "update": "Update"
+        },
+        "gameDetails": {
+            "more": "Learn more",
+            "developer": "Developer",
+            "publisher": "Publisher"
+        },
+        "editGame": {
+            "title": "Editing game information",
+            "form": {
+                "name": "Game name",
+                "year": "Release year",
+                "desc": "Description",
+                "developer": "Developer",
+                "publisher": "Publisher",
+                "genre": "Genre",
+                "img": "Image",
+
+                "new-img-btn": "Upload new image",
+                "cancel-btn": "Cancel",
+                "change-btn": "Change",
+                "delete-btn": "Delete game",
+                "save-btn": "Update"
+            }
+        }
+    },
+    "pagination": {
+        "text": "Go to:"
+    },
+    "profilePage": {
+        "user": "User",
+        "tooltip": "Copy link",
+        "chart": {
+            "title": "Statistics",
+            "label": {
+                "finished": "Finished",
+                "planned": "Planned",
+                "playing": "Playing",
+                "dropped": "Dropped"
+            }
+        }
+        
     }
 }

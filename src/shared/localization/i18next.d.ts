@@ -1,9 +1,10 @@
 import { resources, defaultNS } from "./i18n-config";
 
 declare module "i18next" {
-  interface CustomTypeOptions {
-    defaultNS: typeof defaultNS;
-    resources: typeof resources["en"];
-    returnNull: false;
-  }
+    interface CustomTypeOptions {
+        defaultNS: typeof defaultNS;
+        resources: (typeof resources)["ru"];
+        returnNull: false;
+        enableSelection: true;
+    }
 }

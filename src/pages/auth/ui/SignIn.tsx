@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "shared/api";
 import { APP_ID } from "shared/const";
 import { showErrorNotification } from "shared/lib";
+import { useTranslation } from "react-i18next";
 
 interface LoginFormState {
     email: string;
@@ -14,6 +15,7 @@ interface LoginFormState {
 
 export const SignInForm = () => {
     const { login } = useAuth();
+    const { t } = useTranslation("translation");
     const navigate = useNavigate();
 
     const [state, setState] = React.useState<LoginFormState>({
@@ -37,13 +39,13 @@ export const SignInForm = () => {
 
         try {
             await api().post('/login', { email, password, app_id }).then(
-                (response) => {
+                (response: { data: any; }) => {
                     const data = response.data;
                     // console.log(data)
                     login(data);
                     navigate("/games");
                 }
-            ).catch((error) => {
+            ).catch((error: { response: { data: any; }; }) => {
                 throw (error.response.data);
             });
         }
@@ -55,11 +57,11 @@ export const SignInForm = () => {
     return (
         <div className={styles.loginReg__formContainer + " " + styles.loginReg__signInContainer}>
             <form className={styles.loginReg__form} onSubmit={handleOnSubmit}>
-                <h1 className={styles.loginReg__h1 + " " + styles.loginReg__h1__signIn}>Авторизация</h1>
+                <h1 className={styles.loginReg__h1 + " " + styles.loginReg__h1__signIn}>{t("loginReg.login.title")}</h1>
                 <input
                     className={styles.loginReg__input}
                     type="email"
-                    placeholder="Почта"
+                    placeholder={t("loginReg.login.form-email")}
                     name="email"
                     value={state.email}
                     onChange={handleChange}
@@ -68,12 +70,12 @@ export const SignInForm = () => {
                     className={styles.loginReg__input}
                     type="password"
                     name="password"
-                    placeholder="Пароль"
+                    placeholder={t("loginReg.login.form-password")}
                     value={state.password}
                     onChange={handleChange}
                 />
                 {/* <a className={styles.loginReg__a} href="#">Забыли свой пароль?</a> */}
-                <button className={styles.loginReg__button}>Войти</button>
+                <button className={styles.loginReg__button}>{t("loginReg.login.form-button")}</button>
             </form>
         </div>
     );

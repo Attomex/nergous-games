@@ -5,6 +5,7 @@ import { api } from "shared/api";
 import { APP_ID } from "shared/const";
 import { useAuth } from "features/auth";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
+import { useTranslation } from "react-i18next";
 
 interface RegisterFormState {
     email: string;
@@ -16,6 +17,7 @@ interface RegisterFormState {
 export const SignUpForm = () => {
     const inputFile = useRef<HTMLInputElement>(null);
     const { login } = useAuth();
+    const { t } = useTranslation("translation");
     const navigate = useNavigate();
     const [state, setState] = useState<RegisterFormState>({
         email: "",
@@ -109,14 +111,14 @@ export const SignUpForm = () => {
     return (
         <div className={styles.loginReg__formContainer + " " + styles.loginReg__signUpContainer}>
             <form className={styles.loginReg__form} onSubmit={handleOnSubmit}>
-                <h1 className={styles.loginReg__h1 + " " + styles.loginReg__h1__signUp}>Регистрация</h1>
+                <h1 className={styles.loginReg__h1 + " " + styles.loginReg__h1__signUp}>{t("loginReg.registration.title")}</h1>
                 <input
                     className={styles.loginReg__input}
                     type="email"
                     name="email"
                     value={state.email}
                     onChange={handleChange}
-                    placeholder="Почта"
+                    placeholder={t("loginReg.registration.form-email")}
                     required
                 />
                 <input
@@ -125,7 +127,7 @@ export const SignUpForm = () => {
                     name="password"
                     value={state.password}
                     onChange={handleChange}
-                    placeholder="Пароль"
+                    placeholder={t("loginReg.registration.form-password")}
                     required
                 />
                 <input
@@ -134,24 +136,39 @@ export const SignUpForm = () => {
                     name="steam_url"
                     value={state.steam_url}
                     onChange={handleChange}
-                    placeholder="URL на профиль Steam"
+                    placeholder={t("loginReg.registration.form-steam")}
                     required
                 />
-                <input
-                    className={styles.loginReg__input}
-                    type="file"
-                    name="image"
-                    accept=".jpg, .jpeg, .png"
-                    onChange={handleChange}
-                    ref={inputFile}
-                    required
-                />
+                <div className={styles.loginReg__input__file}>
+                    <input
+                        type="button"
+                        id="loadFileXml"
+                        value={t("loginReg.registration.form-image-btn")}
+                        onClick={() => {
+                            document.getElementById("file-upload")?.click();
+                        }}
+                    />
+                    <span className={styles.loginReg__input__file__name} title={state.image ? state.image.name : t("loginReg.registration.form-image-text")}>
+                        {state.image ? state.image.name : t("loginReg.registration.form-image-text")}
+                    </span>
+                    <input
+                        className={styles.loginReg__input}
+                        id="file-upload"
+                        type="file"
+                        name="image"
+                        accept=".jpg, .jpeg, .png"
+                        style={{ display: "none" }}
+                        onChange={handleChange}
+                        ref={inputFile}
+                        required
+                    />
+                </div>
                 {redirect ? (
                     <button className={styles.loginReg__button} disabled>
                         {timerRedirect > 1 ? "Перенаправление через " + timerRedirect + " секунд..." : "Перенаправление..."}
                     </button>
                 ) : (
-                    <button className={styles.loginReg__button}>Регистрация</button>
+                    <button className={styles.loginReg__button}>{t("loginReg.registration.form-button")}</button>
                 )}
             </form>
         </div>

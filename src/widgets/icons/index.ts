@@ -22,4 +22,5 @@ export {
     UploadIcon,
     ImageCardIcon,
     XMarkLgIcon,
+    TranslateIcon,
 } from "./ui";

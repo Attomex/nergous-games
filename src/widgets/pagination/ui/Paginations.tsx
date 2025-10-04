@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Paginations.css";
+import { useTranslation } from "react-i18next";
 
 interface PaginationProps {
     totalItems: number;
@@ -30,6 +31,7 @@ const NextIcon = () => (
 export const Paginations: React.FC<PaginationProps> = ({ totalItems, currentPage, pageSize, onChange }) => {
     const totalPages = Math.ceil(totalItems / pageSize);
     const [jumpPage, setJumpPage] = useState<string>("");
+    const { t } = useTranslation("translation");
 
     const handleJump = () => {
         const page = Math.max(1, Math.min(totalPages, Number(jumpPage)));
@@ -62,7 +64,7 @@ export const Paginations: React.FC<PaginationProps> = ({ totalItems, currentPage
 
             <div className="pagination-jump">
                 <label htmlFor="jump-page" className="pagination-jump-label">
-                    Перейти к:
+                    {t("pagination.text")}
                 </label>
                 <div className="pagination-jump-input-wrapper">
                     <input

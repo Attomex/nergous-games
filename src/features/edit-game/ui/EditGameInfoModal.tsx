@@ -5,6 +5,7 @@ import { api } from "shared/api";
 import { DeleteOutlined, SyncOutlined, UploadOutlined } from "@ant-design/icons";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { IMG_SRC } from "shared/const";
+import { useTranslation } from "react-i18next";
 
 interface EditGameInfoModalProps {
     gameInfo: GameInfo;
@@ -18,6 +19,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
     const [isLoading, setIsLoading] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
     const [newImageFile, setNewImageFile] = useState<File | null>(null);
+    const { t } = useTranslation("translation", { keyPrefix: "gameCard.editGame" });
 
     useEffect(() => {
         // При открытии модалки сбрасываем превью
@@ -133,46 +135,47 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
     return (
         <Modal
             open={isModalOpen}
-            title={`Измение информации о игре: ${gameInfo.title}`}
+            title={`${t("title")}: ${gameInfo.title}`}
             onCancel={closeModalForm}
             width={600}
             footer={[
                 <Button key="back" onClick={closeModal}>
-                    Отмена
+                    {t("form.cancel-btn")}
                 </Button>,
                 <Button key="delete" onClick={deleteGame} icon={<DeleteOutlined style={{ color: "red" }} />}>
-                    Удалить игру
+                    {t("form.delete-btn")}
                 </Button>,
                 <Button key="submit" type="primary" icon={<SyncOutlined />} loading={isLoading} onClick={() => form.submit()}>
-                    Обновить
+                    {t("form.save-btn")}
                 </Button>,
-            ]}>
+            ]}
+        >
             <Form form={form} onFinish={onFinish} labelCol={{ span: 5 }}>
-                <Form.Item name="title" initialValue={gameInfo.title} label="Название игры">
-                    <Input placeholder="Название игры" />
+                <Form.Item name="title" initialValue={gameInfo.title} label={t("form.name")}>
+                    <Input placeholder={t("form.name")} />
                 </Form.Item>
 
-                <Form.Item name="year" initialValue={gameInfo.year} label="Год выпуска">
-                    <InputNumber placeholder="Год выпуска" />
+                <Form.Item name="year" initialValue={gameInfo.year} label={t("form.year")}>
+                    <InputNumber placeholder={t("form.year")} />
                 </Form.Item>
 
-                <Form.Item name="preambula" initialValue={gameInfo.preambula} label="Описание">
-                    <Input.TextArea placeholder="Описание игры" autoSize={{ minRows: 3, maxRows: 5 }}/>
+                <Form.Item name="preambula" initialValue={gameInfo.preambula} label={t("form.desc")}>
+                    <Input.TextArea placeholder={t("form.desc")} autoSize={{ minRows: 3, maxRows: 5 }} />
                 </Form.Item>
 
-                <Form.Item name="developer" initialValue={gameInfo.developer} label="Разработчик">
-                    <Input placeholder="Разработчик" />
+                <Form.Item name="developer" initialValue={gameInfo.developer} label={t("form.developer")}>
+                    <Input placeholder={t("form.developer")} />
                 </Form.Item>
 
-                <Form.Item name="publisher" initialValue={gameInfo.publisher} label="Издатель">
-                    <Input placeholder="Издатель" />
+                <Form.Item name="publisher" initialValue={gameInfo.publisher} label={t("form.publisher")}>
+                    <Input placeholder={t("form.publisher")} />
                 </Form.Item>
 
-                <Form.Item name="genre" initialValue={gameInfo.genre} label="Жанр">
-                    <Input placeholder="Жанр" />
+                <Form.Item name="genre" initialValue={gameInfo.genre} label={t("form.genre")}>
+                    <Input placeholder={t("form.genre")} />
                 </Form.Item>
 
-                <Form.Item label="Изображение">
+                <Form.Item label={t("form.img")}>
                     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                         {/* Превью текущего/нового изображения */}
                         <Image src={previewImage} preview={false} width={150} style={{ borderRadius: 4 }} />
@@ -181,7 +184,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                         <div>
                             <input type="file" id="image-upload" accept=".jpg,.jpeg,.png" style={{ display: "none" }} onChange={handleImageChange} />
                             <Button icon={<UploadOutlined />} onClick={() => document.getElementById("image-upload")?.click()}>
-                                {newImageFile ? "Изменить" : "Загрузить новое"}
+                                {newImageFile ? t("form.change-btn") : t("form.new-img-btn")}
                             </Button>
                             {newImageFile && (
                                 <div style={{ marginTop: 8 }}>
@@ -191,8 +194,9 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                                         onClick={() => {
                                             setNewImageFile(null);
                                             setPreviewImage(IMG_SRC + gameInfo.image);
-                                        }}>
-                                        Отменить
+                                        }}
+                                    >
+                                        {t("form.cancel-btn")}
                                     </Button>
                                 </div>
                             )}

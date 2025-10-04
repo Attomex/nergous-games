@@ -9,6 +9,7 @@ import { CopyOutlined } from "@ant-design/icons";
 import styles from "./Profile.module.css";
 import { Badge } from "./Badge";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
+import { useTranslation } from "react-i18next";
 
 export const Profile = () => {
     const { user, getUserInfo } = useAuth();
@@ -18,6 +19,8 @@ export const Profile = () => {
         photo: "",
         stats: { finished: 0, playing: 0, planned: 0, dropped: 0 },
     });
+
+    const { t } = useTranslation("translation", { keyPrefix: "profilePage" });
 
     useEffect(() => {
         const getInfo = async () => {
@@ -34,7 +37,7 @@ export const Profile = () => {
     ChartJS.register(ArcElement, ChartTooltip, Legend);
 
     const chartData = {
-        labels: ["Завершено", "В планах", "В процессе", "Брошено"],
+        labels: [t("chart.label.finished"), t("chart.label.planned"), t("chart.label.playing"), t("chart.label.dropped")],
         datasets: [
             {
                 data: [userInfo.stats.finished, userInfo.stats.planned, userInfo.stats.playing, userInfo.stats.dropped],
@@ -55,24 +58,31 @@ export const Profile = () => {
     };
 
     const statsItems = [
-        { label: "Завершено", value: userInfo.stats.finished, color: statsColors.finished },
-        { label: "В планах", value: userInfo.stats.planned, color: statsColors.planned },
-        { label: "В процессе", value: userInfo.stats.playing, color: statsColors.playing },
-        { label: "Брошено", value: userInfo.stats.dropped, color: statsColors.dropped },
+        { label: t("chart.label.finished"), value: userInfo.stats.finished, color: statsColors.finished },
+        { label: t("chart.label.planned"), value: userInfo.stats.planned, color: statsColors.planned },
+        { label: t("chart.label.playing"), value: userInfo.stats.playing, color: statsColors.playing },
+        { label: t("chart.label.dropped"), value: userInfo.stats.dropped, color: statsColors.dropped },
     ];
 
     return (
         <div className={styles.profilePage}>
             <div className={styles.profileCard}>
                 <Typography.Title level={2} className={styles.user}>
-                    Пользователь
+                    {t("user")}
                 </Typography.Title>
                 <Image width={150} height={150} src={`${IMG_SRC}${userInfo.photo}`} preview={false} className={styles.profileImage} />
                 <div className={styles.profileInfo}>
                     <Typography.Text className={styles.userInfoText}>Email: {userInfo.email}</Typography.Text>
                     <div className={styles.steamContainer}>
-                        <a className={`${styles.userInfoText} ${styles.steamLink}`} href={userInfo.steam_url} target="_blank" rel="noopener noreferrer">Steam: {userInfo.steam_url}</a>
-                        <Tooltip title="Скопировать ссылку">
+                        <a
+                            className={`${styles.userInfoText} ${styles.steamLink}`}
+                            href={userInfo.steam_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Steam: {userInfo.steam_url}
+                        </a>
+                        <Tooltip title={t("tooltip")}>
                             <CopyOutlined
                                 className={styles.copyIcon}
                                 onClick={() => {
@@ -91,7 +101,7 @@ export const Profile = () => {
 
             <div className={styles.statsCard}>
                 <Typography.Title level={3} className={styles.cardTitle}>
-                    Статистика
+                    {t("chart.title")}
                 </Typography.Title>
                 <div className={styles.statsContent}>
                     <div className={styles.chartContainer}>
@@ -106,9 +116,6 @@ export const Profile = () => {
                             </div>
                         ))}
                     </div>
-                </div>
-                <div className={styles.chartLegend}>
-                    Всего {userInfo.stats.finished + userInfo.stats.planned + userInfo.stats.playing + userInfo.stats.dropped} игр
                 </div>
             </div>
         </div>

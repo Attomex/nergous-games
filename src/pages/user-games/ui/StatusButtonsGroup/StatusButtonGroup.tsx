@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import "./StatusButtonGroup.css";
+import { useTranslation } from "react-i18next";
 
 interface StatusButtonsGroupProps {
     status: string;
@@ -8,12 +9,13 @@ interface StatusButtonsGroupProps {
 }
 
 export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, setStatus, setPage }) => {
+    const { t } = useTranslation("translation");
     const buttons: { title: string; status: string }[] = [
-        { title: "Все", status: "" },
-        { title: "Завершенные", status: "finished" },
-        { title: "Запланировано", status: "planned" },
-        { title: "В процессе", status: "playing" },
-        { title: "Брошено", status: "dropped" },
+        { title: t("filterGames.button.all"), status: "" },
+        { title: t("filterGames.button.finished"), status: "finished" },
+        { title: t("filterGames.button.planned"), status: "planned" },
+        { title: t("filterGames.button.playing"), status: "playing" },
+        { title: t("filterGames.button.dropped"), status: "dropped" },
     ];
 
     const containerRef = useRef<HTMLDivElement | null>(null);

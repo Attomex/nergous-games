@@ -1,8 +1,9 @@
 import { Card, List, Typography, Divider, ConfigProvider } from "antd";
-import { updates } from "./updates";
+// import { updates } from "./updates";
 import { useMemo, useState } from "react";
 import styles from "./UpdatePage.module.css";
 import "./fckngOVERRIDE.css";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 
@@ -16,7 +17,23 @@ function parseDate(date: string) {
 
 const MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
 
+type Update = {
+    date: string;
+    title: string;
+    update: Changes[];
+};
+
+// Changes is the type of the update array
+type Changes = {
+    name: string;
+    desc: string;
+};
+
 export const UpdatePage = () => {
+    const { t } = useTranslation("changes");
+    const title = t("updates.title");
+    const updates = t("updates.__updates__", { returnObjects: true }) as Update[];
+
     const firstDate = parseDate(updates[0].date);
 
     const dateDiff = useMemo(() => {
@@ -26,7 +43,17 @@ export const UpdatePage = () => {
         return differenceInDays;
     }, [firstDate]);
 
-    const [diffDates, ] = useState(Math.floor(dateDiff));
+    const [diffDates] = useState(Math.floor(dateDiff));
+
+    const sortedUpdates = [...updates].sort((a, b) => {
+        const [dayA, monthA, yearA] = a.date.split("-").map(Number);
+        const [dayB, monthB, yearB] = b.date.split("-").map(Number);
+
+        const dateA = new Date(yearA, monthA - 1, dayA);
+        const dateB = new Date(yearB, monthB - 1, dayB);
+
+        return dateB.getTime() - dateA.getTime(); // по убыванию (сначала новые)
+    });
 
     return (
         <div style={{ maxWidth: 800, margin: "0 auto", padding: "20px" }}>
@@ -45,7 +72,7 @@ export const UpdatePage = () => {
                 }}
             >
                 <Title level={2} style={{ color: "var(--text-color)" }}>
-                    Обновления
+                    {title}
                 </Title>
                 <Divider style={{ borderBlockStart: "1px solid var(--text-color)" }} />
                 {sortedUpdates.map((updateItem, index) => (
@@ -55,7 +82,6 @@ export const UpdatePage = () => {
                         className={styles.card}
                         title={
                             <>
-                                
                                 <div className={styles["card-header"]}>
                                     <Title level={3} style={{ color: "var(--text-color)", margin: "auto 0" }}>
                                         {updateItem.title}
@@ -63,23 +89,33 @@ export const UpdatePage = () => {
                                     <Text type="secondary" style={{ color: "var(--text-color)", margin: "auto 0" }}>
                                         {updateItem.date}
                                     </Text>
-                                    {(diffDates < 7 && index === 0) && <span className={styles.new}>NEW</span>}
+                                    {diffDates < 7 && index === 0 && <span className={styles.new}>NEW</span>}
                                 </div>
                             </>
                         }
                     >
                         <List
                             dataSource={updateItem.update}
-                            renderItem={(change) => (
-                                <List.Item>
+                            renderItem={(change, index) => (
+                                <List.Item style={{ paddingBottom: 0 }}>
                                     <List.Item.Meta
                                         title={
                                             <Text strong style={{ color: "var(--text-color)" }}>
                                                 {change.name}
                                             </Text>
                                         }
-                                        description={<Text style={{ color: "var(--text-color)" }}>{change.desc}</Text>}
-                                    />
+                                        description={
+                                            <Text style={{ color: "var(--text-color)" }}>
+                                                {change.desc}
+                                                {index !== updateItem.update.length - 1 && (
+                                                    <Divider
+                                                        type="horizontal"
+                                                        style={{ backgroundColor: "var(--gray-light-color)", marginTop: 12, marginBottom: 0 }}
+                                                    />
+                                                )}
+                                            </Text>
+                                        }
+                                    ></List.Item.Meta>
                                 </List.Item>
                             )}
                         />
@@ -89,13 +125,3 @@ export const UpdatePage = () => {
         </div>
     );
 };
-
-const sortedUpdates = [...updates].sort((a, b) => {
-    const [dayA, monthA, yearA] = a.date.split("-").map(Number);
-    const [dayB, monthB, yearB] = b.date.split("-").map(Number);
-
-    const dateA = new Date(yearA, monthA - 1, dayA);
-    const dateB = new Date(yearB, monthB - 1, dayB);
-
-    return dateB.getTime() - dateA.getTime(); // по убыванию (сначала новые)
-});

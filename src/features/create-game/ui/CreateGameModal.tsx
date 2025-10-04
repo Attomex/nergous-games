@@ -4,6 +4,7 @@ import { api } from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { UploadIcon, ImageCardIcon, XMarkLgIcon } from "widgets/icons";
 import style from "./CreateGameModal.module.css";
+import { useTranslation } from "react-i18next";
 
 interface CreateGameModalProps {
     isModalOpen: boolean;
@@ -28,11 +29,13 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
     const [isLoading, setIsLoading] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
 
+    const { t } = useTranslation("translation", {keyPrefix: "addGame.modal"});
+
     const statusOptions = [
-        { value: "planned", label: "В планах" },
-        { value: "playing", label: "В процессе" },
-        { value: "finished", label: "Завершен" },
-        { value: "dropped", label: "Брошено" },
+        { value: "planned", label: t("add-new.form.status.planned") },
+        { value: "playing", label: t("add-new.form.status.playing") },
+        { value: "finished", label: t("add-new.form.status.finished") },
+        { value: "dropped", label: t("add-new.form.status.dropped") },
     ];
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -119,7 +122,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                     closeModalForm();
                     onGameCreated();
                 })
-                .catch((error) => {
+                .catch((error: { response: { data: { error: any; }; }; }) => {
                     showErrorNotification(error.response.data.error || "Произошла ошибка при создании игры");
                 });
         } catch (error) {
@@ -152,14 +155,14 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
         <div className={style.modalOverlay}>
             <div className={style.modal}>
                 <div className={style.modalHeader}>
-                    <h2 className={style.modalTitle}>Создание игры</h2>
+                    <h2 className={style.modalTitle}>{t("add-new.title")}</h2>
                 </div>
                 <form ref={formRef} onSubmit={onFinish} className={style.form}>
                     <div className={style.formBody}>
                         {/* Поле Название */}
                         <div className={style.formItem}>
                             <label htmlFor="title" className={style.formLabel}>
-                                Название игры
+                                {t("add-new.form.name")}
                             </label>
                             <input
                                 type="text"
@@ -168,7 +171,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 value={formData.title}
                                 onChange={handleChange}
                                 className={style.formInput}
-                                placeholder="Название игры"
+                                placeholder={t("add-new.form.name")}
                                 required
                             />
                         </div>
@@ -176,7 +179,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                         {/* Поле Описание */}
                         <div className={style.formItem}>
                             <label htmlFor="preambula" className={style.formLabel}>
-                                Описание игры
+                                {t("add-new.form.desc")}
                             </label>
                             <textarea
                                 id="preambula"
@@ -184,7 +187,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 value={formData.preambula}
                                 onChange={handleChange}
                                 className={style.formTextarea}
-                                placeholder="Описание игры"
+                                placeholder={t("add-new.form.desc")}
                                 rows={3}
                                 required
                             />
@@ -193,7 +196,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                         {/* Поле Год */}
                         <div className={style.formItem}>
                             <label htmlFor="year" className={style.formLabel}>
-                                Год игры
+                                {t("add-new.form.year")}
                             </label>
                             <input
                                 type="number"
@@ -202,7 +205,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 value={formData.year}
                                 onChange={handleChange}
                                 className={style.formInput}
-                                placeholder="Год игры"
+                                placeholder={t("add-new.form.year")}
                                 min={1900}
                                 max={2100}
                                 required
@@ -212,7 +215,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                         {/* Поле Жанр */}
                         <div className={style.formItem}>
                             <label htmlFor="genre" className={style.formLabel}>
-                                Жанр игры
+                                {t("add-new.form.genre")}
                             </label>
                             <input
                                 type="text"
@@ -221,7 +224,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 value={formData.genre}
                                 onChange={handleChange}
                                 className={style.formInput}
-                                placeholder="Жанр игры"
+                                placeholder={t("add-new.form.genre")}
                                 required
                             />
                         </div>
@@ -229,7 +232,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                         {/* Поле Ссылка */}
                         <div className={style.formItem}>
                             <label htmlFor="url" className={style.formLabel}>
-                                Ссылка на игру
+                                {t("add-new.form.source")}
                             </label>
                             <input
                                 type="url"
@@ -238,7 +241,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 value={formData.url}
                                 onChange={handleChange}
                                 className={style.formInput}
-                                placeholder="Ссылка на игру"
+                                placeholder={t("add-new.form.source")}
                                 required
                             />
                         </div>
@@ -246,7 +249,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                         {/* Поле Приоритет */}
                         <div className={style.formItem}>
                             <label htmlFor="priority" className={style.formLabel}>
-                                Приоритет игры (0-10)
+                                {t("add-new.form.priority")}
                             </label>
                             <input
                                 type="number"
@@ -255,7 +258,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 value={formData.priority}
                                 onChange={handleChange}
                                 className={style.formInput}
-                                placeholder="Приоритет игры"
+                                placeholder={t("add-new.form.priority")}
                                 min={0}
                                 max={10}
                                 required
@@ -265,7 +268,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                         {/* Поле Статус */}
                         <div className={style.formItem}>
                             <label htmlFor="status" className={style.formLabel}>
-                                Статус игры
+                                {t("add-new.form.status.label")}
                             </label>
                             <select id="status" name="status" value={formData.status} onChange={handleChange} className={style.formSelect} required>
                                 {statusOptions.map((option) => (
@@ -279,7 +282,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                         {/* Поле Разработчик */}
                         <div className={style.formItem}>
                             <label htmlFor="developer" className={style.formLabel}>
-                                Разработчик игры
+                                {t("add-new.form.developer")}
                             </label>
                             <input
                                 type="text"
@@ -288,7 +291,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 value={formData.developer}
                                 onChange={handleChange}
                                 className={style.formInput}
-                                placeholder="Разработчик игры"
+                                placeholder={t("add-new.form.developer")}
                                 required
                             />
                         </div>
@@ -296,7 +299,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                         {/* Поле Издатель */}
                         <div className={style.formItem}>
                             <label htmlFor="publisher" className={style.formLabel}>
-                                Издатель игры
+                                {t("add-new.form.publisher")}
                             </label>
                             <input
                                 type="text"
@@ -305,18 +308,18 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 value={formData.publisher}
                                 onChange={handleChange}
                                 className={style.formInput}
-                                placeholder="Издатель игры"
+                                placeholder={t("add-new.form.publisher")}
                                 required
                             />
                         </div>
 
                         {/* Поле Обложка */}
                         <div className={style.formItem}>
-                            <label className={style.formLabel}>Обложка игры</label>
+                            <label className={style.formLabel}>{t("add-new.form.img")}</label>
                             <div className={style.uploadContainer}>
                                 {previewImage ? (
                                     <div className={style.imagePreview}>
-                                        <img src={previewImage} alt="Превью обложки" className={style.previewImg} />
+                                        <img src={previewImage} alt="" className={style.previewImg} />
                                         <button type="button" className={style.removeImageBtn} onClick={handleRemoveImage}>
                                             <XMarkLgIcon className={style.removeIcon} />
                                         </button>
@@ -324,7 +327,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 ) : (
                                     <label htmlFor="image-upload" className={style.uploadLabel}>
                                         <ImageCardIcon className={style.uploadIcon} />
-                                        <p>Загрузить обложку</p>
+                                        <p>{t("add-new.form.new-img-btn")}</p>
                                     </label>
                                 )}
                                 <input
@@ -342,7 +345,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                 </form>
                 <div className={style.modalFooter}>
                     <button type="button" className={style.button} onClick={closeModalForm}>
-                        Отмена
+                        {t("cancel-btn")}
                     </button>
                     <button type="button" className={`${style.button} ${style.buttonPrimary}`} onClick={onFinish} disabled={isLoading}>
                         {isLoading ? (
@@ -350,7 +353,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                         ) : (
                             <>
                                 <UploadIcon className={style.iconLeft} />
-                                Создать
+                                {t("create-btn")}
                             </>
                         )}
                     </button>

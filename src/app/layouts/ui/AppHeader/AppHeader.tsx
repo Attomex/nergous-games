@@ -4,7 +4,8 @@ import { useAuth } from "features/auth";
 import style from "./AppHeader.module.css";
 import { Dropdown } from "widgets/dropdown";
 import type { DropdownProps } from "shared/types";
-import { SunIcon, MoonIcon, ProfileIcon, ArrowRepeat, PaintBucketIcon, ToolsIcon, LogoutIcon } from "widgets/icons";
+import { SunIcon, MoonIcon, ProfileIcon, ArrowRepeat, PaintBucketIcon, ToolsIcon, LogoutIcon, TranslateIcon } from "widgets/icons";
+import { useTranslation } from "react-i18next";
 
 // const pageTitles = {
 //     "/all-games": "Все игры",
@@ -17,13 +18,20 @@ import { SunIcon, MoonIcon, ProfileIcon, ArrowRepeat, PaintBucketIcon, ToolsIcon
 export const AppHeader = () => {
     const { theme, setTheme, themes } = useTheme();
     const { logout, isAdmin, checkAdmin } = useAuth();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
-    // const location = useLocation();
 
-    // const currentTitle = useMemo(() => {
-    //     const path = location.pathname as keyof typeof pageTitles;
-    //     return pageTitles[path] || "Главная";
-    // }, [location.pathname]);
+    const onClickLocal: DropdownProps["onClick"] = ({ value }) => {
+        localStorage.setItem("local", value as string);
+        switch (value) {
+            case "ru-RU":
+                i18n.changeLanguage(value);
+                break;
+            case "en-US":
+                i18n.changeLanguage(value);
+                break;
+        }
+    }
 
     const onClickTheme: DropdownProps["onClick"] = ({ key }) => {
         const selectedTheme = themes[Number(key) - 1];
@@ -44,14 +52,14 @@ export const AppHeader = () => {
     const menuItemsTheme: DropdownProps["options"] = [
         {
             id: 1,
-            label: "Светлая тема",
+            label: t("appHeader.theme.light"),
             icon: <SunIcon />,
             extra: theme === "light" && <span className={style["badge"]}></span>,
             active: theme === "light",
         },
         {
             id: 2,
-            label: "Темная тема",
+            label: t("appHeader.theme.dark"),
             icon: <MoonIcon />,
             extra: theme === "dark" && <span className={style["badge"]}></span>,
             active: theme === "dark",
@@ -61,7 +69,7 @@ export const AppHeader = () => {
         },
         {
             id: 3,
-            label: "Системная тема",
+            label: t("appHeader.theme.system"),
             icon: <ArrowRepeat />,
             extra: theme.includes("system") && <span className={style["badge"]}></span>,
             active: theme.includes("system"),
@@ -69,14 +77,33 @@ export const AppHeader = () => {
     ];
 
     const menuItemsProfile = [
-        { id: 1, label: "Информация", icon: <ProfileIcon /> },
-        { id: 2, label: "Выход", icon: <LogoutIcon />, danger: true },
+        { id: 1, label: t("appHeader.settings.profile"), icon: <ProfileIcon /> },
+        { id: 2, label: t("appHeader.settings.logout"), icon: <LogoutIcon />, danger: true },
     ];
+
+    const localItems: DropdownProps["options"] = [
+        {
+            id: 1,
+            label: "Русский язык",
+            value: "ru-RU",
+            extra: i18n.language === "ru-RU" && <span className={style["badge"]}></span>,
+            active: i18n.language === "ru-RU",
+        },
+        {
+            id: 2,
+            label: "English",
+            value: "en-US",
+            extra: i18n.language === "en-US" && <span className={style["badge"]}></span>,
+            active: i18n.language === "en-US",
+        },
+    ];
+
+    console.log(i18n.language);
 
     if (isAdmin) {
         menuItemsProfile.push({
             id: 3,
-            label: "Панель администратора",
+            label: t("appHeader.settings.admin-users"),
             icon: <ToolsIcon />,
         });
     }
@@ -94,6 +121,7 @@ export const AppHeader = () => {
 
                 {/* Настройки */}
                 <div className={style.header__group}>
+                    <Dropdown options={localItems} buttonIcon={<TranslateIcon />} onClick={onClickLocal} />
                     <Dropdown options={menuItemsTheme} buttonIcon={<PaintBucketIcon />} onClick={onClickTheme} />
                     <Dropdown options={menuItemsProfile} buttonIcon={<ProfileIcon />} onClick={onClickProfile} />
                 </div>

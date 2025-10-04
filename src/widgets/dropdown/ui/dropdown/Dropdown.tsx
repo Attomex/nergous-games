@@ -62,9 +62,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
         };
     }, []);
 
-    let listClasses = `${dropdownStyles["dropdown-list"]} ${position === "left" ? dropdownStyles["position-left"] : dropdownStyles["position-right"]} ${
-        isOpen ? dropdownStyles["open"] : ""
-    }`;
+    let listClasses = `${dropdownStyles["dropdown-list"]} ${
+        position === "left" ? dropdownStyles["position-left"] : dropdownStyles["position-right"]
+    } ${isOpen ? dropdownStyles["open"] : ""}`;
 
     let toggleClasses = `${dropdownStyles["dropdown-toggle"]} ${
         (buttonStyle === "shaped" && placeholder === "") || (buttonIcon && placeholder === "") ? dropdownStyles["shaped"] : dropdownStyles["default"]
@@ -72,7 +72,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
     return (
         <div className={dropdownStyles["dropdown-wrapper"]} ref={rootRef}>
-            <button className={toggleClasses} onClick={(e) => handleToggle()} ref={buttonRef} style={styles}>
+            <button className={toggleClasses} onClick={handleToggle} ref={buttonRef} style={styles}>
                 {buttonIcon && <span className={dropdownStyles["icon"]}>{buttonIcon}</span>}
                 {placeholder}
             </button>
@@ -95,7 +95,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                             onClick={(e) => handleClick(item, e)}
                         >
                             {item.icon && <span className={dropdownStyles["icon-left"] + " " + dropdownStyles["icon"]}>{item.icon}</span>}
-                            <span className={dropdownStyles["label"] + " " + item?.active}>{item.label}</span>
+                            <span className={dropdownStyles["label"]}>{item.label}</span>
                             {item?.extra && <span className={dropdownStyles["icon-right"] + " " + dropdownStyles["icon"]}>{item.extra}</span>}
                         </li>
                     );

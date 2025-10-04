@@ -68,8 +68,12 @@
     border-radius: 4px;
     opacity: 1;
     text-align: start;
-    color: #ffffffff;
-    text-decoration: none;   
+    color: var(--white-color);
+    text-decoration: none;
+}
+
+.tag:hover {
+    color: var(--white-color);
 }
 
 .source {
@@ -184,7 +188,7 @@
 
 /* Добавляем эти стили */
 .rating__container {
-    min-width: 50%; /* Занимает половину пространства */
+    width: 100%; /* Занимает половину пространства */
     display: flex;
     justify-content: flex-start; /* Выравнивание по левому краю */
 }
@@ -199,6 +203,8 @@
     font-size: var(--card-secondary-font-size);
     display: flex;
     align-items: center;
+    width: 100%;
+    justify-content: space-between;
 
     color: var(--card-text-color);
 }
@@ -218,11 +224,11 @@
 .rating__update__hidden,
 .rating__update {
     cursor: pointer;
-    color: var(--card-button-text-color);
+    color: var(--text-color);
     margin: 0;
     margin-left: 37px;
-    background-color: var(--card-button-bg-color);
-    border: var(--card-button-border-color) 1px solid;
+    background-color: var(--bg-color);
+    border: var(--gray-light-color) 1px solid;
     transition: all 0.3s ease;
 }
 
@@ -239,7 +245,7 @@
     /* box-shadow: 0 0 4px 1px var(--secondary-color); */
     background-color: var(--card-button-hover-bg-color);
     color: var(--card-button-hover-text-color);
-    border-color: var(--card-button-hover-border-color);
+    border-color: var(--gray-medium-color);
 }
 
 .status {

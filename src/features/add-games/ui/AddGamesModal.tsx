@@ -4,6 +4,7 @@ import { api } from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { TrashIcon, PlusLgIcon, UploadIcon } from "widgets/icons";
 import style from "./AddGamesModal.module.css";
+import { useTranslation } from "react-i18next";
 
 interface AddGamesModalProps {
     isModalOpen: boolean;
@@ -14,6 +15,7 @@ interface AddGamesModalProps {
 export const AddGamesModal: React.FC<AddGamesModalProps> = ({ isModalOpen, closeModal, onAddGames }) => {
     const [games, setGames] = useState([{ name: "", source: "Steam" }]);
     const [isLoading, setIsLoading] = useState(false);
+    const { t } = useTranslation("translation", { keyPrefix: "addGame.modal" });
 
     const onFinish = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -73,28 +75,32 @@ export const AddGamesModal: React.FC<AddGamesModalProps> = ({ isModalOpen, close
         <div className={style.modalOverlay}>
             <div className={style.modal}>
                 <div className={style.modalHeader}>
-                    <h2 className={style.modalTitle}>Добавление игр</h2>
+                    <h2 className={style.modalTitle}>{t("add-several.title")}</h2>
                 </div>
                 <form onSubmit={onFinish} className={style.form}>
                     <div className={style.formList}>
                         {games.map((game, index) => (
                             <div key={index} className={style.formItemContainer}>
                                 <div className={style.formItem}>
-                                    <label className={style.formLabel}>Название игры</label>
+                                    <label htmlFor="name" className={style.formLabel}>
+                                        {t("add-several.form.name")}
+                                    </label>
                                     <input
+                                        id="name"
                                         type="text"
                                         value={game.name}
                                         onChange={(e) => handleGameChange(index, "name", e.target.value)}
-                                        placeholder="Название игры"
+                                        placeholder={t("add-several.form.name")}
                                         className={style.formInput}
                                         required
                                     />
                                 </div>
                                 <div className={style.formItem}>
-                                    <label className={style.formLabel}>Источник</label>
+                                    <label className={style.formLabel}>{t("add-several.form.source")}</label>
                                     <div className={style.radioGroup}>
-                                        <label className={style.radioLabel}>
+                                        <label htmlFor="steam" className={style.radioLabel}>
                                             <input
+                                                id="steam"
                                                 type="radio"
                                                 value="Steam"
                                                 checked={game.source === "Steam"}
@@ -102,8 +108,9 @@ export const AddGamesModal: React.FC<AddGamesModalProps> = ({ isModalOpen, close
                                             />
                                             Steam
                                         </label>
-                                        <label className={style.radioLabel}>
+                                        <label htmlFor="wiki" className={style.radioLabel}>
                                             <input
+                                                id="wiki"
                                                 type="radio"
                                                 value="Wiki"
                                                 checked={game.source === "Wiki"}
@@ -119,13 +126,13 @@ export const AddGamesModal: React.FC<AddGamesModalProps> = ({ isModalOpen, close
                             </div>
                         ))}
                         <button type="button" className={style.addButton} onClick={addGame}>
-                            <PlusLgIcon className={style.icon} /> Добавить игру
+                            <PlusLgIcon className={style.icon} /> {t("add-several.form.plus-btn")}
                         </button>
                     </div>
                 </form>
                 <div className={style.modalFooter}>
                     <button className={style.button} onClick={closeModalForm}>
-                        Отмена
+                        {t("cancel-btn")}
                     </button>
                     <button className={`${style.button} ${style.buttonPrimary}`} onClick={onFinish} disabled={isLoading}>
                         {isLoading ? (
@@ -133,7 +140,7 @@ export const AddGamesModal: React.FC<AddGamesModalProps> = ({ isModalOpen, close
                         ) : (
                             <>
                                 <UploadIcon className={style.iconLeft} />
-                                Создать
+                                {t("create-btn")}
                             </>
                         )}
                     </button>

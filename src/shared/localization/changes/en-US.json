@@ -1,0 +1,95 @@
+{
+    "updates": {
+        "title": "Updates",
+        "__updates__": [
+            {
+                "date": "29-09-2025",
+                "title": "Global Major update",
+                "update": [
+                    {
+                        "name": "Game cards",
+                        "desc": "The design of game cards has been updated. The ability to navigate to a game page, depending on where the game information was retrieved (wiki / steam), has also been added."
+                    },
+                    {
+                        "name": "Components",
+                        "desc": "Some components were written from scratch, instead of Antd components."
+                    },
+                    {
+                        "name": "Profile page",
+                        "desc": "The profile page has been completely redesigned."
+                    }
+                ]
+            },
+            {
+                "date": "16-08-2025",
+                "title": "Major update",
+                "update": [
+                    {
+                        "name": "Antd Components",
+                        "desc": "Antd components have been styled to match the design."
+                    },
+                    {
+                        "name": "Game Cards",
+                        "desc": "Completely redesigned. New design. Game descriptions moved to a modal window."
+                    },
+                    {
+                        "name": "Game Modal Window",
+                        "desc": "A modal window has been implemented that displays complete information about the game, as well as where the information was retrieved."
+                    },
+                    {
+                        "name": "Trivia",
+                        "desc": "Minor code refactoring."
+                    }
+                ]
+            },
+            {
+                "date": "14-08-2025",
+                "title": "Major update",
+                "update": [
+                    {
+                        "name": "Search",
+                        "desc": "A search function has been created that allows you to explore your library."
+                    },
+                    {
+                        "name": "Sorting",
+                        "desc": "A sorting function has been created that allows you to explore your library."
+                    },
+                    {
+                        "name": "Tabs",
+                        "desc": "Tabs have been created that allow you to explore your library..."
+                    },
+                    {
+                        "name": "Pagination",
+                        "desc": "A pagination function has been created that allows you to explore your library... Do I really need to write this for the fourth time?"
+                    },
+                    {
+                        "name": "All Games Page",
+                        "desc": "A page with all games in the database has been created."
+                    },
+                    {
+                        "name": "Adding games from the All Games page",
+                        "desc": "It is now possible to add games from the All Games page by changing the game status."
+                    },
+                    {
+                        "name": "Styles",
+                        "desc": "Well, I've been tinkering with all sorts of Ant Design styles and stuff."
+                    }
+                ]
+            },
+            {
+                "date": "13-08-2025",
+                "title": "Minor bugfix",
+                "update": [
+                    {
+                        "name": "Sidebar",
+                        "desc": "The sidebar has been moved to the AppHeader. It looks hyped."
+                    },
+                    {
+                        "name": "Add game buttons",
+                        "desc": "Updated. New city tiles."
+                    }
+                ]
+            }
+        ]
+    }
+}

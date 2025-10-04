@@ -5,9 +5,10 @@ import { IMG_SRC } from "shared/const";
 import { useNavigate } from "react-router-dom";
 import { showSuccessNotification } from "shared/lib";
 import { BookIcon, SquaresIcon, LogoutIcon, ArrowRepeat } from "widgets/icons";
+import { useTranslation } from "react-i18next";
 
 export const AppSidebar = () => {
-
+    const { t } = useTranslation("translation");
     const { user, getUserInfo, logout } = useAuth();
     const navigate = useNavigate();
 
@@ -18,9 +19,9 @@ export const AppSidebar = () => {
     }, [user, getUserInfo]);
 
     const sidebarItems = [
-        { id: 1, icon: <SquaresIcon />, label: "Все игры", href: "/all-games" },
-        { id: 2, icon: <BookIcon />, label: "Мои игры", href: "/games" },
-        { id: 3, icon: <ArrowRepeat />, label: "Обновления", href: "/updates" },
+        { id: 1, icon: <SquaresIcon />, label: t("sidebar.buttons.allGames"), href: "/all-games" },
+        { id: 2, icon: <BookIcon />, label: t("sidebar.buttons.myGames"), href: "/games" },
+        { id: 3, icon: <ArrowRepeat />, label: t("sidebar.buttons.updates"), href: "/updates" },
     ];
 
     const handleCopyLink = () => {
@@ -70,13 +71,13 @@ export const AppSidebar = () => {
                             <span className={styles["sidebar-item__icon"]}>
                                 <LogoutIcon />
                             </span>
-                            <span className={styles["sidebar-text"]}>Выход</span>
+                            <span className={styles["sidebar-text"]}>{t("sidebar.buttons.logout")}</span>
                         </div>
                     </section>
                 </div>
             </div>
             {/* Этот backdrop теперь не нужен, так как эффект наведения управляется только через сайдбар */}
-            <div className={`${styles["backdrop"]}`}>backdrop</div>
+            <div className={`${styles["backdrop"]}`}></div>
         </>
     );
 };

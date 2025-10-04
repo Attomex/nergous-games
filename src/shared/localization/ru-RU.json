@@ -1,6 +1,8 @@
 {
     "docTitle": {
         "pages": {
+            "title": "Менеджер игр",
+            
             "userGames": "Мои игры",
             "allGames": "Все игры",
             "profile": "Профиль",
@@ -8,7 +10,7 @@
             "admin": "Админ-пользователи",
             "login": "Вход",
             "test": "Тест",
-            "title": "Менеджер игр"
+            "lander": "Добро пожаловать!"
         }
     },
     "landing": {
@@ -19,21 +21,25 @@
     "loginReg": {
         "login": {
             "title": "Авторизация",
+
             "form-email": "Почта",
             "form-password": "Пароль",
             "form-button": "Вход",
+
             "side-title": "Один аккаунт для всего!",
             "side-text": "Зарегистрируйтесь, чтобы получить доступ ко всем нашим сервисам с единой учетной записью.",
             "side-button": "Регистрация"
         },
         "registration": {
             "title": "Регистрация",
+
             "form-email": "Почта",
             "form-password": "Пароль",
             "form-steam": "URL на профиль Steam",
             "form-image-btn": "Выберите файл",
             "form-image-text": "Файл не выбран",
             "form-button": "Регистрация",
+
             "side-title": "Вход в аккаунт",
             "side-text": "Уже есть учетная запись? Просто войдите, и вы в деле.",
             "side-button": "Войти"
@@ -46,5 +52,133 @@
             "updates": "Обновления",
             "logout": "Выход"
         }
+    },
+    "appHeader": {
+        "theme": {
+            "light": "Светлая тема",
+            "dark": "Темная тема",
+            "system": "Системная тема"
+        },
+        "settings": {
+            "profile": "Профиль",
+            "logout": "Выход",
+            "admin-users": "Админ-пользователи"
+        }
+    },
+    "addGame": {
+        "label": "Добавить игру",
+        "options": {
+            "add-new": "Добавить новую игру",
+            "add-several": "Добавить несколько игр"
+        },
+        "modal": {
+            "add-new": {
+                "title": "Создание игры",
+                "form": {
+                    "name": "Название игры",
+                    "desc": "Описание игры",
+                    "year": "Год издания",
+                    "genre": "Жанр игры",
+                    "source": "Ссылка на игру",
+                    "priority": "Приоритет игры (0-10)",
+                    "status": {
+                        "label": "Статус игры",
+                        "finished": "Завершена",
+                        "planned": "В планах",
+                        "playing": "В процессе",
+                        "dropped": "Брошена"
+                    },
+                    "developer": "Разработчик",
+                    "publisher": "Издатель",
+                    "img": "Обложка игры",
+
+                    "new-img-btn": "Загрузить обложку"
+                }
+            },
+            "add-several": {
+                "title": "Добавление игр",
+                "form": {
+                    "name": "Название игры",
+                    "source": "Источник",
+
+                    "plus-btn": "Добавить игру"
+                }
+            },
+            "cancel-btn": "Отменить",
+            "create-btn": "Создать"
+        }
+    },
+    "filterGames": {
+        "button": {
+            "all": "Все",
+            "finished": "Завершенные",
+            "planned": "В планах",
+            "playing": "В процессе",
+            "dropped": "Брошено"
+        }
+    },
+    "sortOptions": {
+        "title": "Название",
+        "year": "Год",
+        "priority": "Приоритет"
+    },
+    "searchButton": {
+        "placeholder": "Поиск игр..."
+    },
+    "gameCard": {
+        "status": {
+            "finished": "Завершен",
+            "planned": "В планах",
+            "playing": "В процессе",
+            "dropped": "Брошено",
+            "no-select": "Не выбрано"
+        },
+        "year": {
+            "no-year": "Не указано"
+        },
+        "priority": {
+            "text": "Приоритет",
+            "update": "Обновить"
+        },
+        "gameDetails": {
+            "more": "Узнать больше",
+            "developer": "Разработчик",
+            "publisher": "Издатель"
+        },
+        "editGame": {
+            "title": "Измение информации о игре",
+            "form": {
+                "name": "Название игры",
+                "year": "Год выпуска",
+                "desc": "Описание",
+                "developer": "Разработчик",
+                "publisher": "Издатель",
+                "genre": "Жанр",
+                "img": "Изображение",
+
+                "new-img-btn": "Загрузить новое",
+                "cancel-btn": "Отменить",
+                "change-btn": "Изменить",
+                "delete-btn": "Удалить игру",
+                "save-btn": "Обновить"
+            }
+        }
+    },
+    "pagination": {
+        "text": "Перейти к:"
+    },
+    "profilePage": {
+        "user": "Пользователь",
+        "tooltip": "Скопировать ссылку",
+        "chart": {
+            "title": "Статистика",
+            "label": {
+                "finished": "Завершено",
+                "planned": "В планах",
+                "playing": "В процессе",
+                "dropped": "Брошено"
+            }
+        }
+        
     }
 }

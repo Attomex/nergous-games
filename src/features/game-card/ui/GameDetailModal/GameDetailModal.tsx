@@ -3,6 +3,7 @@ import { DividerStyled } from "shared/ui";
 import styles from "./GameDetailModal.module.css";
 import { Modal, ConfigProvider, Rate, Divider, Image } from "antd";
 import { LinkIcon } from "widgets/icons";
+import { useTranslation } from "react-i18next";
 
 interface GameDetailModalProps {
     gameInfo: GameInfo;
@@ -12,6 +13,8 @@ interface GameDetailModalProps {
 }
 
 export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isModalOpen, closeModal, imgSource }) => {
+    const { t } = useTranslation("translation", { keyPrefix: "gameCard.gameDetails" });
+    
     return (
         <Modal open={isModalOpen} footer={null} closable onCancel={closeModal} centered>
             <div className={styles.content}>
@@ -44,15 +47,15 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
 
             <p className={styles.description}>{gameInfo.preambula}</p>
             <a className={styles.showMore} href={gameInfo.url} target="_blank" rel="noopener noreferrer">
-                Узнать больше
+                {t("more")}
                 <LinkIcon />
             </a>
 
             <p className={styles.devPub}>
-                <strong>Разработчик:</strong> {gameInfo.developer}
+                <strong>{t("developer")}:</strong> {gameInfo.developer}
             </p>
             <p className={styles.devPub}>
-                <strong>Издатель:</strong> {gameInfo.publisher}
+                <strong>{t("publisher")}:</strong> {gameInfo.publisher}
             </p>
         </Modal>
     );

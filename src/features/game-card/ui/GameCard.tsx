@@ -13,6 +13,7 @@ import { CustomRate } from "widgets/rate";
 import { CustomDropdown } from "widgets/dropdown";
 import { IMG_SRC } from "shared/const";
 import { EyeIcon } from "widgets/icons";
+import { useTranslation } from "react-i18next";
 
 interface GameCardProps {
     gameInfo: GameInfo;
@@ -20,12 +21,15 @@ interface GameCardProps {
 }
 
 export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
-    const key = gameInfo.status as keyof typeof gameStatuse;
-    const status = gameStatuse[key];
+    
     const [newPriority, setNewPriority] = useState(gameInfo.priority / 2);
     const [willUpdate, setWillUpdate] = useState(false);
     const { isAdmin } = useAuth();
+    const { t } = useTranslation("translation");
     const [gameDetails, setGameDetails] = useState(false);
+    // const key = gameInfo.status as keyof typeof gameStatuse;
+    const textStatus = `gameCard.status.${gameInfo.status ? gameInfo.status : "no-select"}`;
+    const status = t(textStatus as any);
 
     // Открытие модалки для изменения инфы об игре
     const [editGameInfoModal, setEditGameInfoModal] = useState(false);
@@ -54,22 +58,22 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
     const statuses = [
         {
             id: 1,
-            label: "В планах",
+            label: t("gameCard.status.planned"),
             extra: <span className={`${styles["status-badge"]} ${styles.planned}`}></span>,
         },
         {
             id: 2,
-            label: "В процессе",
+            label: t("gameCard.status.playing"),
             extra: <span className={`${styles["status-badge"]} ${styles.processing}`}></span>,
         },
         {
             id: 3,
-            label: "Завершен",
+            label: t("gameCard.status.finished"),
             extra: <span className={`${styles["status-badge"]} ${styles.finished}`}></span>,
         },
         {
             id: 4,
-            label: "Брошено",
+            label: t("gameCard.status.dropped"),
             extra: <span className={`${styles["status-badge"]} ${styles.dropped}`}></span>,
         },
     ];
@@ -114,7 +118,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
         };
         if (url.includes("wikipedia")) {
             // set.color = "#f3956a";
-            set.color = "#3366cc";
+            set.color = "#3366ccff";
             set.source = "wikipedia";
         } else if (url.includes("steampowered")) {
             // set.color = "#bfbfbf";
@@ -164,7 +168,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                             borderColor: getColor(gameInfo.status),
                         }}
                     >
-                        {status !== undefined ? status : "Не выбрано"}
+                        {status !== undefined ? status : t("gameCard.status.no-select")}
                     </span>
                 </div>
 
@@ -191,7 +195,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
             <div className={styles.details}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <header className={styles.title}>{gameInfo.title}</header>
-                    <div className={styles.year}>{gameInfo.year || "Не указано"}</div>
+                    <div className={styles.year}>{gameInfo.year || t("gameCard.year.no-year")}</div>
                 </div>
 
                 <div className={styles.genres}>{gameInfo.genre.replace(/,\s*/g, " / ")}</div>
@@ -204,7 +208,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                         {status !== undefined && (
                             <div className={styles.rating}>
                                 <div className={styles.rating__content}>
-                                    Приоритет:
+                                    {t("gameCard.priority.text")}
                                     <CustomRate
                                         className={styles.rating__rate}
                                         allowHalf={true}
@@ -214,14 +218,13 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                                 </div>
                                 <div onClick={updatePriority}>
                                     <span className={`${willUpdate ? styles.rating__update : styles.rating__update__hidden} ${styles.tag}`}>
-                                        Обновить
+                                        {t("gameCard.priority.update")}
                                     </span>
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
-                {/* <Dropdown options={statuses} placeholder={status} onClick={(id) => onChangeStatus(id)} className={styles["sort-button"]} /> */}
                 <CustomDropdown items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
             </div>
             <EditGameInfoModal

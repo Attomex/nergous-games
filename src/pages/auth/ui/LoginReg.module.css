@@ -91,6 +91,28 @@
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
+    
+}
+
+.loginReg__input__file {
+    font-size: 13px;
+    margin-right: auto;
+    display: flex;
+    align-items: flex-start;
+    padding: 6px;
+    background-color: rgb(238, 238, 238);
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.loginReg__input__file__name {
+    padding-left: 10px;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: auto 0;
 }
 
 .loginReg__container {

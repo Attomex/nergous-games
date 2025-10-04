@@ -25,6 +25,7 @@ import { Dropdown } from "widgets/dropdown";
 import { AscIcon, DescIcon, SortAZIcon, SortZAIcon } from "widgets/icons";
 import { isDropdownItem } from "shared/types";
 import { EmptyItems } from "widgets/empty-items";
+import { useTranslation } from "react-i18next";
 
 const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
@@ -32,21 +33,21 @@ const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     return res.data; // { data: GameInfo[], pages, total }
 };
 
-type SortOption = keyof typeof sortOptions;
-
-const sortOptions = {
-    "title-asc": "Название",
-    "title-desc": "Название",
-    "year-desc": "Год",
-    "year-asc": "Год",
-    "priority-desc": "Приоритет",
-    "priority-asc": "Приоритет",
-} as const;
-
 export const UserGames: React.FC = () => {
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState("");
     const { search, debouncedSearch, setSearch } = useDebouncedSearch("", setPage, 500);
+    const { t } = useTranslation("translation");
+    
+    type SortOption = keyof typeof sortOptions;
+    const sortOptions = {
+        "title-asc": t("sortOptions.title"),
+        "title-desc": t("sortOptions.title"),
+        "year-desc": t("sortOptions.year"),
+        "year-asc": t("sortOptions.year"),
+        "priority-desc": t("sortOptions.priority"),
+        "priority-asc": t("sortOptions.priority"),
+    } as const;
 
     const [generalSort, setGeneralSort] = useState<SortOption>("title-asc");
 
@@ -70,39 +71,50 @@ export const UserGames: React.FC = () => {
     const sortItems: DropdownOption[] = [
         {
             id: 1,
-            label: "Название",
+            label: t("sortOptions.title"),
             value: "title-asc",
             icon: <SortAZIcon />,
         },
         {
             id: 2,
-            label: "Название",
+            label: t("sortOptions.title"),
             value: "title-desc",
             icon: <SortZAIcon />,
         },
         {
             id: 3,
-            label: "Год",
+            label: t("sortOptions.year"),
             value: "year-desc",
             icon: <DescIcon />,
         },
         {
             id: 4,
-            label: "Год",
+            label: t("sortOptions.year"),
             value: "year-asc",
             icon: <AscIcon />,
         },
         {
             id: 5,
-            label: "Приоритет",
+            label: t("sortOptions.priority"),
             value: "priority-desc",
             icon: <DescIcon />,
         },
         {
             id: 6,
-            label: "Приоритет",
+            label: t("sortOptions.priority"),
             value: "priority-asc",
             icon: <AscIcon />,
+        },
+    ];
+
+    const menuItems: DropdownProps["options"] = [
+        {
+            id: 1,
+            label: t("addGame.options.add-new"),
+        },
+        {
+            id: 2,
+            label: t("addGame.options.add-several"),
         },
     ];
 
@@ -131,7 +143,12 @@ export const UserGames: React.FC = () => {
             <Flex vertical style={{ maxWidth: 1400, margin: "0 auto", gap: 16 }}>
                 {/* Верхняя панель */}
                 <Flex vertical align="start" gap={16}>
-                    <AddGameButton openModalCreateGame={setModalCreateGame} openModalAddGames={setModalAddGames} />
+                    <AddGameButton
+                        placeholder={t("addGame.label")}
+                        menuItems={menuItems}
+                        openModalCreateGame={setModalCreateGame}
+                        openModalAddGames={setModalAddGames}
+                    />
 
                     <Flex gap={16} style={{ width: "100%" }} className={styles["top-panel"]}>
                         <Flex gap={16}>
@@ -139,7 +156,7 @@ export const UserGames: React.FC = () => {
                         </Flex>
 
                         <Flex gap={16} style={{ zIndex: 2 }} className={styles["top-panel__right"]}>
-                            <SearchInput value={search} onChange={setSearch} placeholder="Поиск игр..." width={300} />
+                            <SearchInput value={search} onChange={setSearch} placeholder={t("searchButton.placeholder")} width={300} />
                             <Dropdown
                                 options={sortItems}
                                 buttonIcon={sortItems.filter(isDropdownItem).find((item) => item.value === generalSort)?.icon}
@@ -160,10 +177,9 @@ export const UserGames: React.FC = () => {
                         ))
                     ) : debouncedSearch ? (
                         <EmptyItems search={debouncedSearch} />
-                    )  : (
+                    ) : (
                         <></>
-                    )
-                    }
+                    )}
                 </Flex>
                 {/* Пагинация и статус загрузки */}
                 {isPending && (
