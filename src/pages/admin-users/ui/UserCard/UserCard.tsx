@@ -20,10 +20,14 @@ const whoIs = (whoIs: boolean | string): { role: string; icon: ReactNode } => {
     }
 };
 
-const RoleTag = ({role}: {role: boolean}) => {
+const RoleTag = ({ role }: { role: boolean }) => {
     const userIsAdmin = whoIs(role);
     return (
-        <Tag color={userIsAdmin.role === "Администратор" ? "blue" : "gray"} icon={userIsAdmin.icon}>
+        <Tag
+            color={userIsAdmin.role === "Администратор" ? "blue" : "default"}
+            icon={userIsAdmin.icon}
+            style={{ padding: "4px 12px", borderRadius: "12px", fontSize: "0.9rem" }}
+        >
             {userIsAdmin.role}
         </Tag>
     );
@@ -33,25 +37,23 @@ export const UserCard: React.FC<UserCardProps> = ({ user, refetch }) => {
     const [updateModal, setUpdateModal] = useState(false);
 
     return (
-        <div className={styles.card__user}>
-            <Image
-                width={128}
-                height={128}
-                preview={false}
-                src={IMG_SRC + user.path_to_photo}
-                className={styles.user__image}
-            />
+        <div className={styles.card__tile}>
+            <Image width={120} height={120} preview={false} src={IMG_SRC + user.path_to_photo} className={styles.user__avatar} />
             <div className={styles.user__info}>
-                <div className={styles.user__title}>Информация пользователе</div>
-                <div className={styles.user__email}>Email: {user.email}</div>
-                <div className={styles.user__steam}>Steam URL: {user.steam_url}</div>
-                <div className={styles.user__role}>Текущая роль: <RoleTag role={user.is_admin} /></div>
+                <RoleTag role={user.is_admin} />
+                <div className={styles.user__email}>{user.email}</div>
+                <a className={styles.user__steam} href={user.steam_url} target="_blank" rel="noopener noreferrer">
+                    {user.steam_url}
+                </a>
             </div>
-            <div className={styles.user__button}>
+            <div className={styles.user__actions}>
                 <ButtonStyled>
-                    <Button onClick={() => setUpdateModal(true)}>Изменить</Button>
+                    <Button type="primary" onClick={() => setUpdateModal(true)}>
+                        Изменить
+                    </Button>
                 </ButtonStyled>
             </div>
+
             <UpdateUserModal
                 user={user}
                 roleTag={<RoleTag role={user.is_admin} />}

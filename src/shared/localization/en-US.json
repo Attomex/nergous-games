@@ -1,0 +1,50 @@
+{
+    "docTitle": {
+        "pages": {
+            "userGames": "My games",
+            "allGames": "All games",
+            "profile": "Profile",
+            "updates": "Updates",
+            "admin": "Admin-users",
+            "login": "Login",
+            "test": "Test",
+            "title": "Manager games"
+        }
+    },
+    "landing": {
+        "header": { "text": "Welcome!" },
+        "info": { "text": "To stay in touch with us, please log in with your personal details." },
+        "button": { "text": "Login" }
+    },
+    "loginReg": {
+        "login": {
+            "title": "Authorization",
+            "form-email": "Email",
+            "form-password": "Password",
+            "form-button": "Login",
+            "side-title": "One account for everything!",
+            "side-text": "Sign up to access all our services with a single account.",
+            "side-button": "Sign up"
+        },
+        "registration": {
+            "title": "Registration",
+            "form-email": "Email",
+            "form-password": "Password",
+            "form-steam": "Steam profile URL",
+            "form-image-btn": "Choose file",
+            "form-image-text": "File not selected",
+            "form-button": "Registration",
+            "side-title": "Log in to your account",
+            "side-text": "Already have an account? Just log in and you're good to go.",
+            "side-button": "Log in"
+        }
+    },
+    "sidebar": {
+        "buttons": {
+            "allGames": "All games",
+            "myGames": "My games",
+            "updates": "Updates",
+            "logout": "Logout"
+        }
+    }
+}

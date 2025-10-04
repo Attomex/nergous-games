@@ -1,147 +1,114 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "features/auth";
 import { User } from "shared/types";
-import { Divider, Image, Descriptions, ConfigProvider } from "antd";
-import type { DescriptionsProps } from "antd";
-import styles from "./Profile.module.css";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Image, Typography, Tooltip } from "antd";
+import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { statsColors, IMG_SRC } from "shared/const";
+import { CopyOutlined } from "@ant-design/icons";
+import styles from "./Profile.module.css";
 import { Badge } from "./Badge";
-import { statsColors } from "shared/const";
-import { IMG_SRC } from "shared/const";
+import { showErrorNotification, showSuccessNotification } from "shared/lib";
 
 export const Profile = () => {
     const { user, getUserInfo } = useAuth();
     const [userInfo, setUserInfo] = useState<User>({
-        email: "",
-        steam_url: "",
+        email: "...",
+        steam_url: "...",
         photo: "",
         stats: { finished: 0, playing: 0, planned: 0, dropped: 0 },
     });
 
     useEffect(() => {
         const getInfo = async () => {
-            if (user === null) {
-                setUserInfo(await getUserInfo());
-            } else {
+            if (user) {
                 setUserInfo(user);
+            } else {
+                const fetchedInfo = await getUserInfo();
+                setUserInfo(fetchedInfo);
             }
         };
-
         getInfo();
-    }, [user]);
+    }, [user, getUserInfo]);
 
-    ChartJS.register(ArcElement, Tooltip, Legend);
+    ChartJS.register(ArcElement, ChartTooltip, Legend);
 
-    const data = {
+    const chartData = {
         labels: ["Завершено", "В планах", "В процессе", "Брошено"],
         datasets: [
             {
-                label: "Количество",
                 data: [userInfo.stats.finished, userInfo.stats.planned, userInfo.stats.playing, userInfo.stats.dropped],
                 backgroundColor: [statsColors.finished, statsColors.planned, statsColors.playing, statsColors.dropped],
+                borderWidth: 0,
             },
         ],
     };
 
-    const options = {
+    const chartOptions = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-            legend: {
-                display: false,
-            },
-            tooltip: {
-                enabled: false,
-            },
+            legend: { display: false },
+            tooltip: { enabled: true },
         },
-        cutout: "45%",
-        elements: {
-            arc: {
-                borderWidth: 0,
-                spacing: 2,
-            },
-        },
-        layout: {
-            padding: 2,
-        },
+        cutout: "70%",
     };
 
-    const items: DescriptionsProps["items"] = [
-        {
-            key: "1",
-            label: "Email",
-            children: userInfo.email,
-            // label: "Email",
-            // children: userInfo.email,
-        },
-        {
-            key: "2",
-            label: "Steam URL",
-            children: (
-                <div
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                        navigator.clipboard.writeText(userInfo.steam_url);
-                        console.log("Ссылка была скопирована");
-                    }}
-                >
-                    {userInfo.steam_url}
-                </div>
-            ),
-        },
+    const statsItems = [
+        { label: "Завершено", value: userInfo.stats.finished, color: statsColors.finished },
+        { label: "В планах", value: userInfo.stats.planned, color: statsColors.planned },
+        { label: "В процессе", value: userInfo.stats.playing, color: statsColors.playing },
+        { label: "Брошено", value: userInfo.stats.dropped, color: statsColors.dropped },
     ];
 
     return (
-        <div>
-            <div className={styles.profile}>
-                <Image
-                    width={250}
-                    height={250}
-                    preview={false}
-                    src={`${IMG_SRC}${userInfo.photo}`}
-                    className={styles.profile__image}
-                    style={{ borderRadius: "50%", objectFit: "cover" }}
-                />
-                <div className={styles.profile__info}>
-                    <ConfigProvider
-                        theme={{
-                            token: {
-                                fontSize: 18,
-                            },
-                            components: {
-                                Descriptions: {
-                                    colorText: "var(--text-color)",
-                                    labelColor: "var(--text-color)",
-                                },
-                            },
-                        }}
-                    >
-                        <Descriptions title="Информация о пользователе" items={items} />
-                    </ConfigProvider>
+        <div className={styles.profilePage}>
+            <div className={styles.profileCard}>
+                <Typography.Title level={2} className={styles.user}>
+                    Пользователь
+                </Typography.Title>
+                <Image width={150} height={150} src={`${IMG_SRC}${userInfo.photo}`} preview={false} className={styles.profileImage} />
+                <div className={styles.profileInfo}>
+                    <Typography.Text className={styles.userInfoText}>Email: {userInfo.email}</Typography.Text>
+                    <div className={styles.steamContainer}>
+                        <a className={`${styles.userInfoText} ${styles.steamLink}`} href={userInfo.steam_url} target="_blank" rel="noopener noreferrer">Steam: {userInfo.steam_url}</a>
+                        <Tooltip title="Скопировать ссылку">
+                            <CopyOutlined
+                                className={styles.copyIcon}
+                                onClick={() => {
+                                    try {
+                                        navigator.clipboard.writeText(userInfo.steam_url);
+                                        showSuccessNotification("Ссылка скопирована");
+                                    } catch {
+                                        showErrorNotification("Не удалось скопировать ссылку");
+                                    }
+                                }}
+                            />
+                        </Tooltip>
+                    </div>
                 </div>
             </div>
 
-            <Divider style={{ borderBlockStart: "1px solid var(--text-color)" }} />
-            <div className="user__stats">
-                <h1 style={{ color: "var(--text-color)" }}>Статистика</h1>
-                <div className="container" style={{ display: "flex", justifyContent: "space-between", width: "600px" }}>
-                    <div className="stats" style={{ margin: "auto 0" }}>
-                        <p style={{ color: "var(--text-color)" }}>
-                            <Badge color={statsColors.finished} /> Завершено: {userInfo?.stats.finished}
-                        </p>
-                        <p style={{ color: "var(--text-color)" }}>
-                            <Badge color={statsColors.planned} /> В планах: {userInfo?.stats.planned}
-                        </p>
-                        <p style={{ color: "var(--text-color)" }}>
-                            <Badge color={statsColors.playing} /> В процессе: {userInfo?.stats.playing}
-                        </p>
-                        <p style={{ color: "var(--text-color)" }}>
-                            <Badge color={statsColors.dropped} /> Брошено: {userInfo?.stats.dropped}
-                        </p>
+            <div className={styles.statsCard}>
+                <Typography.Title level={3} className={styles.cardTitle}>
+                    Статистика
+                </Typography.Title>
+                <div className={styles.statsContent}>
+                    <div className={styles.chartContainer}>
+                        <Doughnut data={chartData} options={chartOptions} />
                     </div>
-                    <div className="donut">
-                        <Doughnut data={data} options={options} />
+                    <div className={styles.legendContainer}>
+                        {statsItems.map((item) => (
+                            <div key={item.label} className={styles.legendItem}>
+                                <Badge color={item.color} />
+                                <span className={styles.legendLabel}>{item.label}:</span>
+                                <span className={styles.legendValue}>{item.value}</span>
+                            </div>
+                        ))}
                     </div>
+                </div>
+                <div className={styles.chartLegend}>
+                    Всего {userInfo.stats.finished + userInfo.stats.planned + userInfo.stats.playing + userInfo.stats.dropped} игр
                 </div>
             </div>
         </div>

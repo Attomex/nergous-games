@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useAuth } from "features/auth";
 
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 
 interface ProtectedRouteProps {
@@ -18,27 +18,41 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
     useEffect(() => {
         setLoading(true);
-        const auth_token = Cookies.get("auth_token");
-        
-        if(!auth_token && location.pathname !== '/login') {
-            logout();
-            navigate("/login");
-        }
 
-        if(auth_token && location.pathname === '/login') {
+        const auth_token = Cookies.get("auth_token");
+
+        if (auth_token && location.pathname === "/login") {
             navigate("/games");
         }
 
+        if (!auth_token && location.pathname !== "/login") {
+            logout();
+        }
+
         setLoading(false);
+
     }, [navigate, location.pathname, logout]);
 
-    if (isLoading) {
-        return (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+    return (
+        <>
+            {children}
+            <div
+                style={{
+                    display: "flex",
+                    backgroundColor: "#fff",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    zIndex: 999,
+                    visibility: isLoading ? "visible" : "hidden",
+                }}
+            >
                 <Spin indicator={<LoadingOutlined spin />} size="large" tip="Загрузка..." />
             </div>
-        );
-    }
-
-    return children;
+        </>
+    );
 };

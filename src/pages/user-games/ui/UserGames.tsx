@@ -1,10 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Flex, Divider, Spin } from "antd";
+import { Flex } from "shared/ui";
+import { Divider } from "shared/ui";
+import { Loader } from "shared/ui";
+
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 
 import styles from "./UserGames.module.css";
 
-import { LoadingOutlined } from "@ant-design/icons";
 import { StatusButtonsGroup } from "./StatusButtonsGroup";
 
 import { GameCard } from "features/game-card";
@@ -13,15 +15,16 @@ import { AddGamesModal } from "features/add-games";
 import { useAuth } from "features/auth";
 
 import { api } from "shared/api";
-import { DividerStyled } from "shared/ui";
-import { GameInfo } from "shared/types";
-import { Sort } from "shared/types";
+import { DropdownOption, DropdownProps, GameInfo } from "shared/types";
 import { useDebouncedSearch } from "shared/hooks";
 
 import { Paginations } from "widgets/pagination";
-import { SortButton } from "widgets/sort-button";
 import { AddGameButton } from "widgets/add-game-button";
 import { SearchInput } from "widgets/search-input";
+import { Dropdown } from "widgets/dropdown";
+import { AscIcon, DescIcon, SortAZIcon, SortZAIcon } from "widgets/icons";
+import { isDropdownItem } from "shared/types";
+import { EmptyItems } from "widgets/empty-items";
 
 const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
@@ -29,12 +32,23 @@ const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     return res.data; // { data: GameInfo[], pages, total }
 };
 
+type SortOption = keyof typeof sortOptions;
+
+const sortOptions = {
+    "title-asc": "Название",
+    "title-desc": "Название",
+    "year-desc": "Год",
+    "year-asc": "Год",
+    "priority-desc": "Приоритет",
+    "priority-asc": "Приоритет",
+} as const;
+
 export const UserGames: React.FC = () => {
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState("");
     const { search, debouncedSearch, setSearch } = useDebouncedSearch("", setPage, 500);
 
-    const [generalSort, setGeneralSort] = useState<Sort>({ field: "title", order: "asc" });
+    const [generalSort, setGeneralSort] = useState<SortOption>("title-asc");
 
     const [modalCreateGame, setModalCreateGame] = useState(false);
     const [modalAddGames, setModalAddGames] = useState(false);
@@ -46,12 +60,55 @@ export const UserGames: React.FC = () => {
     const { data, isPending, isError } = useQuery({
         queryKey: [
             "userGames",
-            { status, page, page_size: pageSize, search: debouncedSearch, sort_by: generalSort.field, sort_order: generalSort.order },
+            { status, page, page_size: pageSize, search: debouncedSearch, sort_by: generalSort.split("-")[0], sort_order: generalSort.split("-")[1] },
         ],
         queryFn: fetchUserGames,
         placeholderData: keepPreviousData,
         refetchOnWindowFocus: false,
     });
+
+    const sortItems: DropdownOption[] = [
+        {
+            id: 1,
+            label: "Название",
+            value: "title-asc",
+            icon: <SortAZIcon />,
+        },
+        {
+            id: 2,
+            label: "Название",
+            value: "title-desc",
+            icon: <SortZAIcon />,
+        },
+        {
+            id: 3,
+            label: "Год",
+            value: "year-desc",
+            icon: <DescIcon />,
+        },
+        {
+            id: 4,
+            label: "Год",
+            value: "year-asc",
+            icon: <AscIcon />,
+        },
+        {
+            id: 5,
+            label: "Приоритет",
+            value: "priority-desc",
+            icon: <DescIcon />,
+        },
+        {
+            id: 6,
+            label: "Приоритет",
+            value: "priority-asc",
+            icon: <AscIcon />,
+        },
+    ];
+
+    const sortHandleChange: DropdownProps["onClick"] = ({ value }) => {
+        setGeneralSort(value as SortOption);
+    };
 
     const userGames: GameInfo[] = data?.data ?? [];
     const totalItems: number = data?.total ?? 0;
@@ -73,38 +130,45 @@ export const UserGames: React.FC = () => {
         <>
             <Flex vertical style={{ maxWidth: 1400, margin: "0 auto", gap: 16 }}>
                 {/* Верхняя панель */}
-                <Flex vertical align="start" gap="middle">
+                <Flex vertical align="start" gap={16}>
                     <AddGameButton openModalCreateGame={setModalCreateGame} openModalAddGames={setModalAddGames} />
 
-                    <Flex gap="middle" style={{ width: "100%" }}>
-                        <Flex gap="middle">
+                    <Flex gap={16} style={{ width: "100%" }} className={styles["top-panel"]}>
+                        <Flex gap={16}>
                             <StatusButtonsGroup status={status} setStatus={setStatus} setPage={setPage} />
                         </Flex>
 
-                        <Flex gap="middle" style={{ marginLeft: "auto" }}>
+                        <Flex gap={16} style={{ zIndex: 2 }} className={styles["top-panel__right"]}>
                             <SearchInput value={search} onChange={setSearch} placeholder="Поиск игр..." width={300} />
-
-                            <SortButton value={generalSort} onChange={setGeneralSort} onPageReset={setPage} />
+                            <Dropdown
+                                options={sortItems}
+                                buttonIcon={sortItems.filter(isDropdownItem).find((item) => item.value === generalSort)?.icon}
+                                placeholder={sortOptions[generalSort]}
+                                onClick={sortHandleChange}
+                                className={styles["sort-button"]}
+                            />
+                            {/* <SortButton value={generalSort} onChange={setGeneralSort} onPageReset={setPage} /> */}
                         </Flex>
                     </Flex>
                 </Flex>
-                <DividerStyled>
-                    <Divider className={styles.divider} style={{ margin: "0" }} />
-                </DividerStyled>
+                <Divider className={styles.divider} style={{ margin: "0" }} />
                 {/* Карточки */}
-                <Flex wrap="wrap" justify="space-between" gap={30} style={{ width: "100%" }}>
+                <Flex wrap justify="between" gap={30} style={{ width: "100%" }}>
                     {userGames && userGames.length > 0 ? (
                         userGames.map((g) => (
                             <GameCard key={g.id} gameInfo={g} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })} />
                         ))
-                    ) : (
-                        <div>Пусто</div>
-                    )}
+                    ) : debouncedSearch ? (
+                        <EmptyItems search={debouncedSearch} />
+                    )  : (
+                        <></>
+                    )
+                    }
                 </Flex>
                 {/* Пагинация и статус загрузки */}
                 {isPending && (
                     <div style={{ textAlign: "center", marginTop: 8 }}>
-                        <Spin indicator={<LoadingOutlined spin />} size="large" tip="Загрузка..." />
+                        <Loader size="large" tip="Загрузка..." />
                     </div>
                 )}
                 {isError && <div style={{ color: "red" }}>Ошибка при загрузке игр.</div>}

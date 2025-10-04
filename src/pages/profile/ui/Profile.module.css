@@ -1,17 +1,138 @@
-.profile {
+/* Основной контейнер страницы */
+.profilePage {
     display: grid;
-    grid-template-areas: 
-        "image info";
-    grid-template-columns: 300px auto;
-    grid-template-rows: 300px auto;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+    width: 800px;
+    margin: 0 auto;
 }
 
-.profile__image {
-    grid-area: image;
-    border: 2px solid var(--accent-color);
+/* Общий стиль для карточек */
+.profileCard,
+.statsCard {
+    background-color: var(--profile-bg-color);
+    border: 1px solid var(--profile-border-color);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
 }
 
-.profile__info {
-    grid-area: info;
-    padding: 10px;
+.profileCard:hover,
+.statsCard:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Карточка профиля */
+.profileCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.profileImage {
+    border-radius: 50%;
+    border: 4px solid var(--profile-border-color);
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.user {
+    margin-top: 0;
+    margin-bottom: 8px !important;
+    color: var(--profile-text-color) !important;
+}
+
+.userInfoText {
+    font-size: 16px;
+    color: var(--profile-text-color);
+    word-break: break-all;
+}
+
+.steamLink {
+    text-decoration: none;
+}
+
+.steamContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.copyIcon {
+    cursor: pointer;
+    color: var(--profile-text-color);
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.copyIcon:hover {
+    color: var(--profile-text-color, #1890ff);
+}
+
+/* Карточка статистики */
+.statsCard {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardTitle {
+    margin-bottom: 24px !important;
+    text-align: center;
+    color: var(--profile-text-color) !important;
+}
+
+.statsContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+}
+
+.chartContainer {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    flex-shrink: 0;
+}
+
+.chartLegend {
+    margin: 10px auto;
+    color: var(--text-color);
+}
+
+.legendContainer {
+    display: flex;
+    order: -1;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.badge {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.legendLabel {
+    color: var(--profile-text-color) !important;
+    margin-right: 8px;
+}
+
+.legendValue {
+    font-weight: 600;
+    color: var(--profile-text-color) !important;
 }

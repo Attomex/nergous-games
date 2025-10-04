@@ -1,11 +1,33 @@
 import { Card, List, Typography, Divider, ConfigProvider } from "antd";
 import { updates } from "./updates";
+import { useMemo, useState } from "react";
+import styles from "./UpdatePage.module.css";
+import "./fckngOVERRIDE.css";
 
 const { Title, Text } = Typography;
 
 // Можно сделать, чтобы у карточки border и у Divider цвет был --accent-color
 
+function parseDate(date: string) {
+    const [day, month, year] = date.split("-");
+
+    return new Date(Number(year), Number(month) - 1, Number(day));
+}
+
+const MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
+
 export const UpdatePage = () => {
+    const firstDate = parseDate(updates[0].date);
+
+    const dateDiff = useMemo(() => {
+        const currDate = new Date();
+        const differenceInMilliseconds = Math.abs(currDate.getTime() - firstDate.getTime());
+        const differenceInDays = differenceInMilliseconds / MILLISECONDS_IN_A_DAY;
+        return differenceInDays;
+    }, [firstDate]);
+
+    const [diffDates, ] = useState(Math.floor(dateDiff));
+
     return (
         <div style={{ maxWidth: 800, margin: "0 auto", padding: "20px" }}>
             <ConfigProvider
@@ -14,10 +36,11 @@ export const UpdatePage = () => {
                         Card: {
                             colorBgContainer: "var(--main-background-color)",
                             colorBorderSecondary: "var(--main-secondary-color)",
+                            headerPaddingSM: 0,
                         },
                         List: {
                             colorSplit: "var(--secondary-color)",
-                        }
+                        },
                     },
                 }}
             >
@@ -29,15 +52,20 @@ export const UpdatePage = () => {
                     <Card
                         key={index}
                         style={{ marginBottom: 20 }}
+                        className={styles.card}
                         title={
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", textAlign: "center" }}>
-                                <Title level={3} style={{ marginBottom: "24px", color: "var(--text-color)" }}>
-                                    {updateItem.title}
-                                </Title>
-                                <Text type="secondary" style={{ color: "var(--text-color)" }}>
-                                    {updateItem.date}
-                                </Text>
-                            </div>
+                            <>
+                                
+                                <div className={styles["card-header"]}>
+                                    <Title level={3} style={{ color: "var(--text-color)", margin: "auto 0" }}>
+                                        {updateItem.title}
+                                    </Title>
+                                    <Text type="secondary" style={{ color: "var(--text-color)", margin: "auto 0" }}>
+                                        {updateItem.date}
+                                    </Text>
+                                    {(diffDates < 7 && index === 0) && <span className={styles.new}>NEW</span>}
+                                </div>
+                            </>
                         }
                     >
                         <List
@@ -50,11 +78,7 @@ export const UpdatePage = () => {
                                                 {change.name}
                                             </Text>
                                         }
-                                        description={
-                                            <Text style={{ color: "var(--text-color)" }}>
-                                                {change.desc}
-                                            </Text>
-                                        }
+                                        description={<Text style={{ color: "var(--text-color)" }}>{change.desc}</Text>}
                                     />
                                 </List.Item>
                             )}

@@ -1,0 +1,6 @@
+/* shared/ui/Divider.module.css */
+.divider {
+    border-bottom: 1px solid;
+    margin: 16px 0;
+    width: 100%;
+}

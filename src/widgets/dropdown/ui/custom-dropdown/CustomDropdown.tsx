@@ -10,7 +10,7 @@ interface ItemsProps {
 interface CustomDropdownProps {
     items: ItemsProps[];
     initialSelectedItem: string;
-    onChange: (item: { id: number }) => void;
+    onChange?: (item: { id: number }) => void;
 }
 
 export const CustomDropdown: React.FC<CustomDropdownProps> = ({ items = [], initialSelectedItem, onChange }) => {
@@ -36,11 +36,10 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({ items = [], init
     const handleItemClick = (item: ItemsProps) => {
         setSelectedItem(item);
         setIsOpen(false);
-        // Вызываем переданную извне функцию onChange и передаем в нее выбранный элемент
-        if (onChange) {
-            onChange(item);
-        }
+        onChange?.({ id: item.id });
     };
+
+    let listClasses = `${styles.dropdownList} ${isOpen ? styles.open : ""}`;
 
     return (
         <div className={styles.dropdownContainer} ref={dropdownRef}>
@@ -50,29 +49,28 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({ items = [], init
                     className={styles.dropdownButton}
                     onClick={() => setIsOpen(!isOpen)}
                     aria-haspopup="listbox"
-                    aria-expanded={isOpen}>
+                    aria-expanded={isOpen}
+                    tabIndex={-1}
+                >
                     <span className={styles.buttonLabel}>{initialSelectedItem ? initialSelectedItem : "Не выбрано"}</span>
                     {items.find((item) => item.label === initialSelectedItem)?.extra}
                 </button>
             </div>
 
-            {isOpen && (
-                <div className={styles.dropdownMenu} role="listbox">
-                    <ul className={styles.dropdownList}>
-                        {items.map((item) => (
-                            <li
-                                key={item.id}
-                                className={styles.dropdownItem}
-                                onClick={() => handleItemClick(item)}
-                                role="option"
-                                aria-selected={selectedItem === item}>
-                                {item.label}
-                                {item.extra}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            <ul className={listClasses}>
+                {items.map((item) => (
+                    <li
+                        key={item.id}
+                        className={styles.dropdownItem}
+                        onClick={() => handleItemClick(item)}
+                        role="option"
+                        aria-selected={selectedItem === item}
+                    >
+                        {item.label}
+                        {item.extra}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };

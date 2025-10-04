@@ -15,17 +15,32 @@
 }
 
 .card:hover {
-    box-shadow: 0 5px 10px 5px var(--card-border-color);
+    border-color: var(--card-hover-border-color);
 }
 
+
 .editGame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
     position: absolute;
     left: 10px;
     top: 10px;
     cursor: pointer;
+    background: transparent;
+    z-index: 1;
+    border-radius: 20%;
+    transition: background ease-in-out 0.2s, border-radius ease-in-out 0.2s;
 }
 
-.editGame__icon {
+.editGame:hover {
+    background: black;
+    border-radius: 50%;
+}
+
+.editGame svg {
     color: white;
 }
 
@@ -33,6 +48,8 @@
     position: absolute;
     right: 5px;
     bottom: 3px;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .tag {
@@ -41,7 +58,9 @@
     font-size: 12px;
     line-height: 20px;
     list-style: none;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    gap: 5px;
     height: auto;
     padding-inline: 7px;
     white-space: nowrap;
@@ -50,15 +69,20 @@
     opacity: 1;
     text-align: start;
     color: #ffffffff;
+    text-decoration: none;   
 }
 
 .source {
     position: absolute;
     left: 5px;
     top: 113px;
+    z-index: 2;
+    pointer-events: auto;
 }
 
 .image {
+    display: flex;
+    justify-content: center;
     position: relative;
     width: 100%;
     height: 140.2173913px;
@@ -80,12 +104,28 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0); /* прозрачный изначально */
+    border-radius: 12px 12px 0 0;
     transition: background 0.3s ease;
 }
 
 .image:hover::after {
     background: rgba(0, 0, 0, 0.3); /* при наведении – серый */
     cursor: pointer;
+}
+
+.image:hover .eye {
+    opacity: 1;
+}
+
+.eye {
+    opacity: 0;
+    position: absolute;
+    align-self: center;
+    justify-self: center;
+    color: white;
+    z-index: 1;
+    cursor: pointer;
+    transition: opacity ease-in-out 0.3s;
 }
 
 .details {
@@ -183,6 +223,7 @@
     margin-left: 37px;
     background-color: var(--card-button-bg-color);
     border: var(--card-button-border-color) 1px solid;
+    transition: all 0.3s ease;
 }
 
 .rating__update__hidden {
@@ -198,6 +239,7 @@
     /* box-shadow: 0 0 4px 1px var(--secondary-color); */
     background-color: var(--card-button-hover-bg-color);
     color: var(--card-button-hover-text-color);
+    border-color: var(--card-button-hover-border-color);
 }
 
 .status {

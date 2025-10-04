@@ -1,1 +1,1 @@
-export { CustomDropdown } from "./ui";
+export { CustomDropdown, Dropdown } from "./ui";

@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { api } from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
-import { ArrowUpOnSquareIcon, PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { UploadIcon, ImageCardIcon, XMarkLgIcon } from "widgets/icons";
 import style from "./CreateGameModal.module.css";
 
 interface CreateGameModalProps {
@@ -318,12 +318,12 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                     <div className={style.imagePreview}>
                                         <img src={previewImage} alt="Превью обложки" className={style.previewImg} />
                                         <button type="button" className={style.removeImageBtn} onClick={handleRemoveImage}>
-                                            <XMarkIcon className={style.removeIcon} />
+                                            <XMarkLgIcon className={style.removeIcon} />
                                         </button>
                                     </div>
                                 ) : (
                                     <label htmlFor="image-upload" className={style.uploadLabel}>
-                                        <PhotoIcon className={style.uploadIcon} />
+                                        <ImageCardIcon className={style.uploadIcon} />
                                         <p>Загрузить обложку</p>
                                     </label>
                                 )}
@@ -349,7 +349,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             "Создание..."
                         ) : (
                             <>
-                                <ArrowUpOnSquareIcon className={style.iconLeft} />
+                                <UploadIcon className={style.iconLeft} />
                                 Создать
                             </>
                         )}

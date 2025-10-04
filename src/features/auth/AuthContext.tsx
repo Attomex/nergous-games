@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { User } from "shared/types";
+import type { User } from "shared/types";
 import { URL } from "shared/const";
+import { showErrorNotification } from "shared/lib";
 
 interface AuthContextType {
     user: User | null;
@@ -63,7 +64,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
             setUser(userResponse);
             return userResponse;
         } catch (error) {
-            console.error(error);
+            showErrorNotification(error as string);
             return { email: "", steam_url: "", photo: "", stats: { finished: 0, playing: 0, planned: 0, dropped: 0 } };
         }
     };
@@ -89,6 +90,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
 
     const logout = (): void => {
         Cookies.remove("auth_token");
+        window.location.href = "/login";
     };
 
     return <AuthContext.Provider value={{ user, login, logout, getUserInfo, isAdmin, checkAdmin }}>{children}</AuthContext.Provider>;

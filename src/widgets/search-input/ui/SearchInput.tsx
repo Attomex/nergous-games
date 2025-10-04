@@ -1,6 +1,5 @@
 import React from "react";
-import { Input } from "antd";
-import { InputSearchStyled } from "shared/ui";
+import "./SearchInput.css";
 
 interface SearchInputProps {
     value: string;
@@ -11,25 +10,13 @@ interface SearchInputProps {
 
 export const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, placeholder = "Поиск...", width = 300 }) => {
     return (
-        <InputSearchStyled
-            globalToken={{
-                colorPrimary: "var(--secondary-color)",
-                colorIcon: "var(--secondary-color)",
-            }}
-        >
-            <Input
-                style={{
-                    maxWidth: width,
-                    height: "100%",
-                }}
-                placeholder={placeholder}
-                allowClear
-                value={value}
-                suffix={null}
-                onChange={(e) => {
-                    onChange(e.target.value);
-                }}
-            />
-        </InputSearchStyled>
+        <div className="search-input-wrapper" style={{ maxWidth: width, width: width, height: 34 }}>
+            <input id="search-input" className="search-input" type="text" value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+            {value && (
+                <button className="search-clear-btn" onClick={() => onChange("")}>
+                    ×
+                </button>
+            )}
+        </div>
     );
 };

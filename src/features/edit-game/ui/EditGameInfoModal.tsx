@@ -157,7 +157,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                 </Form.Item>
 
                 <Form.Item name="preambula" initialValue={gameInfo.preambula} label="Описание">
-                    <Input.TextArea placeholder="Описание игры" autoSize={{ minRows: 3 }} />
+                    <Input.TextArea placeholder="Описание игры" autoSize={{ minRows: 3, maxRows: 5 }}/>
                 </Form.Item>
 
                 <Form.Item name="developer" initialValue={gameInfo.developer} label="Разработчик">

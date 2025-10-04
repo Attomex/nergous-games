@@ -11,11 +11,12 @@ import { Paginations } from "widgets/pagination";
 import { DividerStyled } from "shared/ui";
 import { LoadingOutlined } from "@ant-design/icons";
 import { GameInfo } from "shared/types";
-import { SortButton } from "widgets/sort-button";
-import { Sort } from "shared/types";
 import { AddGameButton } from "widgets/add-game-button";
 import { useDebouncedSearch } from "shared/hooks";
 import { SearchInput } from "widgets/search-input";
+import { Dropdown } from "widgets/dropdown";
+import { DropdownOption, DropdownProps } from "shared/types";
+import { AscIcon, DescIcon, SortAZIcon, SortZAIcon } from "widgets/icons";
 
 const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
@@ -23,11 +24,23 @@ const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
     return res.data; // { data: GameInfo[], pages, total }
 };
 
+
+type SortOption = keyof typeof sortOptions;
+
+const sortOptions = {
+    "title-asc": "Название (A-Z)",
+    "title-desc": "Название (Z-A)",
+    "year-desc": "Год (по убыванию)",
+    "year-asc": "Год (по возрастанию)",
+    "priority-desc": "Приоритет (по убыванию)",
+    "priority-asc": "Приоритет (по возрастанию)",
+} as const;
+
 export const AllGames: React.FC = () => {
     const [page, setPage] = useState(1);
     const { search, debouncedSearch, setSearch } = useDebouncedSearch("", setPage, 500);
 
-    const [generalSort, setGeneralSort] = useState<Sort>({ field: "title", order: "asc" });
+    const [generalSort, setGeneralSort] = useState<SortOption>("title-asc");
 
     const [modalCreateGame, setModalCreateGame] = useState(false);
     const [modalAddGames, setModalAddGames] = useState(false);
@@ -35,9 +48,51 @@ export const AllGames: React.FC = () => {
     const { checkAdmin } = useAuth();
     const queryClient = useQueryClient();
 
+     const sortItems: DropdownOption[] = [
+         {
+             id: 1,
+             label: "Название",
+             value: "title-asc",
+             icon: <SortAZIcon />,
+         },
+         {
+             id: 2,
+             label: "Название",
+             value: "title-desc",
+             icon: <SortZAIcon />,
+         },
+         {
+             id: 3,
+             label: "Год",
+             value: "year-desc",
+             icon: <DescIcon />,
+         },
+         {
+             id: 4,
+             label: "Год",
+             value: "year-asc",
+             icon: <AscIcon />,
+         },
+         {
+             id: 5,
+             label: "Приоритет",
+             value: "priority-desc",
+             icon: <DescIcon />,
+         },
+         {
+             id: 6,
+             label: "Приоритет",
+             value: "priority-asc",
+             icon: <AscIcon />,
+         },
+     ];
+
     const pageSize = 18;
     const { data, isPending, isError } = useQuery({
-        queryKey: ["allGames", { page, page_size: pageSize, search: debouncedSearch, sort_by: generalSort.field, sort_order: generalSort.order }],
+        queryKey: [
+            "allGames",
+            { page, page_size: pageSize, search: debouncedSearch, sort_by: generalSort.split("-")[0], sort_order: generalSort.split("-")[1] },
+        ],
         queryFn: fetchAllGames,
         placeholderData: keepPreviousData,
         refetchOnWindowFocus: false,
@@ -55,18 +110,28 @@ export const AllGames: React.FC = () => {
         queryClient.invalidateQueries({ queryKey: ["allGames"] });
     }, [queryClient]);
 
+    const sortHandleChange: DropdownProps["onClick"] = ({ value }) => {
+        setGeneralSort(value as SortOption);
+    };
+
+
     useEffect(() => {
         checkAdmin();
     }, [checkAdmin]);
 
     return (
         <>
-            <div style={{ marginBottom: 20, display: "flex" }}>
+            <div style={{ marginBottom: 20, display: "flex", zIndex: 3 }}>
                 <AddGameButton openModalCreateGame={setModalCreateGame} openModalAddGames={setModalAddGames} />
-                <Flex gap="middle" style={{ marginLeft: "auto" }}>
+                <Flex gap={16} style={{ marginLeft: "auto", zIndex: 2 }}>
                     <SearchInput value={search} onChange={setSearch} placeholder="Поиск игр..." width={300} />
 
-                    <SortButton value={generalSort} onChange={setGeneralSort} onPageReset={setPage} />
+                    <Dropdown
+                        options={sortItems}
+                        placeholder={sortOptions[generalSort]}
+                        onClick={sortHandleChange}
+                        className={styles["sort-button"]}
+                    />
                 </Flex>
             </div>
 

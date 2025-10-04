@@ -2,6 +2,7 @@ import { GameInfo } from "shared/types";
 import { DividerStyled } from "shared/ui";
 import styles from "./GameDetailModal.module.css";
 import { Modal, ConfigProvider, Rate, Divider, Image } from "antd";
+import { LinkIcon } from "widgets/icons";
 
 interface GameDetailModalProps {
     gameInfo: GameInfo;
@@ -28,7 +29,8 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
                                         starBg: "var(--card-third-text-color)",
                                     },
                                 },
-                            }}>
+                            }}
+                        >
                             <Rate allowHalf defaultValue={gameInfo.priority / 2} disabled />
                         </ConfigProvider>
                         <span className={styles.year}>2025</span>
@@ -43,12 +45,13 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
             <p className={styles.description}>{gameInfo.preambula}</p>
             <a className={styles.showMore} href={gameInfo.url} target="_blank" rel="noopener noreferrer">
                 Узнать больше
+                <LinkIcon />
             </a>
 
-            <p>
+            <p className={styles.devPub}>
                 <strong>Разработчик:</strong> {gameInfo.developer}
             </p>
-            <p>
+            <p className={styles.devPub}>
                 <strong>Издатель:</strong> {gameInfo.publisher}
             </p>
         </Modal>

@@ -54,7 +54,8 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag,
                 </Button>,
             ]}
             onCancel={handleCloseModal}
-            centered>
+            centered
+        >
             <Form form={form} onFinish={onFinish} labelCol={{ span: 5 }}>
                 <FormItem label="Аватар">
                     <Image
@@ -74,9 +75,14 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag,
                     <Input placeholder="Ссылка на Steam" />
                 </Form.Item>
                 {changeRole && (
-                    <Form.Item name="role" initialValue={user?.is_admin} label="Новая роль">
+                    <Form.Item
+                        name="is_admin"
+                        label="Новая роль"
+                        initialValue={user?.is_admin}
+                        rules={[{ required: true, message: "Выберите роль" }]}
+                    >
                         <SelectStyled>
-                            <Select placeholder="Выберите роль" value={user?.is_admin}>
+                            <Select placeholder="Выберите роль">
                                 <Select.Option value={true}>Администратор</Select.Option>
                                 <Select.Option value={false}>Пользователь</Select.Option>
                             </Select>
@@ -93,7 +99,8 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag,
                                         colorBorder: "var(--main-third-color)",
                                     },
                                 },
-                            }}>
+                            }}
+                        >
                             <Button onClick={() => setChangeRole(!changeRole)}>Изменить</Button>
                         </ConfigProvider>
                     </ButtonStyled>

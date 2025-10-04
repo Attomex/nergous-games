@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { api } from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
-import { TrashIcon, PlusIcon, ArrowUpOnSquareIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, PlusLgIcon, UploadIcon } from "widgets/icons";
 import style from "./AddGamesModal.module.css";
 
 interface AddGamesModalProps {
@@ -119,7 +119,7 @@ export const AddGamesModal: React.FC<AddGamesModalProps> = ({ isModalOpen, close
                             </div>
                         ))}
                         <button type="button" className={style.addButton} onClick={addGame}>
-                            <PlusIcon className={style.icon} /> Добавить игру
+                            <PlusLgIcon className={style.icon} /> Добавить игру
                         </button>
                     </div>
                 </form>
@@ -132,7 +132,7 @@ export const AddGamesModal: React.FC<AddGamesModalProps> = ({ isModalOpen, close
                             "Создание..."
                         ) : (
                             <>
-                                <ArrowUpOnSquareIcon className={style.iconLeft} />
+                                <UploadIcon className={style.iconLeft} />
                                 Создать
                             </>
                         )}

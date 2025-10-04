@@ -152,3 +152,12 @@ paddingXS: 12, // Отступы внутри меню */
     border-color: var(--main-secondary-color) !important;
     color: var(--text-color) !important;
 }
+
+
+.ant-modal-content {
+    background-color: var(--card-modal-bg-color) !important;
+}
+
+.ant-modal-close {
+    color: var(--card-modal-text-color) !important;
+}

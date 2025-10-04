@@ -1,0 +1,55 @@
+.add-game-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.add-game-button {
+    padding: 8px 16px;
+    border: 1px solid var(--main-button-border-color);
+    border-radius: 4px;
+    background: var(--main-button-bg-color);
+    cursor: pointer;
+    font-size: 14px;
+    transform-origin: center center;
+    transition: transform 0.1s ease, border-color 0.2s ease;
+    color: var(--main-button-text-color);
+    z-index: 4;
+}
+
+.add-game-button:hover {
+    border-color: var(--main-button-hover-border-color);
+    background: var(--main-bg-color);
+}
+
+.add-game-button:active {
+    border-color: var(--main-button-active-border-color);
+    background: var(--main-bg-color);
+    color: var(--main-button-text-color);
+    transform: scale(0.95);
+}
+
+.add-game-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: max-content;
+    min-width: 150px;
+    margin: 4px 0 0 0;
+    padding: 4px 0;
+    list-style: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+}
+
+.add-game-menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-game-menu-item:hover {
+    background: #f5f5f5;
+}

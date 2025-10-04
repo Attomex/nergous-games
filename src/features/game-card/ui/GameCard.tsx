@@ -12,6 +12,7 @@ import { EditIcon, WikipediaIcon, SteamIcon } from "widgets/icons";
 import { CustomRate } from "widgets/rate";
 import { CustomDropdown } from "widgets/dropdown";
 import { IMG_SRC } from "shared/const";
+import { EyeIcon } from "widgets/icons";
 
 interface GameCardProps {
     gameInfo: GameInfo;
@@ -48,6 +49,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
         const keyStatus = keysStatuses[id - 1];
         updateGame("status", keyStatus);
     };
+    
 
     const statuses = [
         {
@@ -130,19 +132,29 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
     const set = getColorSource(gameInfo.url);
 
     return (
-        <div className={styles.card}>
+        <article className={styles.card}>
             {/* Левый столбец — изображение */}
             <div className={styles.image} onClick={() => setGameDetails(true)}>
-                <img src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
+                <img loading="lazy" src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
 
                 {/* Поверхностные кнопачки */}
                 {isAdmin && (
-                    <div className={styles.editGame}>
-                        <div onClick={() => setEditGameInfoModal(true)} className={styles.editGame__icon}>
-                            <EditIcon />
-                        </div>
+                    <div
+                        className={styles.editGame}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setEditGameInfoModal(true);
+                        }}
+                    >
+                        {/* <div  className={styles.editGame__icon}> */}
+                        <EditIcon />
+                        {/* </div> */}
                     </div>
                 )}
+
+                <div className={styles.eye}>
+                    <EyeIcon w="48px" h="48px" />
+                </div>
 
                 <div className={styles.status__tag}>
                     <span
@@ -150,21 +162,29 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                         style={{
                             backgroundColor: getColor(gameInfo.status),
                             borderColor: getColor(gameInfo.status),
-                        }}>
+                        }}
+                    >
                         {status !== undefined ? status : "Не выбрано"}
                     </span>
                 </div>
 
                 <div className={styles.source}>
-                    <span
+                    <a
                         className={styles.tag}
                         style={{
                             backgroundColor: set.color,
                             borderColor: set.color,
-                        }}>
+                        }}
+                        href={gameInfo.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Ссылка на сайт"
+                        onClick={(e) => e.stopPropagation()}
+                        tabIndex={-1}
+                    >
                         {set.source === "wikipedia" ? <WikipediaIcon /> : set.source === "steam" ? <SteamIcon /> : <></>}
                         {" " + set.source}
-                    </span>
+                    </a>
                 </div>
             </div>
 
@@ -201,6 +221,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                         )}
                     </div>
                 </div>
+                {/* <Dropdown options={statuses} placeholder={status} onClick={(id) => onChangeStatus(id)} className={styles["sort-button"]} /> */}
                 <CustomDropdown items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
             </div>
             <EditGameInfoModal
@@ -210,6 +231,6 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                 closeModal={() => setEditGameInfoModal(false)}
             />
             <GameDetailModal gameInfo={gameInfo} isModalOpen={gameDetails} closeModal={() => setGameDetails(false)} imgSource={IMG_SRC} />
-        </div>
+        </article>
     );
 };
