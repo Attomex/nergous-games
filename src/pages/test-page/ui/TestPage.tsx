@@ -1,10 +1,14 @@
 import { Dropdown } from "widgets/dropdown";
 import type { DropdownOption, DropdownProps } from "shared/types";
 import { EyeIcon, EditIcon } from "widgets/icons";
+import { Modal } from "widgets/modal";
+import "./TestPage.css";
+import { useState } from "react";
 
 export const TestPage = () => {
+    const [open, setOpen] = useState(false);
     const handleDropdownClick: DropdownProps["onClick"] = ({ key }) => {
-        console.log(key);
+        // console.log(key);
     };
 
     const options: DropdownOption[] = [
@@ -32,7 +36,10 @@ export const TestPage = () => {
                     onClick={handleDropdownClick}
                 />
             </div>
-            <div style={{ fontSize: "10rem" }}>dskjdjhsdj hsjh dsjhd jshdjhs djhaskj dhweiu hashfj sjdhf ajhsgjk fhsdkjf hsjkf jskhf jshf</div>
+            <button onClick={() => setOpen(true)}>Открыть модалку</button>
+            <div style={{ fontSize: "10rem", wordBreak: "break-word" }}>dskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdj hsjh dsjhd jshdjhs djhaskj dhweiu hashfj sjdhf ajhsgjk fhsdkjf hsjkf jskhf jshf</div>
+            <Modal title="Modal title" open={open} onClose={() => setOpen(false)} onOk={() => setOpen(false)}>Modal content</Modal>
+            
         </>
     );
 };

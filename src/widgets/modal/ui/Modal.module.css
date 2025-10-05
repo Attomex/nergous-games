@@ -1,0 +1,109 @@
+.modal {
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    background-color: rgba(0, 0, 0, 0.32);
+    z-index: 2000;
+    transition: visibility 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.modal.close {
+    visibility: hidden;
+}
+
+.modal.open {
+    visibility: visible;
+}
+
+.modal__container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-sizing: border-box;
+    transform: scale(0.9);
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal.open > .modal__container {
+    transform: scale(1);
+}
+
+.break-word {
+    word-break: break-word;
+}
+
+.modal__title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal__title h2 {
+    margin: 0;
+}
+
+.modal__body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-btn {
+    border: 1px solid var(--gray-light-color);
+    border-radius: var(--button-radius);
+    padding: var(--button-padding);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.modal-btn__close {
+    background-color: var(--bg-color);
+    &:hover {
+        background-color: var(--hover-bg-color);
+        border-color: var(--hover-border-color);
+    }
+    &:active {
+        color: var(--active-text-color);
+        background-color: var(--active-bg-color);
+        border-color: var(--active-border-color);
+    }
+}
+
+.modal-btn__ok {
+    background-color: var(--light-blue-color);
+    color: var(--white-color);
+    &:hover {
+        border-color: var(--hover-border-color);
+    }
+    &:active {
+        color: var(--black-color);
+        border-color: var(--active-border-color);
+    }
+}
+
+.small {
+    min-width: 200px;
+    max-width: 600px;
+}
+.medium {
+    min-width: 400px;
+    max-width: 800px;
+}
+.large {
+    min-width: 600px;
+    max-width: 1000px;
+}

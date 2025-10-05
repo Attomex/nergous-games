@@ -5,7 +5,6 @@ import { UserCard } from "./UserCard";
 
 const fetchUsers = async () => {
     const res = await api().get("/users");
-    console.log(res.data.users);
     return res.data.users;
 };
 

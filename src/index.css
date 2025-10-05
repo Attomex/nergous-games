@@ -89,18 +89,19 @@ body.light {
 
     --second-font-size: 0.9rem;
     --second-font-weight: 400;
-
     --bg-color: var(--white-color);
     --text-color: var(--black-color);
     --border-color: var(--gray-light-color);
 
-    --hover-bg-color: var(--gray-dark-color);
-    --hover-text-color: var(--white-color);
+    --hover-bg-color: var(--gray-light-color);
+    --hover-text-color: var(--black-color);
     --hover-border-color: var(--gray-medium-color);
 
-    --active-bg-color: var();
-    --active-text-color: var();
-    --active-border-color: var(--accent-color);
+    --active-bg-color: var(--gray-medium-color);
+    --active-text-color: var(--white-color);
+    --active-border-color: var(--gray-dark-color);
+
+    --focus-border-color: var(--accent-color);
 
     /* Header */
 
