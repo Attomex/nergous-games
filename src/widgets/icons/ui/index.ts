@@ -20,3 +20,5 @@ export { UploadIcon } from "./UploadIcon";
 export { ImageCardIcon } from "./ImageCardIcon";
 export { XMarkLgIcon } from "./XMarkLgIcon";
 export { TranslateIcon } from "./TranslateIcon";
+export { MenuIcon } from "./MenuIcon";
+export { CheronLeft, CheronRight } from "./ChevronArrowIcons";

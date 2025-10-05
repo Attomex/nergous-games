@@ -22,7 +22,7 @@ import { Paginations } from "widgets/pagination";
 import { AddGameButton } from "widgets/add-game-button";
 import { SearchInput } from "widgets/search-input";
 import { Dropdown } from "widgets/dropdown";
-import { AscIcon, DescIcon, SortAZIcon, SortZAIcon } from "widgets/icons";
+import { AscIcon, CheronLeft, CheronRight, DescIcon, SortAZIcon, SortZAIcon } from "widgets/icons";
 import { isDropdownItem } from "shared/types";
 import { EmptyItems } from "widgets/empty-items";
 import { useTranslation } from "react-i18next";
@@ -151,8 +151,10 @@ export const UserGames: React.FC = () => {
                     />
 
                     <Flex gap={16} style={{ width: "100%" }} className={styles["top-panel"]}>
-                        <Flex gap={16}>
+                        <Flex gap={0} className={styles["status-buttons"]}>
+                            <span className={styles["status-buttons__arrow"]}><CheronLeft /></span>
                             <StatusButtonsGroup status={status} setStatus={setStatus} setPage={setPage} />
+                            <span className={styles["status-buttons__arrow"]}><CheronRight /></span>
                         </Flex>
 
                         <Flex gap={16} style={{ zIndex: 2 }} className={styles["top-panel__right"]}>
@@ -170,13 +172,13 @@ export const UserGames: React.FC = () => {
                 </Flex>
                 <Divider className={styles.divider} style={{ margin: "0" }} />
                 {/* Карточки */}
-                <Flex wrap justify="between" gap={30} style={{ width: "100%" }}>
+                <Flex wrap justify="between" className={styles["cards-wrapper"]}>
                     {userGames && userGames.length > 0 ? (
                         userGames.map((g) => (
                             <GameCard key={g.id} gameInfo={g} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })} />
                         ))
                     ) : debouncedSearch ? (
-                        <EmptyItems search={debouncedSearch} />
+                        <EmptyItems />
                     ) : (
                         <></>
                     )}

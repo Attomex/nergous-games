@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import styles from "./EmptyItems.module.css";
 
-export const EmptyItems = ({ search }: { search: string }) => {
+export const EmptyItems = () => {
+    const { t } = useTranslation("translation", {keyPrefix: "emptyResult"});
     const clickOnRepeatSearch = () => {
         document.getElementById("search-input")?.focus();
     };
@@ -9,12 +11,12 @@ export const EmptyItems = ({ search }: { search: string }) => {
         <div className={styles["empty-items__container"]}>
             <img loading="lazy" src="./no-search.png" alt="Ничего не нашлось" className={styles["empty-items__img"]} />
             <p className={styles["empty-items__text"]}>
-                По вашему запросу: <span className={styles["empty-items__search"]}>{search}</span> не было найдено ни 1 игры.
+                {t("f-text")}
             </p>
             <p className={styles["empty-items__text"]}>
-                Попробуйте изменить запрос и попробовать{" "}
+                {t("s-text")}{" "}
                 <span className={styles["repeat-search"]} onClick={clickOnRepeatSearch}>
-                    снова
+                    {t("again-text")}
                 </span>
                 .
             </p>

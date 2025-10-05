@@ -38,3 +38,10 @@
     overflow: hidden;
     color: #ffc107; /* Цвет для заполненной половины */
 }
+
+@media screen and (max-width: 660px) {
+    .star {
+        font-size: 20px;
+    }
+    
+}

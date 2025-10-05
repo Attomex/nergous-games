@@ -34,7 +34,7 @@
     border-color: var(--main-button-active-bg-color);
 }
 
-@media screen and (max-width: 680px) {
+@media screen and (max-width: 560px) {
     .status-buttons-group {
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -43,6 +43,7 @@
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
         user-select: none;
+        padding-inline: 8px;
     }
 
     .status-buttons-group::-webkit-scrollbar {
@@ -57,4 +58,7 @@
     .status-buttons-group.dragging {
         cursor: grabbing;
     }
+}
+
+@media screen and (max-width: 560px) {
 }

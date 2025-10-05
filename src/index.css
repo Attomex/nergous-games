@@ -2,8 +2,8 @@
 
 === Основный breakpoints для адаптации ===
 1140px
-
-680px
+960px
+660px
 
 */
 
@@ -33,13 +33,13 @@
 }
 
 body.light {
-    --sidebar_-bg-color: var(--gray-light-color);
+    --sidebar_-bg-color: var(--white-color);
 
     --sidebar_-bg-item-color: var(--gray-medium-color);
 }
 
 body.dark {
-    --sidebar_-bg-color: var(--gray-dark-color);
+    --sidebar_-bg-color: var(--black-color);
 }
 
 *,

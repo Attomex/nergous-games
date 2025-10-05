@@ -1,7 +1,6 @@
 .dropdown-wrapper {
     position: relative;
     display: inline-block;
-    z-index: 2;
 
     --icon-margin-x: 6px;
     --list-border-radius: 8px;
@@ -70,6 +69,7 @@
     border: 1px solid var(--gray-light-color);
     border-radius: var(--list-border-radius);
     background-color: var(--bg-color);
+    z-index: 9999;
 
     /* Анимации */
     opacity: 0;
@@ -120,6 +120,7 @@
 
 .icon {
     display: inline-flex;
+    align-items: center;
     width: 16px;
     height: 16px;
 }
@@ -143,4 +144,32 @@
 .dropdown-item.danger:hover {
     color: var(--white-color);
     background-color: var(--red-color);
+}
+
+@media screen and (max-width: 960px) {
+    .dropdown-toggle {
+        padding: 5px 10px;
+    }
+    .shaped {
+        width: 28px;
+        height: 28px;
+    }
+    .dropdown-item {
+        padding: 5px 10px;
+        font-size: 13px;
+    }
+    .icon {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .dropdown-toggle {
+        padding: 4px 8px;
+    }
+    .dropdown-item {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
 }

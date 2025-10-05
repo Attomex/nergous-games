@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useAuth } from "features/auth";
 
-import { LoadingOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
+import { Loader } from "shared/ui";
 
 interface ProtectedRouteProps {
     children: React.ReactElement;
@@ -51,7 +50,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
                     visibility: isLoading ? "visible" : "hidden",
                 }}
             >
-                <Spin indicator={<LoadingOutlined spin />} size="large" tip="Загрузка..." />
+                <Loader size="large" tip="Загрузка..." />
             </div>
         </>
     );

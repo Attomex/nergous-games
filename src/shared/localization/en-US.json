@@ -21,21 +21,25 @@
     "loginReg": {
         "login": {
             "title": "Authorization",
+
             "form-email": "Email",
             "form-password": "Password",
             "form-button": "Login",
+
             "side-title": "One account for everything!",
             "side-text": "Sign up to access all our services with a single account.",
             "side-button": "Sign up"
         },
         "registration": {
             "title": "Registration",
+
             "form-email": "Email",
             "form-password": "Password",
             "form-steam": "Steam profile URL",
             "form-image-btn": "Choose file",
             "form-image-text": "File not selected",
             "form-button": "Registration",
+            
             "side-title": "Log in to your account",
             "side-text": "Already have an account? Just log in and you're good to go.",
             "side-button": "Log in"
@@ -175,6 +179,10 @@
                 "dropped": "Dropped"
             }
         }
-        
+    },
+    "emptyResult": {
+        "f-text": "No games were found matching your request.",
+        "s-text": "Please try changing your query and try",
+        "again-text": "again"
     }
 }

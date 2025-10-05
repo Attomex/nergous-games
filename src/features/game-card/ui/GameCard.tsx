@@ -21,7 +21,6 @@ interface GameCardProps {
 }
 
 export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
-    
     const [newPriority, setNewPriority] = useState(gameInfo.priority / 2);
     const [willUpdate, setWillUpdate] = useState(false);
     const { isAdmin } = useAuth();
@@ -193,7 +192,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
             </div>
 
             <div className={styles.details}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div className={styles.header__wrapper}>
                     <header className={styles.title}>{gameInfo.title}</header>
                     <div className={styles.year}>{gameInfo.year || t("gameCard.year.no-year")}</div>
                 </div>
@@ -208,7 +207,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                         {status !== undefined && (
                             <div className={styles.rating}>
                                 <div className={styles.rating__content}>
-                                    {t("gameCard.priority.text")}
+                                    <span className={styles.priority__text}>{t("gameCard.priority.text")}</span>
                                     <CustomRate
                                         className={styles.rating__rate}
                                         allowHalf={true}
@@ -216,7 +215,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                                         onChange={changePriority}
                                     />
                                 </div>
-                                <div onClick={updatePriority}>
+                                <div onClick={updatePriority} className={styles.rating__update__container}>
                                     <span className={`${willUpdate ? styles.rating__update : styles.rating__update__hidden} ${styles.tag}`}>
                                         {t("gameCard.priority.update")}
                                     </span>
@@ -225,7 +224,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                         )}
                     </div>
                 </div>
-                <CustomDropdown items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
+                <CustomDropdown buttonClassName={styles["status-change"]} dropdownClassName={styles["status-change__dropdown"]} items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
             </div>
             <EditGameInfoModal
                 gameInfo={gameInfo}

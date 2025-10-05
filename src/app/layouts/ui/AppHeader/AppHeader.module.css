@@ -19,6 +19,25 @@
     width: 100%;
 }
 
+.header__burger-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    border-radius: 20%;
+    cursor: pointer;
+    transition: all 0.2 ease;
+}
+
+.header__burger-icon:hover,
+.header__burger-icon:active,
+.header__burger-icon:focus {
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
 .header__group {
     display: flex;
     align-items: center;

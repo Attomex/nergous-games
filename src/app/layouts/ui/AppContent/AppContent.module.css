@@ -7,3 +7,10 @@
     padding: 20px;
     background-color: var(--main-bg-color);
 }
+
+@media screen and (max-width: 660px) {
+    .content {
+        margin-left: 0;
+    }
+    
+}

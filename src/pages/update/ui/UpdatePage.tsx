@@ -1,5 +1,4 @@
 import { Card, List, Typography, Divider, ConfigProvider } from "antd";
-// import { updates } from "./updates";
 import { useMemo, useState } from "react";
 import styles from "./UpdatePage.module.css";
 import "./fckngOVERRIDE.css";
@@ -23,7 +22,6 @@ type Update = {
     update: Changes[];
 };
 
-// Changes is the type of the update array
 type Changes = {
     name: string;
     desc: string;
@@ -56,7 +54,7 @@ export const UpdatePage = () => {
     });
 
     return (
-        <div style={{ maxWidth: 800, margin: "0 auto", padding: "20px" }}>
+        <div style={{ maxWidth: 800, margin: "0 auto" }}>
             <ConfigProvider
                 theme={{
                     components: {
@@ -71,7 +69,7 @@ export const UpdatePage = () => {
                     },
                 }}
             >
-                <Title level={2} style={{ color: "var(--text-color)" }}>
+                <Title level={2} style={{ color: "var(--text-color)" }} className={styles.title}>
                     {title}
                 </Title>
                 <Divider style={{ borderBlockStart: "1px solid var(--text-color)" }} />
@@ -83,10 +81,10 @@ export const UpdatePage = () => {
                         title={
                             <>
                                 <div className={styles["card-header"]}>
-                                    <Title level={3} style={{ color: "var(--text-color)", margin: "auto 0" }}>
+                                    <Title level={3} style={{ color: "var(--text-color)", margin: "auto 0" }} className={styles["card-header__title"]}>
                                         {updateItem.title}
                                     </Title>
-                                    <Text type="secondary" style={{ color: "var(--text-color)", margin: "auto 0" }}>
+                                    <Text type="secondary" style={{ color: "var(--text-color)", margin: "auto 0" }} className={styles["card-header__date"]}>
                                         {updateItem.date}
                                     </Text>
                                     {diffDates < 7 && index === 0 && <span className={styles.new}>NEW</span>}
@@ -100,12 +98,12 @@ export const UpdatePage = () => {
                                 <List.Item style={{ paddingBottom: 0 }}>
                                     <List.Item.Meta
                                         title={
-                                            <Text strong style={{ color: "var(--text-color)" }}>
+                                            <Text strong style={{ color: "var(--text-color)" }} className={styles["card-body__title"]}>
                                                 {change.name}
                                             </Text>
                                         }
                                         description={
-                                            <Text style={{ color: "var(--text-color)" }}>
+                                            <Text style={{ color: "var(--text-color)" }} className={styles["card-body__text"]}>
                                                 {change.desc}
                                                 {index !== updateItem.update.length - 1 && (
                                                     <Divider

@@ -23,4 +23,7 @@ export {
     ImageCardIcon,
     XMarkLgIcon,
     TranslateIcon,
+    MenuIcon,
+    CheronLeft,
+    CheronRight,
 } from "./ui";

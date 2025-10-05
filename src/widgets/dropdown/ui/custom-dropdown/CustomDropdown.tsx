@@ -9,11 +9,13 @@ interface ItemsProps {
 
 interface CustomDropdownProps {
     items: ItemsProps[];
+    buttonClassName?: string;
+    dropdownClassName?: string;
     initialSelectedItem: string;
     onChange?: (item: { id: number }) => void;
 }
 
-export const CustomDropdown: React.FC<CustomDropdownProps> = ({ items = [], initialSelectedItem, onChange }) => {
+export const CustomDropdown: React.FC<CustomDropdownProps> = ({ items = [], initialSelectedItem, buttonClassName, dropdownClassName, onChange }) => {
     // Определяем начальный выбранный элемент. Если он не передан, берем первый из списка.
     const [selectedItem, setSelectedItem] = useState<ItemsProps>();
 
@@ -39,14 +41,14 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({ items = [], init
         onChange?.({ id: item.id });
     };
 
-    let listClasses = `${styles.dropdownList} ${isOpen ? styles.open : ""}`;
+    let listClasses = `${styles.dropdownList} ${dropdownClassName ? dropdownClassName : ""} ${isOpen ? styles.open : ""}`;
 
     return (
         <div className={styles.dropdownContainer} ref={dropdownRef}>
             <div>
                 <button
                     type="button"
-                    className={styles.dropdownButton}
+                    className={`${styles.dropdownButton} ${buttonClassName}`}
                     onClick={() => setIsOpen(!isOpen)}
                     aria-haspopup="listbox"
                     aria-expanded={isOpen}

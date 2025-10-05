@@ -4,8 +4,11 @@ import { useAuth } from "features/auth";
 import style from "./AppHeader.module.css";
 import { Dropdown } from "widgets/dropdown";
 import type { DropdownProps } from "shared/types";
-import { SunIcon, MoonIcon, ProfileIcon, ArrowRepeat, PaintBucketIcon, ToolsIcon, LogoutIcon, TranslateIcon } from "widgets/icons";
+import { SunIcon, MoonIcon, ProfileIcon, ArrowRepeat, PaintBucketIcon, ToolsIcon, LogoutIcon, TranslateIcon, MenuIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
+import { AppSidebar } from "../AppSidebar";
+import { useMediaQuery } from "shared/hooks";
+import { useState } from "react";
 
 // const pageTitles = {
 //     "/all-games": "Все игры",
@@ -19,6 +22,9 @@ export const AppHeader = () => {
     const { theme, setTheme, themes } = useTheme();
     const { logout, isAdmin, checkAdmin } = useAuth();
     const { t, i18n } = useTranslation();
+
+    const [isOpenSidebar, setIsOpenSidebar] = useState(false);
+    const isMobile = useMediaQuery("(max-width: 660px)");
     const navigate = useNavigate();
 
     const onClickLocal: DropdownProps["onClick"] = ({ value }) => {
@@ -31,7 +37,7 @@ export const AppHeader = () => {
                 i18n.changeLanguage(value);
                 break;
         }
-    }
+    };
 
     const onClickTheme: DropdownProps["onClick"] = ({ key }) => {
         const selectedTheme = themes[Number(key) - 1];
@@ -84,7 +90,7 @@ export const AppHeader = () => {
     const localItems: DropdownProps["options"] = [
         {
             id: 1,
-            label: "Русский язык",
+            label: "Русский",
             value: "ru-RU",
             extra: i18n.language === "ru-RU" && <span className={style["badge"]}></span>,
             active: i18n.language === "ru-RU",
@@ -98,8 +104,6 @@ export const AppHeader = () => {
         },
     ];
 
-    console.log(i18n.language);
-
     if (isAdmin) {
         menuItemsProfile.push({
             id: 3,
@@ -109,23 +113,25 @@ export const AppHeader = () => {
     }
 
     return (
-        <header className={style.header}>
-            <div className={style.header__inner}>
-                {/* Бургер + Заголовок */}
-                {/* <div className={style.header__group} onClick={() => setDrawerOpen(true)}>
-                    <button className={style.iconButton}>
-                        <Bars3Icon className={style.icon} />
-                    </button>
-                    <span className={style.title}>{currentTitle}</span>
-                </div> */}
+        <>
+            <header className={style.header}>
+                <div className={style.header__inner}>
+                    {/* Бургер + Заголовок */}
+                    {isMobile && (
+                        <div className={style["header__burger-icon"]} onClick={() => setIsOpenSidebar(true)}>
+                            <MenuIcon />
+                        </div>
+                    )}
 
-                {/* Настройки */}
-                <div className={style.header__group}>
-                    <Dropdown options={localItems} buttonIcon={<TranslateIcon />} onClick={onClickLocal} />
-                    <Dropdown options={menuItemsTheme} buttonIcon={<PaintBucketIcon />} onClick={onClickTheme} />
-                    <Dropdown options={menuItemsProfile} buttonIcon={<ProfileIcon />} onClick={onClickProfile} />
+                    {/* Настройки */}
+                    <div className={style.header__group}>
+                        <Dropdown options={localItems} buttonIcon={<TranslateIcon />} onClick={onClickLocal} />
+                        <Dropdown options={menuItemsTheme} buttonIcon={<PaintBucketIcon />} onClick={onClickTheme} />
+                        <Dropdown options={menuItemsProfile} buttonIcon={<ProfileIcon />} onClick={onClickProfile} />
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+            <AppSidebar isMobile={isMobile} isOpen={isOpenSidebar} closeSidebar={() => setIsOpenSidebar(false)} />
+        </>
     );
 };

@@ -1,13 +1,23 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import styles from "./AppSidebar.module.css";
 import { useAuth } from "features/auth";
 import { IMG_SRC } from "shared/const";
 import { useNavigate } from "react-router-dom";
 import { showSuccessNotification } from "shared/lib";
-import { BookIcon, SquaresIcon, LogoutIcon, ArrowRepeat } from "widgets/icons";
+import { BookIcon, SquaresIcon, LogoutIcon, ArrowRepeat, XMarkLgIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
 
-export const AppSidebar = () => {
+interface AppSidebarProps {
+    isMobile: boolean;
+    isOpen: boolean;
+    closeSidebar: () => void;
+}
+
+export const AppSidebar: React.FC<AppSidebarProps> = ({
+    isMobile,
+    isOpen,
+    closeSidebar,
+}) => {
     const { t } = useTranslation("translation");
     const { user, getUserInfo, logout } = useAuth();
     const navigate = useNavigate();
@@ -31,7 +41,7 @@ export const AppSidebar = () => {
 
     return (
         <>
-            <div className={styles["app-sidebar"]}>
+            <div className={`${styles["app-sidebar"]} ${isMobile ? styles["mobile"] : ""} ${isOpen ? styles["open"] : ""}`}>
                 <div className={styles["app-sidebar__content"]}>
                     <section className={styles["app-sidebar__header"]}>
                         <div className={styles["sidebar-item"]}>
@@ -49,6 +59,11 @@ export const AppSidebar = () => {
                                 </span>
                             </div>
                         </div>
+                        {isMobile && isOpen && (
+                            <span className={styles["sidebar-close"]} onClick={closeSidebar}>
+                                <XMarkLgIcon />
+                            </span>
+                        )}
                     </section>
                     <section className={styles["app-sidebar__body"]}>
                         <ul className={styles["sidebar-list"]}>
@@ -56,7 +71,10 @@ export const AppSidebar = () => {
                                 <li
                                     key={item.id}
                                     className={`${styles["sidebar-item"]} ${styles["link"]} ${styles["hover"]}`}
-                                    onClick={() => navigate(item.href)}
+                                    onClick={() => {
+                                        navigate(item.href)
+                                        closeSidebar();
+                                    }}
                                     tabIndex={item.id}
                                 >
                                     <span className={styles["sidebar-item__icon"]}>{item.icon}</span>
@@ -67,7 +85,7 @@ export const AppSidebar = () => {
                     </section>
                     <section className={styles["app-sidebar__footer"]}>
                         <div className={`${styles["sidebar-item"]} ${styles["link"]} ${styles["hover"]} ${styles["logout"]}`} onClick={logout} tabIndex={4}>
-                            {/* Здесь может быть иконка выхода или настроек */}
+
                             <span className={styles["sidebar-item__icon"]}>
                                 <LogoutIcon />
                             </span>
@@ -76,8 +94,8 @@ export const AppSidebar = () => {
                     </section>
                 </div>
             </div>
-            {/* Этот backdrop теперь не нужен, так как эффект наведения управляется только через сайдбар */}
-            <div className={`${styles["backdrop"]}`}></div>
+
+            <div className={`${styles["backdrop"]}`} onMouseDown={() => isOpen && closeSidebar()}></div>
         </>
     );
 };

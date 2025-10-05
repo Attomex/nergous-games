@@ -11,7 +11,6 @@ type FlexProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 export const Flex: React.FC<FlexProps> = ({ vertical, gap, align, justify, wrap, className, style, ...rest }) => {
-    
     return (
         <div
             className={clsx(
