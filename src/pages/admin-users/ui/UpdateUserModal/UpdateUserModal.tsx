@@ -3,7 +3,7 @@ import { Button, ConfigProvider, Form, Image, Input, Modal, Select } from "antd"
 import FormItem from "antd/es/form/FormItem";
 import { TUser } from "pages/admin-users/model";
 import { ReactNode, useState } from "react";
-import { api } from "shared/api";
+import api from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { ButtonStyled, SelectStyled } from "shared/ui";
 import { IMG_SRC } from "shared/const";
@@ -27,7 +27,7 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag,
 
             const mergedData = { ...user, ...values };
 
-            await api().put(`/users/${user.id}`, mergedData);
+            await api.put(`/users/${user.id}`, mergedData);
             showSuccessNotification(`Информация о пользователе ${user.email} была успешно обновлена!`);
         } catch (err) {
             showErrorNotification(`Произошла ошибка при обновлении информации о пользователе ${err}`);

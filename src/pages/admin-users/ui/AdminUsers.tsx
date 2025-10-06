@@ -1,10 +1,10 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { api } from "shared/api";
+import api from "shared/api";
 import { TUser } from "../model";
 import { UserCard } from "./UserCard";
 
 const fetchUsers = async () => {
-    const res = await api().get("/users");
+    const res = await api.get("/users");
     return res.data.users;
 };
 

@@ -1,5 +1,5 @@
 import { Dropdown } from "widgets/dropdown";
-import type { DropdownOption, DropdownProps } from "shared/types";
+import type { DropdownOption } from "shared/types";
 import { EyeIcon, EditIcon } from "widgets/icons";
 import { Modal } from "widgets/modal";
 import "./TestPage.css";
@@ -7,9 +7,6 @@ import { useState } from "react";
 
 export const TestPage = () => {
     const [open, setOpen] = useState(false);
-    const handleDropdownClick: DropdownProps["onClick"] = ({ key }) => {
-        // console.log(key);
-    };
 
     const options: DropdownOption[] = [
         {
@@ -33,7 +30,6 @@ export const TestPage = () => {
                     placeholder="Бла бла бла"
                     // buttonIcon={<EyeIcon />}
                     options={options}
-                    onClick={handleDropdownClick}
                 />
             </div>
             <button onClick={() => setOpen(true)}>Открыть модалку</button>

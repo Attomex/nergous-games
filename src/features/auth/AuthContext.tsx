@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState } from "react";
 import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+// import { jwtDecode } from "jwt-decode";
 import type { User } from "shared/types";
 import { URL } from "shared/const";
 import { showErrorNotification } from "shared/lib";
+import api from "shared/api";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
     user: User | null;
@@ -11,16 +13,16 @@ interface AuthContextType {
     logout: () => void;
     getUserInfo: () => Promise<User>;
     isAdmin: boolean | string;
-    checkAdmin: () => Promise<void>;
+    checkAdmin: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
     login: () => {},
     logout: () => {},
-    getUserInfo: () => Promise.resolve({ email: "", steam_url: "", photo: "", stats: { finished: 0, playing: 0, planned: 0, dropped: 0 } }),
+    getUserInfo: () => Promise.resolve({ email: "", steam_url: "", photo: "", stats: { finished: 0, playing: 0, planned: 0, dropped: 0 }, isAdmin: "false" }),
     isAdmin: false,
-    checkAdmin: () => Promise.resolve(),
+    checkAdmin: () => Promise.resolve(false),
 });
 
 interface AuthContextProps {
@@ -30,30 +32,16 @@ interface AuthContextProps {
 export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [isAdmin, setIsAdmin] = useState<boolean | string>("");
+    const navigate = useNavigate();
 
     const getUserInfo = async (): Promise<User> => {
         try {
-            const auth_token = Cookies.get("auth_token");
-            if (!auth_token) logout();
+            const responseInfo = await api.get(`${URL}/games/user/info`);
 
-            const responseInfo = await fetch(`${URL}/games/user/info`, {
-                headers: {
-                    Authorization: `Bearer ${auth_token}`,
-                },
-                credentials: "include",
-            });
-            if (!responseInfo.ok) throw new Error("Ошибка при получении информации о пользователе");
+            const responseStats = await api.get(`${URL}/games/user/stats`);
 
-            const responseStats = await fetch(`${URL}/games/user/stats`, {
-                headers: {
-                    Authorization: `Bearer ${auth_token}`,
-                },
-                credentials: "include",
-            });
-            if (!responseStats.ok) throw new Error("Ошибка при получении информации о статистике пользователя");
-
-            const userInfo = await responseInfo.json();
-            const stats = await responseStats.json();
+            const userInfo = responseInfo.data;
+            const stats = responseStats.data;
 
             const userResponse: User = {
                 ...userInfo,
@@ -61,26 +49,18 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
                 stats: stats,
             };
 
+            setIsAdmin(userInfo?.isAdmin ? "true" : "false");
+
             setUser(userResponse);
             return userResponse;
         } catch (error) {
             showErrorNotification(error as string);
-            return { email: "", steam_url: "", photo: "", stats: { finished: 0, playing: 0, planned: 0, dropped: 0 } };
+            return { email: "", steam_url: "", photo: "", stats: { finished: 0, playing: 0, planned: 0, dropped: 0 }, isAdmin: "false" };
         }
     };
 
-    const checkAdmin = async (): Promise<void> => {
-        try {
-            const auth_token = Cookies.get("auth_token");
-            if (!auth_token) logout();
-
-            const decodeJWT = jwtDecode(auth_token as string);
-            const parseJWT = await JSON.parse(JSON.stringify(decodeJWT));
-
-            setIsAdmin(parseJWT?.is_admin || false);
-        } catch (error) {
-            console.error(error);
-        }
+    const checkAdmin = async (): Promise<boolean> => {
+        return isAdmin === "true" ? true : false;
     };
 
     const login = (auth_token: string): void => {
@@ -88,9 +68,10 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
         // console.log("success:" + auth_token);
     };
 
-    const logout = (): void => {
+    const logout = async (): Promise<void> => {
+        await api.post("/logout");
         Cookies.remove("auth_token");
-        window.location.href = "/login";
+        navigate("/login");
     };
 
     return <AuthContext.Provider value={{ user, login, logout, getUserInfo, isAdmin, checkAdmin }}>{children}</AuthContext.Provider>;

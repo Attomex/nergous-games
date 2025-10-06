@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import styles from "./Modal.module.css";
 
 type ModalSize = "small" | "medium" | "large";
@@ -47,31 +48,35 @@ export const Modal: React.FC<ModalProps> = ({
     };
 
     return (
-        <div
-            className={`${styles["modal"]} ${open ? styles["open"] : styles["close"]}`}
-            id="modal"
-            tabIndex={-1}
-            aria-hidden="true"
-            onClick={handleCancel}
-        >
-            <div className={styles["modal__container"] + " " + styles[size]} onClick={(e) => e.stopPropagation()}>
-                <div className={classTitle}>
-                    <h2>{title}</h2>
-                </div>
-                <div className={classBody}>{children}</div>
-                {footer || footer === null ? (
-                    <footer className={classFooter}>{footer}</footer>
-                ) : (
-                    <footer className={classFooter}>
-                        <button className={styles["modal-btn"] + " " + styles["modal-btn__close"]} onClick={handleCancel}>
-                            Закрыть
-                        </button>
-                        <button className={styles["modal-btn"] + " " + styles["modal-btn__ok"]} onClick={handleOk}>
-                            Ок
-                        </button>
-                    </footer>
-                )}
-            </div>
-        </div>
+        <>
+            {createPortal(
+                <div
+                    className={`${styles["modal"]} ${open ? styles["open"] : styles["close"]}`}
+                    id="modal"
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    onClick={handleCancel}>
+                    <div className={styles["modal__container"] + " " + styles[size]} onClick={(e) => e.stopPropagation()}>
+                        <div className={classTitle}>
+                            <h2>{title}</h2>
+                        </div>
+                        <div className={classBody}>{children}</div>
+                        {footer || footer === null ? (
+                            <footer className={classFooter}>{footer}</footer>
+                        ) : (
+                            <footer className={classFooter}>
+                                <button className={styles["modal-btn"] + " " + styles["modal-btn__close"]} onClick={handleCancel}>
+                                    Закрыть
+                                </button>
+                                <button className={styles["modal-btn"] + " " + styles["modal-btn__ok"]} onClick={handleOk}>
+                                    Ок
+                                </button>
+                            </footer>
+                        )}
+                    </div>
+                </div>,
+                document.body
+            )}
+        </>
     );
 };

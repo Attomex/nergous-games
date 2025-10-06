@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./GameCard.module.css";
 import { gameStatuse } from "shared/const";
 import { GameInfo } from "shared/types";
-import { api } from "shared/api";
+import api from "shared/api";
 import { EditGameInfoModal } from "features/edit-game";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { statsColors } from "shared/const";
@@ -79,7 +79,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
 
     const updateGame = async (key: string, value: string | number) => {
         try {
-            await api()
+            await api
                 .put(`/games/${gameInfo.id}/${key}`, {
                     ...gameInfo,
                     [key]: value,

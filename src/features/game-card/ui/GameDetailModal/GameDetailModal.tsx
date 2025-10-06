@@ -14,7 +14,7 @@ interface GameDetailModalProps {
 
 export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isModalOpen, closeModal, imgSource }) => {
     const { t } = useTranslation("translation", { keyPrefix: "gameCard.gameDetails" });
-    
+
     return (
         <Modal open={isModalOpen} footer={null} closable onCancel={closeModal} centered>
             <div className={styles.content}>
@@ -32,8 +32,7 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
                                         starBg: "var(--card-third-text-color)",
                                     },
                                 },
-                            }}
-                        >
+                            }}>
                             <Rate allowHalf defaultValue={gameInfo.priority / 2} disabled />
                         </ConfigProvider>
                         <span className={styles.year}>2025</span>

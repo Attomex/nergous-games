@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GameInfo } from "shared/types";
 import { Button, Form, Input, InputNumber, Modal, Image } from "antd";
-import { api } from "shared/api";
+import api from "shared/api";
 import { DeleteOutlined, SyncOutlined, UploadOutlined } from "@ant-design/icons";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { IMG_SRC } from "shared/const";
@@ -96,7 +96,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                 formData.append("image", gameInfo.image);
             }
 
-            await api().put(`/games/${gameInfo.id}`, formData, {
+            await api.put(`/games/${gameInfo.id}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -115,7 +115,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
     const deleteGame = async () => {
         try {
             setIsLoading(true);
-            await api().delete(`/games/${gameInfo.id}`);
+            await api.delete(`/games/${gameInfo.id}`);
             showSuccessNotification("Игра успешно удалена!");
             updateUsersGames();
         } catch (err) {

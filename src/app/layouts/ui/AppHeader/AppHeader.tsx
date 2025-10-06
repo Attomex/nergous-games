@@ -20,7 +20,7 @@ import { useState } from "react";
 
 export const AppHeader = () => {
     const { theme, setTheme, themes } = useTheme();
-    const { logout, isAdmin, checkAdmin } = useAuth();
+    const { logout, isAdmin } = useAuth();
     const { t, i18n } = useTranslation();
 
     const [isOpenSidebar, setIsOpenSidebar] = useState(false);
@@ -53,7 +53,7 @@ export const AppHeader = () => {
         if (key === 3) navigate("/admin");
     };
 
-    if (isAdmin === "") checkAdmin();
+    // if (isAdmin === "") checkAdmin();
 
     const menuItemsTheme: DropdownProps["options"] = [
         {

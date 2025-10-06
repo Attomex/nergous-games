@@ -10,4 +10,5 @@ export interface User {
     steam_url: string;
     photo: string;
     stats: UserStats;
+    isAdmin?: string;
 }

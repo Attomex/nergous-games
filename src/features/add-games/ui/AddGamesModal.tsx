@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import { api } from "shared/api";
+import api from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { TrashIcon, PlusLgIcon, UploadIcon } from "widgets/icons";
 import style from "./AddGamesModal.module.css";
@@ -32,7 +32,7 @@ export const AddGamesModal: React.FC<AddGamesModalProps> = ({ isModalOpen, close
                 throw new Error("Пожалуйста, заполните все поля.");
             }
 
-            await api()
+            await api
                 .post("/games/multi", { games: gameData })
                 .then(() => {
                     onAddGames();

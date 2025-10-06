@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./LoginReg.module.css";
-import { api } from "shared/api";
+import api from "shared/api";
 import { APP_ID } from "shared/const";
 import { useAuth } from "features/auth";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
@@ -81,7 +81,7 @@ export const SignUpForm = () => {
         }
 
         try {
-            await api()
+            await api
                 .post("/register", formData)
                 .catch((error) => {
                     throw error.response.data;
@@ -90,7 +90,7 @@ export const SignUpForm = () => {
             const email = formData.get("email");
             const password = formData.get("password");
 
-            await api()
+            await api
                 .post("/login", { email, password, app_id: Number(APP_ID) })
                 .then((response) => {
                     login(response.data);

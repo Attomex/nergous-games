@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./LoginReg.module.css";
 import { useAuth } from "features/auth";
 import { useNavigate } from "react-router-dom";
-import { api } from "shared/api";
+import api from "shared/api";
 import { APP_ID } from "shared/const";
 import { showErrorNotification } from "shared/lib";
 import { useTranslation } from "react-i18next";
@@ -38,11 +38,11 @@ export const SignInForm = () => {
         const { email, password, app_id } = state;
 
         try {
-            await api().post('/login', { email, password, app_id }).then(
-                (response: { data: any; }) => {
+            
+            await api.post('/login', { email, password, app_id }).then(
+                async (response: { data: any; }) => {
                     const data = response.data;
-                    // console.log(data)
-                    login(data);
+                    login(data.access_token);
                     navigate("/games");
                 }
             ).catch((error: { response: { data: any; }; }) => {

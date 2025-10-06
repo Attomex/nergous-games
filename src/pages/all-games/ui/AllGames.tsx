@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { GameCard } from "features/game-card";
 import styles from "./AllGames.module.css";
-import { api } from "shared/api";
+import api from "shared/api";
 import { Divider, Flex, Spin } from "antd";
 import { CreateGameModal } from "features/create-game";
 import { AddGamesModal } from "features/add-games";
@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 
 const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
-    const res = await api().get("/games", { params });
+    const res = await api.get("/games", { params });
     return res.data; // { data: GameInfo[], pages, total }
 };
 

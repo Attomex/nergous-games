@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { createPortal } from "react-dom";
-import { api } from "shared/api";
+import api from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { UploadIcon, ImageCardIcon, XMarkLgIcon } from "widgets/icons";
 import style from "./CreateGameModal.module.css";
@@ -115,7 +115,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                 }
             });
 
-            await api()
+            await api
                 .post("/games", data)
                 .then(() => {
                     showSuccessNotification("Игра успешно создана!");

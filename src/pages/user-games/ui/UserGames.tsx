@@ -14,7 +14,7 @@ import { CreateGameModal } from "features/create-game";
 import { AddGamesModal } from "features/add-games";
 import { useAuth } from "features/auth";
 
-import { api } from "shared/api";
+import api from "shared/api";
 import { DropdownOption, DropdownProps, GameInfo } from "shared/types";
 import { useDebouncedSearch } from "shared/hooks";
 
@@ -26,11 +26,11 @@ import { AscIcon, CheronLeft, CheronRight, DescIcon, SortAZIcon, SortZAIcon } fr
 import { isDropdownItem } from "shared/types";
 import { EmptyItems } from "widgets/empty-items";
 import { useTranslation } from "react-i18next";
-import { Modal } from "widgets/modal";
+// import { Modal } from "widgets/modal";
 
 const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
-    const res = await api().get("/games/user", { params });
+    const res = await api.get("/games/user", { params });
     return res.data; // { data: GameInfo[], pages, total }
 };
 
