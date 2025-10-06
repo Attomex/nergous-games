@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import { createPortal } from "react-dom";
 import styles from "./Modal.module.css";
 
 type ModalSize = "small" | "medium" | "large";
@@ -55,7 +56,8 @@ export const Modal: React.FC<ModalProps> = ({
                     id="modal"
                     tabIndex={-1}
                     aria-hidden="true"
-                    onClick={handleCancel}>
+                    onClick={handleCancel}
+                >
                     <div className={styles["modal__container"] + " " + styles[size]} onClick={(e) => e.stopPropagation()}>
                         <div className={classTitle}>
                             <h2>{title}</h2>

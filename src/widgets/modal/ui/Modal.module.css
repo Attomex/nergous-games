@@ -20,6 +20,7 @@
 }
 
 .modal__container {
+    
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -97,14 +98,11 @@
 }
 
 .small {
-    min-width: 200px;
-    max-width: 600px;
+    width: 300px;
 }
 .medium {
-    min-width: 400px;
-    max-width: 800px;
+    width: 520px;
 }
 .large {
-    min-width: 600px;
-    max-width: 1000px;
+    width: 800px;
 }

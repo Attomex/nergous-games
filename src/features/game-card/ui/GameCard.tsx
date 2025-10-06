@@ -7,7 +7,6 @@ import { EditGameInfoModal } from "features/edit-game";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { statsColors } from "shared/const";
 import { useAuth } from "features/auth";
-import { GameDetailModal } from "./GameDetailModal";
 import { EditIcon, WikipediaIcon, SteamIcon } from "widgets/icons";
 import { CustomRate } from "widgets/rate";
 import { CustomDropdown } from "widgets/dropdown";
@@ -18,14 +17,14 @@ import { useTranslation } from "react-i18next";
 interface GameCardProps {
     gameInfo: GameInfo;
     updateUsersGames: () => void;
+    openDetails: (gameInfo: GameInfo) => void
 }
 
-export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }) => {
+export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames, openDetails }) => {
     const [newPriority, setNewPriority] = useState(gameInfo.priority / 2);
     const [willUpdate, setWillUpdate] = useState(false);
     const { isAdmin } = useAuth();
     const { t } = useTranslation("translation");
-    const [gameDetails, setGameDetails] = useState(false);
     // const key = gameInfo.status as keyof typeof gameStatuse;
     const textStatus = `gameCard.status.${gameInfo.status ? gameInfo.status : "no-select"}`;
     const status = t(textStatus as any);
@@ -137,7 +136,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
     return (
         <article className={styles.card}>
             {/* Левый столбец — изображение */}
-            <div className={styles.image} onClick={() => setGameDetails(true)}>
+            <div className={styles.image} onClick={() => openDetails(gameInfo)}>
                 <img loading="lazy" src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
 
                 {/* Поверхностные кнопачки */}
@@ -232,7 +231,6 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames }
                 isModalOpen={editGameInfoModal}
                 closeModal={() => setEditGameInfoModal(false)}
             />
-            <GameDetailModal gameInfo={gameInfo} isModalOpen={gameDetails} closeModal={() => setGameDetails(false)} imgSource={IMG_SRC} />
         </article>
     );
 };
