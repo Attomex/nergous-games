@@ -1,25 +1,28 @@
 import { GameInfo } from "shared/types";
 import { DividerStyled } from "shared/ui";
 import styles from "./GameDetailModal.module.css";
-import { Modal, ConfigProvider, Rate, Divider, Image } from "antd";
+import { ConfigProvider, Rate, Divider, Image } from "antd";
 import { LinkIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
+// import { Modal } from "widgets/modal";
+import {Modal} from "antd";
+import { IMG_SRC } from "shared/const";
 
 interface GameDetailModalProps {
     gameInfo: GameInfo;
     isModalOpen: boolean;
     closeModal: () => void;
-    imgSource: string | undefined;
 }
 
-export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isModalOpen, closeModal, imgSource }) => {
+export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isModalOpen, closeModal }) => {
     const { t } = useTranslation("translation", { keyPrefix: "gameCard.gameDetails" });
-    
+
     return (
+        // <Modal open={isModalOpen} footer={null}  onClose={closeModal} title={null}>
         <Modal open={isModalOpen} footer={null} closable onCancel={closeModal} centered>
             <div className={styles.content}>
                 <div className={styles.imageWrapper}>
-                    <Image src={imgSource + gameInfo.image} alt={gameInfo.title} />
+                    <Image src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
                 </div>
                 <div className={styles.info}>
                     <h2 className={styles.title}>{gameInfo.title}</h2>

@@ -26,7 +26,7 @@ import { AscIcon, CheronLeft, CheronRight, DescIcon, SortAZIcon, SortZAIcon } fr
 import { isDropdownItem } from "shared/types";
 import { EmptyItems } from "widgets/empty-items";
 import { useTranslation } from "react-i18next";
-import { Modal } from "widgets/modal";
+import { GameDetailModal } from "features/game-card/ui/GameDetailModal";
 
 const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
@@ -39,7 +39,7 @@ export const UserGames: React.FC = () => {
     const [status, setStatus] = useState("");
     const { search, debouncedSearch, setSearch } = useDebouncedSearch("", setPage, 500);
     const { t } = useTranslation("translation");
-    
+
     type SortOption = keyof typeof sortOptions;
     const sortOptions = {
         "title-asc": t("sortOptions.title"),
@@ -54,6 +54,21 @@ export const UserGames: React.FC = () => {
 
     const [modalCreateGame, setModalCreateGame] = useState(false);
     const [modalAddGames, setModalAddGames] = useState(false);
+
+    const [detailsModal, setDetailsModal] = useState(false);
+    const [detailsGameInfo, setDetailsGameInfo] = useState<GameInfo>({
+        id: 0,
+        title: "",
+        preambula: "",
+        image: "",
+        developer: "",
+        publisher: "",
+        year: "",
+        genre: "",
+        url: "",
+        status: "",
+        priority: 0,
+    });
 
     const { checkAdmin } = useAuth();
     const queryClient = useQueryClient();
@@ -131,6 +146,11 @@ export const UserGames: React.FC = () => {
         setModalAddGames(false);
     };
 
+    const openDetailsModal = (gameInfo: GameInfo) => {
+        setDetailsGameInfo(gameInfo);
+        setDetailsModal(true);
+    };
+
     const refreshGames = useCallback(() => {
         queryClient.invalidateQueries({ queryKey: ["userGames"] });
     }, [queryClient]);
@@ -153,9 +173,13 @@ export const UserGames: React.FC = () => {
 
                     <Flex gap={16} style={{ width: "100%" }} className={styles["top-panel"]}>
                         <Flex gap={0} className={styles["status-buttons"]}>
-                            <span className={styles["status-buttons__arrow"]}><CheronLeft /></span>
+                            <span className={styles["status-buttons__arrow"]}>
+                                <CheronLeft />
+                            </span>
                             <StatusButtonsGroup status={status} setStatus={setStatus} setPage={setPage} />
-                            <span className={styles["status-buttons__arrow"]}><CheronRight /></span>
+                            <span className={styles["status-buttons__arrow"]}>
+                                <CheronRight />
+                            </span>
                         </Flex>
 
                         <Flex gap={16} style={{ zIndex: 2 }} className={styles["top-panel__right"]}>
@@ -176,7 +200,12 @@ export const UserGames: React.FC = () => {
                 <Flex wrap justify="between" className={styles["cards-wrapper"]}>
                     {userGames && userGames.length > 0 ? (
                         userGames.map((g) => (
-                            <GameCard key={g.id} gameInfo={g} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })} />
+                            <GameCard
+                                key={g.id}
+                                gameInfo={g}
+                                updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })}
+                                openDetails={openDetailsModal}
+                            />
                         ))
                     ) : debouncedSearch ? (
                         <EmptyItems />
@@ -196,6 +225,7 @@ export const UserGames: React.FC = () => {
                 {/* Модалки */}
                 <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
                 <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
+                <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} />
             </Flex>
         </>
     );
