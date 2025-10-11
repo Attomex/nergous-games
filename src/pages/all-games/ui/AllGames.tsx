@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { GameCard } from "features/game-card";
 import styles from "./AllGames.module.css";
 import api from "shared/api";
 import { Divider, Flex, Spin } from "antd";
@@ -98,7 +97,7 @@ export const AllGames: React.FC = () => {
         refetchOnWindowFocus: false,
     });
 
-    const userGames: GameInfo[] = data?.data ?? [];
+    // const userGames: GameInfo[] = data?.data ?? [];
     const totalItems: number = data?.total ?? 0;
 
     const closeModal = () => {
