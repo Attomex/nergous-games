@@ -1,5 +1,4 @@
 import { createPortal } from "react-dom";
-import { createPortal } from "react-dom";
 import styles from "./Modal.module.css";
 
 type ModalSize = "small" | "medium" | "large";

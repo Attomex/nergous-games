@@ -1,11 +1,9 @@
 import { GameInfo } from "shared/types";
 import { DividerStyled } from "shared/ui";
 import styles from "./GameDetailModal.module.css";
-import { ConfigProvider, Rate, Divider, Image } from "antd";
+import { Modal, ConfigProvider, Rate, Divider, Image } from "antd";
 import { LinkIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
-// import { Modal } from "widgets/modal";
-import {Modal} from "antd";
 import { IMG_SRC } from "shared/const";
 
 interface GameDetailModalProps {
@@ -18,7 +16,6 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
     const { t } = useTranslation("translation", { keyPrefix: "gameCard.gameDetails" });
 
     return (
-        // <Modal open={isModalOpen} footer={null}  onClose={closeModal} title={null}>
         <Modal open={isModalOpen} footer={null} closable onCancel={closeModal} centered>
             <div className={styles.content}>
                 <div className={styles.imageWrapper}>
@@ -36,7 +33,7 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
                                     },
                                 },
                             }}>
-                            <Rate allowHalf defaultValue={gameInfo.priority / 2} disabled />
+                            <Rate allowHalf value={gameInfo.priority / 2} disabled />
                         </ConfigProvider>
                         <span className={styles.year}>2025</span>
                     </div>

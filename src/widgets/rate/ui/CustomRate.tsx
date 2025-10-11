@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import PropTypes from "prop-types";
 import styles from "./CustomRate.module.css";
 import Star from "./Star";
 
@@ -57,12 +56,4 @@ export const CustomRate = ({ count = 5, defaultValue = 0, allowHalf = false, onC
             ))}
         </div>
     );
-};
-
-CustomRate.propTypes = {
-    count: PropTypes.number,
-    defaultValue: PropTypes.number,
-    allowHalf: PropTypes.bool,
-    onChange: PropTypes.func,
-    className: PropTypes.string,
 };

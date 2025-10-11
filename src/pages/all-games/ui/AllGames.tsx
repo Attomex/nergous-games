@@ -25,8 +25,6 @@ const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
     return res.data; // { data: GameInfo[], pages, total }
 };
 
-
-
 export const AllGames: React.FC = () => {
     const [page, setPage] = useState(1);
     const { search, debouncedSearch, setSearch } = useDebouncedSearch("", setPage, 500);
@@ -158,13 +156,13 @@ export const AllGames: React.FC = () => {
 
             {/* Карточки */}
             <Flex wrap="wrap" justify="space-between" gap={10} style={{ width: "100%" }}>
-                {userGames && userGames.length > 0 ? (
+                {/* {userGames && userGames.length > 0 ? (
                     userGames.map((g) => (
-                        <GameCard key={g.id} gameInfo={g} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["allGames"] })} />
+                        <GameCard key={g.id} gameInfo={g} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["allGames"] })} openDetails={} />
                     ))
                 ) : (
                     <div>Пусто</div>
-                )}
+                )} */}
             </Flex>
             {/* Пагинация и статус загрузки */}
             {isPending && (

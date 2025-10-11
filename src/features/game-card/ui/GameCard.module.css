@@ -1,5 +1,4 @@
 .card {
-    z-index: 0;
     max-width: 300px;
     min-width: 300px;
     margin: 1em auto;
@@ -30,7 +29,6 @@
     top: 10px;
     cursor: pointer;
     background: transparent;
-    z-index: 1;
     border-radius: 20%;
     transition: background ease-in-out 0.2s, border-radius ease-in-out 0.2s;
 }
@@ -48,7 +46,6 @@
     position: absolute;
     right: 5px;
     bottom: 3px;
-    z-index: 1;
     pointer-events: none;
 }
 
@@ -80,7 +77,6 @@
     position: absolute;
     left: 5px;
     bottom: 3px;
-    z-index: 2;
     pointer-events: auto;
 }
 
@@ -100,7 +96,7 @@
     border-radius: 12px 12px 0 0;
 }
 
-.image::after {
+.image::before {
     content: "";
     position: absolute;
     top: 0;
@@ -112,7 +108,7 @@
     transition: background 0.3s ease;
 }
 
-.image:hover::after {
+.image:hover::before {
     background: rgba(0, 0, 0, 0.3); /* при наведении – серый */
     cursor: pointer;
 }
@@ -121,13 +117,19 @@
     opacity: 1;
 }
 
+/* .eye,
+.source,
+.status__tag,
+.editGame {
+    z-index: 0;
+} */
+
 .eye {
     opacity: 0;
     position: absolute;
     align-self: center;
     justify-self: center;
     color: white;
-    z-index: 1;
     cursor: pointer;
     transition: opacity ease-in-out 0.3s;
 }
