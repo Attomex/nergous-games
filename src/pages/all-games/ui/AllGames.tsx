@@ -9,7 +9,6 @@ import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-quer
 import { Paginations } from "widgets/pagination";
 import { DividerStyled } from "shared/ui";
 import { LoadingOutlined } from "@ant-design/icons";
-import { GameInfo } from "shared/types";
 import { AddGameButton } from "widgets/add-game-button";
 import { useDebouncedSearch } from "shared/hooks";
 import { SearchInput } from "widgets/search-input";
