@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 parser-steam
 dist
+build
 dist-ssr
 *.local
 
