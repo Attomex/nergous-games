@@ -21,7 +21,7 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
     const { t } = useTranslation("translation", { keyPrefix: "gameCard" });
 
     const textStatus = `status.${gameInfo.status ? gameInfo.status : "no-select"}`;
-    const status = t(textStatus as any);
+    const status = t(textStatus as any) as any;
 
     const changePriority = async (value: number) => {
         await updateGame("priority", value * 2);

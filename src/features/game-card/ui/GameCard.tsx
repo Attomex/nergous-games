@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./GameCard.module.css";
 import { GameInfo } from "shared/types";
-import { EditGameInfoModal } from "features/edit-game";
+// import { EditGameInfoModal } from "features/edit-game";
 import { statsColors } from "shared/const";
-import { useAuth } from "features/auth";
-import { EditIcon, WikipediaIcon, SteamIcon, IGDBIcon, StarFillIcon } from "widgets/icons";
+// import { useAuth } from "features/auth";
+// import { EditIcon } from "widgets/icons";
+import { WikipediaIcon, SteamIcon, IGDBIcon, StarFillIcon } from "widgets/icons";
 import { IMG_SRC } from "shared/const";
 import { EyeIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
@@ -15,14 +16,14 @@ interface GameCardProps {
 }
 
 export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails }) => {
-    const { isAdmin } = useAuth();
+    // const { isAdmin } = useAuth();
     const { t } = useTranslation("translation");
     // const key = gameInfo.status as keyof typeof gameStatuse;
     const textStatus = `gameCard.status.${gameInfo.status ? gameInfo.status : "no-select"}`;
     const status = t(textStatus as any);
 
     // Открытие модалки для изменения инфы об игре
-    const [editGameInfoModal, setEditGameInfoModal] = useState(false);
+    // const [editGameInfoModal, setEditGameInfoModal] = useState(false);
 
     // Изменение приоритета
     
