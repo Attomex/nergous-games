@@ -4,7 +4,7 @@
 1140px
 960px
 660px
-
+440px
 */
 
 :root {
@@ -32,14 +32,17 @@
     */
 }
 
-body.light {
+body.light,
+body.system-light {
     --sidebar_-bg-color: var(--white-color);
 
     --sidebar_-bg-item-color: var(--gray-medium-color);
 }
 
-body.dark {
+body.dark,
+body.system-dark {
     --sidebar_-bg-color: var(--black-color);
+    --sidebar_-bg-item-color: var(--gray-medium-color);
 }
 
 *,

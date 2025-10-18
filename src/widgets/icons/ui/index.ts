@@ -22,3 +22,5 @@ export { XMarkLgIcon } from "./XMarkLgIcon";
 export { TranslateIcon } from "./TranslateIcon";
 export { MenuIcon } from "./MenuIcon";
 export { CheronLeft, CheronRight } from "./ChevronArrowIcons";
+export { IGDBIcon } from "./IGDBIcon";
+export { StarFillIcon } from "./StarFillIcon";

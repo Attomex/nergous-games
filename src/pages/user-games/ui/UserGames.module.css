@@ -65,9 +65,9 @@
         flex-direction: column;
         gap: 10px;
     }
-    .status-buttons {
-        /* padding-inline: 20px; */
-    }
+    /* .status-buttons {
+        padding-inline: 20px;
+    } */
 }
 
 @media screen and (max-width: 560px) {
@@ -75,5 +75,6 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
+        color: var(--text-color)
     }
 }

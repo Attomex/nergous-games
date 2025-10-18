@@ -65,13 +65,12 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
 
     const login = (auth_token: string): void => {
         Cookies.set("auth_token", auth_token, { expires: 1 / 24 });
-        // console.log("success:" + auth_token);
     };
 
     const logout = async (): Promise<void> => {
         await api.post("/logout");
         Cookies.remove("auth_token");
-        navigate("/login");
+        navigate("/");
     };
 
     return <AuthContext.Provider value={{ user, login, logout, getUserInfo, isAdmin, checkAdmin }}>{children}</AuthContext.Provider>;

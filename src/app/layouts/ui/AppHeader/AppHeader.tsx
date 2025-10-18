@@ -48,7 +48,7 @@ export const AppHeader = () => {
         if (key === 1) navigate("/profile");
         if (key === 2) {
             logout();
-            navigate("/login");
+            navigate("/");
         }
         if (key === 3) navigate("/admin");
     };

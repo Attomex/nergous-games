@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import styles from "./GameCard.module.css";
+import { gameStatuse } from "shared/const";
 import { GameInfo } from "shared/types";
+import api from "shared/api";
 import { EditGameInfoModal } from "features/edit-game";
+import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { statsColors } from "shared/const";
 import { useAuth } from "features/auth";
-import { EditIcon, WikipediaIcon, SteamIcon, IGDBIcon, StarFillIcon } from "widgets/icons";
+import { EditIcon, WikipediaIcon, SteamIcon, IGDBIcon } from "widgets/icons";
+import { CustomRate } from "widgets/rate";
+import { CustomDropdown } from "widgets/dropdown";
 import { IMG_SRC } from "shared/const";
 import { EyeIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
 
 interface GameCardProps {
     gameInfo: GameInfo;
+    updateUsersGames: () => void;
     openDetails: (gameInfo: GameInfo) => void
 }
 
-export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails }) => {
+export const GameCard: React.FC<GameCardProps> = ({ gameInfo, updateUsersGames, openDetails }) => {
     const { isAdmin } = useAuth();
     const { t } = useTranslation("translation");
     // const key = gameInfo.status as keyof typeof gameStatuse;
@@ -25,7 +31,76 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails }) => 
     const [editGameInfoModal, setEditGameInfoModal] = useState(false);
 
     // Изменение приоритета
-    
+    const changePriority = async (value: number) => {
+        await updateGame("priority", value * 2);
+    };
+
+    const onChangeStatus = ({ id }: { id: number }) => {
+        if (id === 1) {
+            deleteFromUserGame();
+            return;
+        }
+        const keysStatuses = Object.keys(gameStatuse);
+        const keyStatus = keysStatuses[id - 2];
+        updateGame("status", keyStatus);
+    };
+
+
+    const statuses = [
+        {
+            id: 1,
+            label: t("gameCard.status.no-select"),
+            extra: <span className={`${styles["status-badge"]} ${styles["no-select"]}`}></span>,
+        },
+        {
+            id: 2,
+            label: t("gameCard.status.planned"),
+            extra: <span className={`${styles["status-badge"]} ${styles.planned}`}></span>,
+        },
+        {
+            id: 3,
+            label: t("gameCard.status.playing"),
+            extra: <span className={`${styles["status-badge"]} ${styles.processing}`}></span>,
+        },
+        {
+            id: 4,
+            label: t("gameCard.status.finished"),
+            extra: <span className={`${styles["status-badge"]} ${styles.finished}`}></span>,
+        },
+        {
+            id: 5,
+            label: t("gameCard.status.dropped"),
+            extra: <span className={`${styles["status-badge"]} ${styles.dropped}`}></span>,
+        },
+    ];
+
+    const updateGame = async (key: string, value: string | number) => {
+        try {
+            await api
+                .put(`/games/${gameInfo.id}/${key}`, {
+                    ...gameInfo,
+                    [key]: value,
+                })
+                .then(() => {
+                    showSuccessNotification(`Было обновлено! Обновлено ${key} на ${value}`);
+                });
+        } catch (err) {
+            showErrorNotification(err as string);
+        }
+
+        updateUsersGames();
+    };
+
+    const deleteFromUserGame = async () => {
+        try {
+            await api.delete(`/games/${gameInfo.id}/delete-user-game`).then(() => {
+                showSuccessNotification("Игра успешно удалена!");
+                updateUsersGames();
+            })
+        } catch (err) {
+            showErrorNotification(`Произошла ошибка при удалении игры ${err}`);
+        }
+    }
 
     const getColor = (status: string): string => {
         switch (status) {
@@ -77,7 +152,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails }) => 
                 <img loading="lazy" src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
 
                 {/* Поверхностные кнопачки */}
-                {/* {isAdmin && (
+                {isAdmin && (
                     <div
                         className={styles.editGame}
                         onClick={(e) => {
@@ -85,9 +160,11 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails }) => 
                             setEditGameInfoModal(true);
                         }}
                     >
+                        {/* <div  className={styles.editGame__icon}> */}
                         <EditIcon />
+                        {/* </div> */}
                     </div>
-                )} */}
+                )}
 
                 <div className={styles.eye}>
                     <EyeIcon w="48px" h="48px" />
@@ -131,20 +208,12 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails }) => 
                     <div className={styles.year}>{gameInfo.year || t("gameCard.year.no-year")}</div>
                 </div>
 
-                <div className={styles.genres}>
-                    <p className={styles.genre__text}>
-                        {gameInfo.genre.replace(/,\s*/g, " / ")}
-                    </p>
-                    <span className={styles.priority}>
-                        <StarFillIcon />{gameInfo.priority}
-                    </span>
-                </div>
+                <div className={styles.genres}>{gameInfo.genre.replace(/,\s*/g, " / ")}</div>
 
-                <div className={styles.description}>{gameInfo.preambula}</div>
-
-                {/* <hr className={styles.divider} />
+                <hr className={styles.divider} />
 
                 <div className={styles.rating__year}>
+                    {/* Добавляем пустой контейнер для сохранения пространства слева */}
                     <div className={styles.rating__container}>
                         {status !== undefined && (
                             <div className={styles.rating}>
@@ -161,14 +230,14 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails }) => 
                         )}
                     </div>
                 </div>
-                <CustomDropdown buttonClassName={styles["status-change"]} dropdownClassName={styles["status-change__dropdown"]} items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} /> */}
+                <CustomDropdown buttonClassName={styles["status-change"]} dropdownClassName={styles["status-change__dropdown"]} items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
             </div>
-            {/* <EditGameInfoModal
+            <EditGameInfoModal
                 gameInfo={gameInfo}
                 updateUsersGames={updateUsersGames}
                 isModalOpen={editGameInfoModal}
                 closeModal={() => setEditGameInfoModal(false)}
-            /> */}
+            />
         </article>
     );
 };

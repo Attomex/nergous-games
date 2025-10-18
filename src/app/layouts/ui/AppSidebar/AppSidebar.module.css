@@ -143,7 +143,19 @@
 }
 
 .app-sidebar.app-sidebar.mobile.open .sidebar-close {
-    visibility: visible;
+    animation: sidebar-close-btn 0.3s ease 0.1s forwards;
+}
+
+@keyframes sidebar-close-btn {
+    0% {
+        visibility: hidden;
+    }
+    70% {
+        visibility: hidden;
+    }
+    100% {
+        visibility: visible;
+    }
 }
 
 .app-sidebar__body {

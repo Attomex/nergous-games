@@ -4,7 +4,7 @@ import { UserGames } from "pages/user-games";
 import { LoginRegPage } from "pages/auth";
 import { Profile } from "pages/profile";
 import { AuthProvider } from "features/auth";
-import { Lander } from "pages/lander";
+// import { Lander } from "pages/lander";
 import { ProtectedRoute } from "app/provider";
 import { UpdatePage } from "pages/update";
 import { AllGames } from "pages/all-games";
@@ -39,15 +39,13 @@ export const Router = () => {
                             </ProtectedRoute>
                         }
                     />
-                    <Route path="/" element={<Page title={t("lander")}><Lander /></Page>} />
+                    {/* <Route path="/" element={<Page title={t("lander")}><Lander /></Page>} /> */}
                     <Route
-                        path="/login"
+                        path="/"
                         element={
-                            <ProtectedRoute>
-                                <Page title={t("login")}>
-                                    <LoginRegPage />
-                                </Page>
-                            </ProtectedRoute>
+                            <Page title={t("login")}>
+                                <LoginRegPage />
+                            </Page>
                         }
                     />
                 </Routes>
@@ -57,9 +55,9 @@ export const Router = () => {
 };
 
 const Page = ({ title, children }: { title: string; children: React.ReactNode }) => {
-    useEffect (() => {
-        document.title = title 
+    useEffect(() => {
+        document.title = title
     }, [title])
 
-    return <>{children}</> ;
+    return <>{children}</>;
 };

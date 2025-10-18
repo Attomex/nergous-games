@@ -26,4 +26,6 @@ export {
     MenuIcon,
     CheronLeft,
     CheronRight,
+    IGDBIcon,
+    StarFillIcon,
 } from "./ui";

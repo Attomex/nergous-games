@@ -37,7 +37,7 @@ const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
 export const UserGames: React.FC = () => {
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState("");
-    const { search, debouncedSearch, setSearch } = useDebouncedSearch("", setPage, 500);
+    const { search, debouncedSearch, setSearch } = useDebouncedSearch(setPage, 500);
     const { t } = useTranslation("translation");
 
     type SortOption = keyof typeof sortOptions;
@@ -156,6 +156,21 @@ export const UserGames: React.FC = () => {
     }, [queryClient]);
 
     useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        let newUrl = "";
+
+        if (search) {
+            searchParams.set("s", search);
+            newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+        } else {
+            searchParams.delete("s");
+            newUrl = `${window.location.pathname}`;
+        }
+
+        window.history.replaceState(null, "", newUrl);
+    }, [search])
+
+    useEffect(() => {
         checkAdmin();
     }, [checkAdmin]);
 
@@ -203,7 +218,6 @@ export const UserGames: React.FC = () => {
                             <GameCard
                                 key={g.id}
                                 gameInfo={g}
-                                updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })}
                                 openDetails={openDetailsModal}
                             />
                         ))
@@ -225,7 +239,7 @@ export const UserGames: React.FC = () => {
                 {/* Модалки */}
                 <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
                 <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
-                <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} />
+                <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })}/>
             </Flex>
         </>
     );

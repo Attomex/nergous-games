@@ -102,35 +102,3 @@
 .devPub {
     color: var(--card-modal-text-color);
 }
-
-.status-change {
-    cursor: pointer;
-}
-
-.status-badge {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    position: relative;
-}
-
-.no-select {
-    background-color: #c4c4c4;
-}
-
-.planned {
-    background-color: #008cff;
-}
-
-.processing {
-    background-color: #ffe600;
-}
-
-.finished {
-    background-color: #55ff00;
-}
-
-.dropped {
-    background-color: #ff0000;
-}

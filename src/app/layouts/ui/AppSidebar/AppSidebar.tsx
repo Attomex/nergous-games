@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { showSuccessNotification } from "shared/lib";
 import { BookIcon, SquaresIcon, LogoutIcon, ArrowRepeat, XMarkLgIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
+import { Preloader } from "widgets/preloader";
 
 interface AppSidebarProps {
     isMobile: boolean;
@@ -45,7 +46,12 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                 <div className={styles["app-sidebar__content"]}>
                     <section className={styles["app-sidebar__header"]}>
                         <div className={styles["sidebar-item"]}>
-                            <img src={`${IMG_SRC}${user?.photo}`} alt={user?.email} className={styles["sidebar-item__img"]} />
+                            {user?.photo ? (
+                                < img src={`${IMG_SRC}${user?.photo}`} alt={user?.email} className={styles["sidebar-item__img"]} />
+                            ) :
+                            (
+                                <Preloader width="56px" height="56px" borderRadius="8px" />
+                            )}
                             <div className={styles["sidebar-user-info"]}>
                                 <span className={styles["sidebar-text"]} style={{ color: "var(--gray-medium-color)", cursor: "default" }}>
                                     {user?.email.split("@")[0] || "Username"}

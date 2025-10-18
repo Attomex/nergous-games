@@ -10,7 +10,7 @@ const axiosPublic = axios.create({
 const logout = () => {
     Cookies.remove("auth_token");
     Cookies.remove("refresh_token");
-    window.location.href = "/login";
+    window.location.href = "/";
 };
 
 const api = axios.create({

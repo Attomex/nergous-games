@@ -1,19 +1,100 @@
 import { GameInfo } from "shared/types";
 import { DividerStyled } from "shared/ui";
 import styles from "./GameDetailModal.module.css";
-import { Modal, ConfigProvider, Rate, Divider, Image } from "antd";
+import { Modal, ConfigProvider, Divider, Image } from "antd";
 import { LinkIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
-import { IMG_SRC } from "shared/const";
+import { gameStatuse, IMG_SRC } from "shared/const";
+import { CustomDropdown } from "widgets/dropdown";
+import { showErrorNotification, showSuccessNotification } from "shared/lib";
+import api from "shared/api";
+import { CustomRate } from "widgets/rate";
 
 interface GameDetailModalProps {
     gameInfo: GameInfo;
     isModalOpen: boolean;
     closeModal: () => void;
+    updateUsersGames: () => void;
 }
 
-export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isModalOpen, closeModal }) => {
-    const { t } = useTranslation("translation", { keyPrefix: "gameCard.gameDetails" });
+export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isModalOpen, closeModal, updateUsersGames }) => {
+    const { t } = useTranslation("translation", { keyPrefix: "gameCard" });
+
+    const textStatus = `status.${gameInfo.status ? gameInfo.status : "no-select"}`;
+    const status = t(textStatus as any);
+
+    const changePriority = async (value: number) => {
+        await updateGame("priority", value * 2);
+    };
+
+    const onChangeStatus = ({ id }: { id: number }) => {
+        if (id === 1) {
+            deleteFromUserGame();
+            closeModal();
+            return;
+        }
+        const keysStatuses = Object.keys(gameStatuse);
+        const keyStatus = keysStatuses[id - 2];
+        updateGame("status", keyStatus);
+        closeModal();
+    };
+
+
+    const statuses = [
+        {
+            id: 1,
+            label: t("status.no-select"),
+            extra: <span className={`${styles["status-badge"]} ${styles["no-select"]}`}></span>,
+        },
+        {
+            id: 2,
+            label: t("status.planned"),
+            extra: <span className={`${styles["status-badge"]} ${styles.planned}`}></span>,
+        },
+        {
+            id: 3,
+            label: t("status.playing"),
+            extra: <span className={`${styles["status-badge"]} ${styles.processing}`}></span>,
+        },
+        {
+            id: 4,
+            label: t("status.finished"),
+            extra: <span className={`${styles["status-badge"]} ${styles.finished}`}></span>,
+        },
+        {
+            id: 5,
+            label: t("status.dropped"),
+            extra: <span className={`${styles["status-badge"]} ${styles.dropped}`}></span>,
+        },
+    ];
+
+    const updateGame = async (key: string, value: string | number) => {
+        try {
+            await api
+                .put(`/games/${gameInfo.id}/${key}`, {
+                    ...gameInfo,
+                    [key]: value,
+                })
+                .then(() => {
+                    showSuccessNotification(`Было обновлено! Обновлено ${key} на ${value}`);
+                });
+        } catch (err) {
+            showErrorNotification(err as string);
+        }
+
+        updateUsersGames();
+    };
+
+    const deleteFromUserGame = async () => {
+        try {
+            await api.delete(`/games/${gameInfo.id}/delete-user-game`).then(() => {
+                showSuccessNotification("Игра успешно удалена!");
+                updateUsersGames();
+            })
+        } catch (err) {
+            showErrorNotification(`Произошла ошибка при удалении игры ${err}`);
+        }
+    }
 
     return (
         <Modal open={isModalOpen} footer={null} closable onCancel={closeModal} centered>
@@ -33,7 +114,12 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
                                     },
                                 },
                             }}>
-                            <Rate allowHalf value={gameInfo.priority / 2} disabled />
+                            <CustomRate
+                                className={styles.rating__rate}
+                                allowHalf={true}
+                                defaultValue={gameInfo.priority / 2}
+                                onChange={changePriority}
+                            />
                         </ConfigProvider>
                         <span className={styles.year}>2025</span>
                     </div>
@@ -46,16 +132,17 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
 
             <p className={styles.description}>{gameInfo.preambula}</p>
             <a className={styles.showMore} href={gameInfo.url} target="_blank" rel="noopener noreferrer">
-                {t("more")}
+                {t("gameDetails.more")}
                 <LinkIcon />
             </a>
 
             <p className={styles.devPub}>
-                <strong>{t("developer")}:</strong> {gameInfo.developer}
+                <strong>{t("gameDetails.developer")}:</strong> {gameInfo.developer}
             </p>
             <p className={styles.devPub}>
-                <strong>{t("publisher")}:</strong> {gameInfo.publisher}
+                <strong>{t("gameDetails.publisher")}:</strong> {gameInfo.publisher}
             </p>
+            <CustomDropdown buttonClassName={styles["status-change"]} dropdownClassName={styles["status-change__dropdown"]} items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
         </Modal>
     );
 };

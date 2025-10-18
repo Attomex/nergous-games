@@ -137,8 +137,7 @@
             "no-year": "Not specified"
         },
         "priority": {
-            "text": "Priority",
-            "update": "Update"
+            "text": "Priority"
         },
         "gameDetails": {
             "more": "Learn more",

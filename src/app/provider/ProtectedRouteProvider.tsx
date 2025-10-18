@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 // import { useLocation, useNavigate } from "react-router-dom";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 // import { useAuth } from "features/auth";
 
 import { Loader } from "shared/ui";
@@ -15,21 +15,25 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     // const { logout } = useAuth();
     const [isLoading, setLoading] = useState<boolean>(true);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         setLoading(true);
 
-        // const auth_token = Cookies.get("auth_token");
+        const auth_token = Cookies.get("auth_token");
 
-        // if (auth_token && location.pathname === "/login") {
-        //     navigate("/games");
-        // }
+        let timeout: number;
 
-        // if (!auth_token && location.pathname !== "/login") {
-        //     logout();
-        // }
+        if (!auth_token && window.location.pathname !== "/") {
+            window.location.href = "/";
+            timeout = setTimeout(() => {
+                setLoading(false);
+            }, 200)
+        } else {
+            setLoading(false);
+        }
 
-        setLoading(false);
-
+        return () => {
+            clearTimeout(timeout);
+        };
     }, []);
 
     return (
@@ -47,6 +51,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
                     left: 0,
                     width: "100%",
                     zIndex: 999,
+                    pointerEvents: "none",
                     visibility: isLoading ? "visible" : "hidden",
                 }}
             >

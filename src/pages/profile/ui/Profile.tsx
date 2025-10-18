@@ -70,7 +70,7 @@ export const Profile = () => {
                 <Typography.Title level={2} className={styles.user}>
                     {t("user")}
                 </Typography.Title>
-                <Image width={150} height={150} src={`${IMG_SRC}${userInfo.photo}`} preview={false} className={styles.profileImage} />
+                <Image src={`${IMG_SRC}${userInfo.photo}`} preview={false} className={styles.profileImage} />
                 <div className={styles.profileInfo}>
                     <Typography.Text className={styles.userInfoText}>Email: {userInfo.email}</Typography.Text>
                     <div className={styles.steamContainer}>

@@ -1,17 +1,28 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import styles from "./LoginReg.module.css";
 import { SignInForm } from "./SignIn";
 import { SignUpForm } from "./SignUp";
 import { useTranslation } from "react-i18next";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 export const LoginRegPage = () => {
     const [type, setType] = useState("signIn");
     const { t } = useTranslation("translation");
+
+    const navigate = useNavigate();
+    
     const handleOnClick = (text: string) => {
         if (text !== type) {
             setType(text);
         }
     };
+
+    useLayoutEffect(() => {
+        if(Cookies.get("auth_token")) {
+            navigate("/games");
+        }
+    }, [])
 
     const containerClass = [styles.loginReg__container, type === "signUp" ? styles.loginReg__rightPanelActive : ""].join(" ");
 

@@ -25,7 +25,7 @@ const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
 
 export const AllGames: React.FC = () => {
     const [page, setPage] = useState(1);
-    const { search, debouncedSearch, setSearch } = useDebouncedSearch("", setPage, 500);
+    const { search, debouncedSearch, setSearch } = useDebouncedSearch(setPage, 500);
     const { t } = useTranslation("translation");
 
     type SortOption = keyof typeof sortOptions;

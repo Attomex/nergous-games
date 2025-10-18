@@ -150,26 +150,18 @@
     .dropdown-toggle {
         padding: 5px 10px;
     }
+    .dropdown-item {
+        padding: 5px 10px;
+    }
     .shaped {
         width: 28px;
         height: 28px;
-    }
-    .dropdown-item {
-        padding: 5px 10px;
-        font-size: 13px;
-    }
+    }  
     .icon {
         width: 14px;
         height: 14px;
     }
 }
 
-@media screen and (max-width: 660px) {
-    .dropdown-toggle {
-        padding: 4px 8px;
-    }
-    .dropdown-item {
-        padding: 4px 8px;
-        font-size: 12px;
-    }
-}
+/* @media screen and (max-width: 660px) {
+} */
