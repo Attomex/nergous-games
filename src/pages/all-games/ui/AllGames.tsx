@@ -154,13 +154,13 @@ export const AllGames: React.FC = () => {
 
             {/* Карточки */}
             <Flex wrap="wrap" justify="space-between" gap={10} style={{ width: "100%" }}>
-                 {userGames && userGames.length > 0 ? (
+                {/*{userGames && userGames.length > 0 ? (
                     userGames.map((g) => (
                         <GameCard key={g.id} gameInfo={g} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["allGames"] })} openDetails={} />
                     ))
                 ) : (
                     <div>Пусто</div>
-                )} 
+                )} */}
             </Flex>
             {/* Пагинация и статус загрузки */}
             {isPending && (
