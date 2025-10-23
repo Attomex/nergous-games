@@ -53,30 +53,6 @@ body.system-dark {
 
 body.system-light,
 body.light {
-    /* 
-
-    === То, как хочу сделать ===
-    --accent-color: var(--light-blue-color);
-
-    --light-color: rgb(187, 187, 187);
-    --medium-color: rgb(95, 95, 95);
-    --dark-color: rgb(71, 71, 71);
-
-    --bg-color: var(--white-color);
-    --text-color: var(--black-color);
-    --border-color: var(--light-color);
-
-    --hover-bg-color: var(--light-color);
-    --hover-text-color: var(--black-color);
-    --hover-border-color: var(--medium-color);
-
-    --active-bg-color: var();
-    --active-text-color: var();
-    --active-border-color: var(--accent-color);
-
-    --shadow: color-mix(in srgb, var(--medium-color) 50%, transparent);
-    */
-
 
     --white-color: rgb(255, 255, 255);
     --black-color: rgb(0, 0, 0);
@@ -291,7 +267,7 @@ body.dark {
     --pure-black-color: #000;
     --black-color: #121212;
     --black-light-color: #1e1e1e;
-    --red-color: #ff0000;
+    --red-color: rgb(255, 0, 0);
     --blue-color: #0000ff;
     --light-blue-color: #1890ff;
 

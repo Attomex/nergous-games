@@ -1,12 +1,12 @@
 import { SyncOutlined } from "@ant-design/icons";
-import { Button, ConfigProvider, Form, Image, Input, Modal, Select } from "antd";
-import FormItem from "antd/es/form/FormItem";
 import { TUser } from "pages/admin-users/model";
 import { ReactNode, useState } from "react";
 import api from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
-import { ButtonStyled, SelectStyled } from "shared/ui";
 import { IMG_SRC } from "shared/const";
+import { Modal } from "widgets/modal";
+import styles from "./UpdateUserModal.module.css";
+import { CustomDropdown } from "widgets/dropdown";
 
 interface UpdateUserModalProps {
     user: TUser;
@@ -17,15 +17,18 @@ interface UpdateUserModalProps {
 }
 
 export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag, isModalOpen, closeModal, updateUsers }) => {
-    const [form] = Form.useForm();
+    const [email, setEmail] = useState(user.email);
+    const [steamUrl, setSteamUrl] = useState(user.steam_url);
+    const [role, setRole] = useState(user.is_admin ? "admin" : "user");
+
     const [changeRole, setChangeRole] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const onFinish = async (values: any) => {
+    const onFinish = async () => {
         try {
             setIsLoading(true);
 
-            const mergedData = { ...user, ...values };
+            const mergedData = { ...user, email, steam_url: steamUrl, is_admin: role === "admin" };
 
             await api.put(`/users/${user.id}`, mergedData);
             showSuccessNotification(`Информация о пользователе ${user.email} была успешно обновлена!`);
@@ -33,79 +36,71 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag,
             showErrorNotification(`Произошла ошибка при обновлении информации о пользователе ${err}`);
         } finally {
             setIsLoading(false);
-            handleCloseModal();
+            closeModal();
             updateUsers();
         }
     };
 
-    const handleCloseModal = () => {
-        closeModal();
-        setChangeRole(false);
-        form.resetFields();
+    const onChangeRole = ({ id }: { id: number }) => {
+        if (id === 1) {
+            setRole("user");
+        }
+        if (id === 2) {
+            setRole("admin");
+        }
     };
 
     return (
         <Modal
             title="Изменение информации"
             open={isModalOpen}
-            footer={[
-                <Button key="submit" type="primary" icon={<SyncOutlined />} loading={isLoading} onClick={() => form.submit()}>
-                    Обновить
-                </Button>,
-            ]}
-            onCancel={handleCloseModal}
-            centered
-        >
-            <Form form={form} onFinish={onFinish} labelCol={{ span: 5 }}>
-                <FormItem label="Аватар">
-                    <Image
-                        src={IMG_SRC + user.path_to_photo}
-                        preview={false}
-                        width={64}
-                        height={64}
-                        style={{ border: "1px solid var(--accent-color)", borderRadius: "50%", objectFit: "cover" }}
+            onClose={closeModal}
+            footer={
+                <div className={styles.footer}>
+                    <button className={styles.buttonCancel} onClick={closeModal} disabled={isLoading}>
+                        Отменить
+                    </button>
+                    <button className={styles.buttonSubmit} onClick={onFinish} disabled={isLoading}>
+                        {isLoading ? <SyncOutlined spin /> : "Сохранить"}
+                    </button>
+                </div>
+            }>
+            <div className={styles.form}>
+                <div className={styles.formRow}>
+                    <label>Аватар</label>
+                    <img src={IMG_SRC + user.path_to_photo} alt="User avatar" width={64} height={64} className={styles.avatar} />
+                </div>
+
+                <div className={styles.formRow}>
+                    <label>Email</label>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={styles.input} placeholder="Email" />
+                </div>
+
+                <div className={styles.formRow}>
+                    <label>Steam</label>
+                    <input
+                        type="text"
+                        value={steamUrl}
+                        onChange={(e) => setSteamUrl(e.target.value)}
+                        className={styles.input}
+                        placeholder="Ссылка на Steam"
                     />
-                </FormItem>
+                </div>
 
-                <Form.Item name="email" initialValue={user?.email} label="Email">
-                    <Input type="email" placeholder="Email" />
-                </Form.Item>
-
-                <Form.Item name="steam_url" initialValue={user?.steam_url} label="Steam">
-                    <Input placeholder="Ссылка на Steam" />
-                </Form.Item>
-                {changeRole && (
-                    <Form.Item
-                        name="is_admin"
-                        label="Новая роль"
-                        initialValue={user?.is_admin}
-                        rules={[{ required: true, message: "Выберите роль" }]}
-                    >
-                        <SelectStyled>
-                            <Select placeholder="Выберите роль">
-                                <Select.Option value={true}>Администратор</Select.Option>
-                                <Select.Option value={false}>Пользователь</Select.Option>
-                            </Select>
-                        </SelectStyled>
-                    </Form.Item>
-                )}
-                <Form.Item label="Роль">
-                    {roleTag}
-                    <ButtonStyled>
-                        <ConfigProvider
-                            theme={{
-                                components: {
-                                    Button: {
-                                        colorBorder: "var(--main-third-color)",
-                                    },
-                                },
-                            }}
-                        >
-                            <Button onClick={() => setChangeRole(!changeRole)}>Изменить</Button>
-                        </ConfigProvider>
-                    </ButtonStyled>
-                </Form.Item>
-            </Form>
+                <div className={styles.formRow}>
+                    <label>Роль</label>
+                    <CustomDropdown
+                        items={[
+                            { id: 1, label: "Пользователь", extra: <></> },
+                            { id: 2, label: "Администратор", extra: <></> },
+                        ]}
+                        buttonClassName={styles.button}
+                        dropdownClassName={styles.dropdown}
+                        initialSelectedItem={role === "user" ? "Пользователь" : "Администратор"}
+                        onChange={(id) => onChangeRole(id)}
+                    />
+                </div>
+            </div>
         </Modal>
     );
 };
