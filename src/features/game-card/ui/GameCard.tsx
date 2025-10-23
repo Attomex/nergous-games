@@ -9,6 +9,7 @@ import { WikipediaIcon, SteamIcon, IGDBIcon, StarFillIcon } from "widgets/icons"
 import { IMG_SRC } from "shared/const";
 import { EyeIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
+import { getYearFromDate } from "shared/lib";
 
 interface GameCardProps {
     gameInfo: GameInfo;
@@ -129,7 +130,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails }) => 
             <div className={styles.details}>
                 <div className={styles.header__wrapper}>
                     <header className={styles.title}>{gameInfo.title}</header>
-                    <div className={styles.year}>{gameInfo.year || t("gameCard.year.no-year")}</div>
+                    <div className={styles.year}>{getYearFromDate(gameInfo.year) || t("gameCard.year.no-year")}</div>
                 </div>
 
                 <div className={styles.genres}>

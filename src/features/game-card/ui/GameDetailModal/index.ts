@@ -1,1 +1,0 @@
-export { GameDetailModal } from "./GameDetailModal"

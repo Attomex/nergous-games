@@ -26,7 +26,7 @@ import { AscIcon, CheronLeft, CheronRight, DescIcon, SortAZIcon, SortZAIcon } fr
 import { isDropdownItem } from "shared/types";
 import { EmptyItems } from "widgets/empty-items";
 import { useTranslation } from "react-i18next";
-import { GameDetailModal } from "features/game-card/ui/GameDetailModal";
+import { GameDetailModal } from "features/game-detail";
 
 const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;

@@ -1,21 +1,24 @@
 import React, { useState, useCallback, useEffect } from "react";
 import styles from "./AllGames.module.css";
 import api from "shared/api";
-import { Divider, Flex, Spin } from "antd";
 import { CreateGameModal } from "features/create-game";
 import { AddGamesModal } from "features/add-games";
 import { useAuth } from "features/auth";
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { Paginations } from "widgets/pagination";
-import { DividerStyled } from "shared/ui";
-import { LoadingOutlined } from "@ant-design/icons";
+import { Divider, Loader } from "shared/ui";
 import { AddGameButton } from "widgets/add-game-button";
 import { useDebouncedSearch } from "shared/hooks";
 import { SearchInput } from "widgets/search-input";
 import { Dropdown } from "widgets/dropdown";
-import { DropdownOption, DropdownProps } from "shared/types";
+import { DropdownOption, DropdownProps, GameInfo } from "shared/types";
+import { isDropdownItem } from "shared/types";
 import { AscIcon, DescIcon, SortAZIcon, SortZAIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
+import { EmptyItems } from "widgets/empty-items";
+import { GameCard } from "features/game-card";
+import { GameDetailModal } from "features/game-detail";
+import { Flex } from "shared/ui";
 
 const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
@@ -42,6 +45,22 @@ export const AllGames: React.FC = () => {
 
     const [modalCreateGame, setModalCreateGame] = useState(false);
     const [modalAddGames, setModalAddGames] = useState(false);
+
+    const [detailsModal, setDetailsModal] = useState(false);
+    const [detailsGameInfo, setDetailsGameInfo] = useState<GameInfo>({
+        id: 0,
+        title: "",
+        preambula: "",
+        image: "",
+        developer: "",
+        publisher: "",
+        year: "",
+        genre: "",
+        url: "",
+        status: "",
+        priority: 0,
+    });
+
 
     const { checkAdmin } = useAuth();
     const queryClient = useQueryClient();
@@ -96,12 +115,17 @@ export const AllGames: React.FC = () => {
         refetchOnWindowFocus: false,
     });
 
-    // const userGames: GameInfo[] = data?.data ?? [];
+    const userGames: GameInfo[] = data?.data ?? [];
     const totalItems: number = data?.total ?? 0;
 
     const closeModal = () => {
         setModalCreateGame(false);
         setModalAddGames(false);
+    };
+
+    const openDetailsModal = (gameInfo: GameInfo) => {
+        setDetailsGameInfo(gameInfo);
+        setDetailsModal(true);
     };
 
     const refreshGames = useCallback(() => {
@@ -129,43 +153,47 @@ export const AllGames: React.FC = () => {
 
     return (
         <>
-            <div style={{ marginBottom: 20, display: "flex", zIndex: 3 }}>
+            <Flex className={styles["top-panel"]}>
                 <AddGameButton
-                    menuItems={menuItems}
                     placeholder={t("addGame.label")}
+                    menuItems={menuItems}
                     openModalCreateGame={setModalCreateGame}
                     openModalAddGames={setModalAddGames}
                 />
-                <Flex gap={16} style={{ marginLeft: "auto", zIndex: 2 }}>
+                <Flex gap={16} style={{ zIndex: 2 }} className={styles["top-panel__right"]}>
                     <SearchInput value={search} onChange={setSearch} placeholder={t("searchButton.placeholder")} width={300} />
-
                     <Dropdown
                         options={sortItems}
+                        buttonIcon={sortItems.filter(isDropdownItem).find((item) => item.value === generalSort)?.icon}
                         placeholder={sortOptions[generalSort]}
                         onClick={sortHandleChange}
                         className={styles["sort-button"]}
                     />
                 </Flex>
-            </div>
+            </Flex>
 
-            <DividerStyled>
-                <Divider className={styles.divider} style={{ margin: "0" }} />
-            </DividerStyled>
+            <Divider className={styles.divider} style={{ margin: "0" }} />
 
             {/* Карточки */}
-            <Flex wrap="wrap" justify="space-between" gap={10} style={{ width: "100%" }}>
-                {/*{userGames && userGames.length > 0 ? (
+            <Flex wrap justify="between" gap={10} style={{ width: "100%" }}>
+                {userGames && userGames.length > 0 ? (
                     userGames.map((g) => (
-                        <GameCard key={g.id} gameInfo={g} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["allGames"] })} openDetails={} />
+                        <GameCard
+                            key={g.id}
+                            gameInfo={g}
+                            openDetails={openDetailsModal}
+                        />
                     ))
+                ) : debouncedSearch ? (
+                    <EmptyItems />
                 ) : (
-                    <div>Пусто</div>
-                )} */}
+                    <></>
+                )}
             </Flex>
             {/* Пагинация и статус загрузки */}
             {isPending && (
                 <div style={{ textAlign: "center", marginTop: 8 }}>
-                    <Spin indicator={<LoadingOutlined spin />} size="large" tip="Загрузка..." />
+                    <Loader size="large" tip="Загрузка..." />
                 </div>
             )}
             {isError && <div style={{ color: "red" }}>Ошибка при загрузке игр.</div>}
@@ -173,6 +201,7 @@ export const AllGames: React.FC = () => {
 
             <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
             <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
+            <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["allGames"] })} />
         </>
     );
 };

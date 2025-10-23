@@ -9,6 +9,7 @@ import { CustomDropdown } from "widgets/dropdown";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import api from "shared/api";
 import { CustomRate } from "widgets/rate";
+import { getYearFromDate } from "shared/lib";
 
 interface GameDetailModalProps {
     gameInfo: GameInfo;
@@ -115,13 +116,14 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
                                 },
                             }}>
                             <CustomRate
+                                key={gameInfo.id}
                                 className={styles.rating__rate}
                                 allowHalf={true}
                                 defaultValue={gameInfo.priority / 2}
                                 onChange={changePriority}
                             />
                         </ConfigProvider>
-                        <span className={styles.year}>2025</span>
+                        <span className={styles.year}>{getYearFromDate(gameInfo.year) || t("year.no-year")}</span>
                     </div>
                 </div>
             </div>
