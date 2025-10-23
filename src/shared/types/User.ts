@@ -10,5 +10,6 @@ export interface User {
     steam_url: string;
     photo: string;
     stats: UserStats;
-    isAdmin?: string;
 }
+
+export const emptyUser = { email: "", steam_url: "", photo: "", stats: { finished: 0, playing: 0, planned: 0, dropped: 0 } }

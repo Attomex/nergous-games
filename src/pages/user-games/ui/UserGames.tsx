@@ -219,6 +219,7 @@ export const UserGames: React.FC = () => {
                                 key={g.id}
                                 gameInfo={g}
                                 openDetails={openDetailsModal}
+                                updateUsersGames={refreshGames}
                             />
                         ))
                     ) : debouncedSearch ? (
@@ -239,7 +240,7 @@ export const UserGames: React.FC = () => {
                 {/* Модалки */}
                 <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
                 <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
-                <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["userGames"] })}/>
+                <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={refreshGames}/>
             </Flex>
         </>
     );

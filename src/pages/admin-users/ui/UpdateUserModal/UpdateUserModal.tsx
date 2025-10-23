@@ -1,5 +1,5 @@
 import { SyncOutlined } from "@ant-design/icons";
-import { TUser } from "pages/admin-users/model";
+import { IUser } from "pages/admin-users/model";
 import { ReactNode, useState } from "react";
 import api from "shared/api";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
@@ -9,19 +9,18 @@ import styles from "./UpdateUserModal.module.css";
 import { CustomDropdown } from "widgets/dropdown";
 
 interface UpdateUserModalProps {
-    user: TUser;
+    user: IUser;
     roleTag: ReactNode;
     isModalOpen: boolean;
     closeModal: () => void;
     updateUsers: () => void;
 }
 
-export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, roleTag, isModalOpen, closeModal, updateUsers }) => {
+export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, isModalOpen, closeModal, updateUsers }) => {
     const [email, setEmail] = useState(user.email);
     const [steamUrl, setSteamUrl] = useState(user.steam_url);
     const [role, setRole] = useState(user.is_admin ? "admin" : "user");
 
-    const [changeRole, setChangeRole] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const onFinish = async () => {

@@ -148,6 +148,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 4px;
 }
 
 /* .header {
@@ -158,6 +159,9 @@
 } */
 
 .title {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0;
     grid-area: title;
     font-weight: var(--card-font-weight);
     font-size: var(--card-font-size);
@@ -203,9 +207,23 @@
 }
 
 .year {
+    flex-shrink: 0;
     color: var(--card-third-text-color);
     font-size: var(--card-secondary-font-size);
-    margin-left: auto; /* Прижимаем год к правому краю */
+    margin-left: 0; /* Прижимаем год к правому краю */
+}
+
+.cardActions {
+    flex-shrink: 0;
+    order: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--card-secondary-text-color);
+    border-radius: 50%;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .description {

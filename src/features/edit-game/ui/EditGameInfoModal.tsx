@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { GameInfo } from "shared/types";
-import { Button, Form, Input, InputNumber, Modal, Image } from "antd";
+import { Button, Form, Input, InputNumber, Image } from "antd";
 import api from "shared/api";
-import { DeleteOutlined, SyncOutlined, UploadOutlined } from "@ant-design/icons";
+import { SyncOutlined, UploadOutlined } from "@ant-design/icons";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { IMG_SRC } from "shared/const";
 import { useTranslation } from "react-i18next";
+import { Modal } from "widgets/modal";
 
 interface EditGameInfoModalProps {
     gameInfo: GameInfo;
@@ -112,19 +113,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
         }
     };
 
-    const deleteGame = async () => {
-        try {
-            setIsLoading(true);
-            await api.delete(`/games/${gameInfo.id}`);
-            showSuccessNotification("Игра успешно удалена!");
-            updateUsersGames();
-        } catch (err) {
-            showErrorNotification(`Произошла ошибка при удалении игры ${err}`);
-        } finally {
-            setIsLoading(false);
-            closeModalForm();
-        }
-    };
+    
 
     const closeModalForm = () => {
         setNewImageFile(null);
@@ -136,14 +125,11 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
         <Modal
             open={isModalOpen}
             title={`${t("title")}: ${gameInfo.title}`}
-            onCancel={closeModalForm}
-            width={600}
+            onClose={closeModalForm}
+            size="large"
             footer={[
                 <Button key="back" onClick={closeModal}>
                     {t("form.cancel-btn")}
-                </Button>,
-                <Button key="delete" onClick={deleteGame} icon={<DeleteOutlined style={{ color: "red" }} />}>
-                    {t("form.delete-btn")}
                 </Button>,
                 <Button key="submit" type="primary" icon={<SyncOutlined />} loading={isLoading} onClick={() => form.submit()}>
                     {t("form.save-btn")}

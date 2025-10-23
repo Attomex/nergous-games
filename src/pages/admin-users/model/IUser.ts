@@ -1,4 +1,4 @@
-export interface TUser {
+export interface IUser {
     id: number;
     email: string;
     steam_url: string;

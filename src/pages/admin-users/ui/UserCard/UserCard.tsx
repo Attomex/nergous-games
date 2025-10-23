@@ -1,14 +1,17 @@
-import { TUser } from "pages/admin-users/model";
+import { IUser } from "pages/admin-users/model";
 import styles from "./UserCard.module.css";
-import { Button, Image, Tag } from "antd";
-import { ButtonStyled } from "shared/ui";
 import { ReactNode, useState } from "react";
 import { UpdateUserModal } from "../UpdateUserModal";
 import { IMG_SRC } from "shared/const";
 import { ProfileIcon, ToolsIcon } from "widgets/icons";
+import { DeleteUserModal } from "../DeleteUserModal";
+import api from "shared/api";
+import { showErrorNotification, showSuccessNotification } from "shared/lib";
+import { AxiosError } from "axios";
+import { capitalizeFirst } from "shared/lib";
 
 interface UserCardProps {
-    user: TUser;
+    user: IUser;
     refetch: () => void;
 }
 
@@ -24,12 +27,6 @@ const RoleTag = ({ role }: { role: boolean }) => {
     const userIsAdmin = whoIs(role);
     const tagColor = userIsAdmin.role === "Администратор" ? "accentColor" : "tagGray";
     return (
-        // <Tag
-        //     color={userIsAdmin.role === "Администратор" ? "blue" : "default"}
-        //     icon={userIsAdmin.icon}
-        //     style={{ padding: "4px 12px", borderRadius: "12px", fontSize: "0.9rem" }}>
-        //     {userIsAdmin.role}
-        // </Tag>
         <div className={`${styles.tag} ${styles[tagColor]}`}>
             <span className={styles["tagIcon"]}>{userIsAdmin.icon}</span>
             {userIsAdmin.role}
@@ -37,8 +34,23 @@ const RoleTag = ({ role }: { role: boolean }) => {
     );
 };
 
+
+
 export const UserCard: React.FC<UserCardProps> = ({ user, refetch }) => {
     const [updateModal, setUpdateModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
+
+    const handleDeleteUser = async (id: number) => {
+        try {
+            await api.delete(`/users/${id}`,);
+            showSuccessNotification("Пользователь успешно удален!");
+            refetch();
+        } catch (err: AxiosError | any) {
+            showErrorNotification(`Произошла ошибка при удалении пользователя: ${capitalizeFirst(err.response.data)}`);
+        } finally {
+            setDeleteModal(false);
+        }
+    }
 
     return (
         <div className={styles.card__tile}>
@@ -54,6 +66,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, refetch }) => {
                 <button className={styles.button} onClick={() => setUpdateModal(true)}>
                     Изменить
                 </button>
+                <button className={`${styles.button} ${styles.delete}`} onClick={() => setDeleteModal(true)}>Удалить</button>
             </div>
 
             <UpdateUserModal
@@ -62,6 +75,13 @@ export const UserCard: React.FC<UserCardProps> = ({ user, refetch }) => {
                 isModalOpen={updateModal}
                 closeModal={() => setUpdateModal(false)}
                 updateUsers={refetch}
+            />
+
+            <DeleteUserModal
+                user={user}
+                isModalOpen={deleteModal}
+                closeModal={() => setDeleteModal(false)}
+                onOk={handleDeleteUser}
             />
         </div>
     );

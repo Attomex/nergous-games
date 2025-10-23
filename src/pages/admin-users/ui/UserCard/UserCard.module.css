@@ -3,12 +3,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    margin: 1em auto;
     background: var(--card-bg-color, #fff);
     border: 1px solid var(--card-border-color);
     border-radius: 20px;
     padding: 20px;
     text-align: center;
-    width: 260px;
+    width: 200px;
     max-height: 360px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     transition: box-shadow 0.2s ease;
@@ -53,6 +54,8 @@
 
 .user__actions {
     margin-top: auto;
+    display: flex;
+    gap: 8px;
 }
 
 .user__button {
@@ -72,9 +75,19 @@
     color: var(--admin-text-color);
 }
 
-.button:hover {
+.button:not(.delete):hover {
     border-color: var(--admin-hover-border-color);
     background: var(--admin-hover-bg-color);
+}
+
+.button.delete:hover {
+    color: white;
+    background: red;
+}
+
+.delete {
+    color: red;
+    border-color: red;
 }
 
 /* Теги ролей */

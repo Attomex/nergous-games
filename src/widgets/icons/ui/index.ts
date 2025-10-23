@@ -24,3 +24,4 @@ export { MenuIcon } from "./MenuIcon";
 export { CheronLeft, CheronRight } from "./ChevronArrowIcons";
 export { IGDBIcon } from "./IGDBIcon";
 export { StarFillIcon } from "./StarFillIcon";
+export { ThreeDotIcon } from "./ThreeDotIcon";

@@ -27,6 +27,10 @@ export const AppHeader = () => {
     const isMobile = useMediaQuery("(max-width: 660px)");
     const navigate = useNavigate();
 
+    // useEffect(() => {
+        
+    // })
+
     const onClickLocal: DropdownProps["onClick"] = ({ value }) => {
         localStorage.setItem("local", value as string);
         switch (value) {
@@ -104,12 +108,8 @@ export const AppHeader = () => {
         },
     ];
 
-    if (isAdmin) {
-        menuItemsProfile.push({
-            id: 3,
-            label: t("appHeader.settings.admin-users"),
-            icon: <ToolsIcon />,
-        });
+    if(isAdmin) {
+        menuItemsProfile.push({ id: 3, label: t("appHeader.settings.admin-users"), icon: <ToolsIcon /> });
     }
 
     return (

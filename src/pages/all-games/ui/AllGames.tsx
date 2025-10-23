@@ -182,6 +182,7 @@ export const AllGames: React.FC = () => {
                             key={g.id}
                             gameInfo={g}
                             openDetails={openDetailsModal}
+                            updateUsersGames={refreshGames}
                         />
                     ))
                 ) : debouncedSearch ? (
@@ -201,7 +202,7 @@ export const AllGames: React.FC = () => {
 
             <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
             <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
-            <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={() => queryClient.invalidateQueries({ queryKey: ["allGames"] })} />
+            <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={refreshGames} />
         </>
     );
 };

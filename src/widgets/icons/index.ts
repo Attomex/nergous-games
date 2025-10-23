@@ -28,4 +28,5 @@ export {
     CheronRight,
     IGDBIcon,
     StarFillIcon,
+    ThreeDotIcon,
 } from "./ui";

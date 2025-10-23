@@ -1,26 +1,27 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import Cookies from "js-cookie";
-// import { jwtDecode } from "jwt-decode";
 import type { User } from "shared/types";
+import { emptyUser } from "shared/types";
 import { URL } from "shared/const";
 import { showErrorNotification } from "shared/lib";
 import api from "shared/api";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
     user: User | null;
     login: (auth_token: string) => void;
     logout: () => void;
     getUserInfo: () => Promise<User>;
-    isAdmin: boolean | string;
+    isAdmin: boolean;
     checkAdmin: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
-    login: () => {},
-    logout: () => {},
-    getUserInfo: () => Promise.resolve({ email: "", steam_url: "", photo: "", stats: { finished: 0, playing: 0, planned: 0, dropped: 0 }, isAdmin: "false" }),
+    login: () => { },
+    logout: () => { },
+    getUserInfo: () => Promise.resolve(emptyUser),
     isAdmin: false,
     checkAdmin: () => Promise.resolve(false),
 });
@@ -31,10 +32,12 @@ interface AuthContextProps {
 
 export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [isAdmin, setIsAdmin] = useState<boolean | string>("");
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    const getUserInfo = async (): Promise<User> => {
+    const getUserInfo = useCallback(async (): Promise<User> => {
+
+
         try {
             const responseInfo = await api.get(`${URL}/games/user/info`);
 
@@ -45,22 +48,32 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
 
             const userResponse: User = {
                 ...userInfo,
-                isAdmin: userInfo?.isAdmin ? "true" : "false",
                 stats: stats,
             };
 
-            setIsAdmin(userInfo?.isAdmin ? "true" : "false");
+            if (JSON.stringify(user) !== JSON.stringify(userResponse)) {
+                setUser(userResponse);
+            }
 
-            setUser(userResponse);
+            setIsAdmin(await checkAdmin());
+
             return userResponse;
         } catch (error) {
             showErrorNotification(error as string);
-            return { email: "", steam_url: "", photo: "", stats: { finished: 0, playing: 0, planned: 0, dropped: 0 }, isAdmin: "false" };
+            return emptyUser;
         }
-    };
+
+    }, [user]);
 
     const checkAdmin = async (): Promise<boolean> => {
-        return isAdmin === "true" ? true : false;
+        const token = Cookies.get("auth_token");
+        let isAdmin;
+        if (token) {
+            const user = jwtDecode(token);
+            isAdmin = await JSON.parse(JSON.stringify(user)).is_admin;
+        }
+
+        return isAdmin;
     };
 
     const login = (auth_token: string): void => {

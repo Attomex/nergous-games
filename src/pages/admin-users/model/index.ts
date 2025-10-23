@@ -1,1 +1,1 @@
-export type { TUser } from "./TUser";
+export type { IUser } from "./IUser";

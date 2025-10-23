@@ -1,0 +1,41 @@
+.text {
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.userEmail {
+    padding-inline: 2px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.footer {
+    display: flex;
+    gap: 10px;
+}
+
+.button {
+    padding: 8px 16px;
+    border: 1px solid var(--admin-border-color, #ccc);
+    border-radius: 8px;
+    background: var(--main-button-bg-color, #f5f5f5);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    color: var(--admin-text-color);
+}
+
+.button:not(.delete):hover {
+    border-color: var(--admin-hover-border-color);
+    background: var(--admin-hover-bg-color);
+}
+
+.button.delete:hover {
+    color: white;
+    background: red;
+}
+
+.delete {
+    color: red;
+    border-color: red;
+}

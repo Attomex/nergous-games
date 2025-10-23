@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "features/auth";
-import { User } from "shared/types";
 import { Image, Typography, Tooltip } from "antd";
 import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
@@ -13,26 +12,11 @@ import { useTranslation } from "react-i18next";
 
 export const Profile = () => {
     const { user, getUserInfo } = useAuth();
-    const [userInfo, setUserInfo] = useState<User>({
-        email: "...",
-        steam_url: "...",
-        photo: "",
-        stats: { finished: 0, playing: 0, planned: 0, dropped: 0 },
-    });
-
     const { t } = useTranslation("translation", { keyPrefix: "profilePage" });
 
     useEffect(() => {
-        const getInfo = async () => {
-            if (user) {
-                setUserInfo(user);
-            } else {
-                const fetchedInfo = await getUserInfo();
-                setUserInfo(fetchedInfo);
-            }
-        };
-        getInfo();
-    }, [user, getUserInfo]);
+        getUserInfo();
+    }, [getUserInfo]);
 
     ChartJS.register(ArcElement, ChartTooltip, Legend);
 
@@ -40,7 +24,7 @@ export const Profile = () => {
         labels: [t("chart.label.finished"), t("chart.label.planned"), t("chart.label.playing"), t("chart.label.dropped")],
         datasets: [
             {
-                data: [userInfo.stats.finished, userInfo.stats.planned, userInfo.stats.playing, userInfo.stats.dropped],
+                data: [user?.stats.finished, user?.stats.planned, user?.stats.playing, user?.stats.dropped],
                 backgroundColor: [statsColors.finished, statsColors.planned, statsColors.playing, statsColors.dropped],
                 borderWidth: 0,
             },
@@ -58,10 +42,10 @@ export const Profile = () => {
     };
 
     const statsItems = [
-        { label: t("chart.label.finished"), value: userInfo.stats.finished, color: statsColors.finished },
-        { label: t("chart.label.planned"), value: userInfo.stats.planned, color: statsColors.planned },
-        { label: t("chart.label.playing"), value: userInfo.stats.playing, color: statsColors.playing },
-        { label: t("chart.label.dropped"), value: userInfo.stats.dropped, color: statsColors.dropped },
+        { label: t("chart.label.finished"), value: user?.stats.finished, color: statsColors.finished },
+        { label: t("chart.label.planned"), value: user?.stats.planned, color: statsColors.planned },
+        { label: t("chart.label.playing"), value: user?.stats.playing, color: statsColors.playing },
+        { label: t("chart.label.dropped"), value: user?.stats.dropped, color: statsColors.dropped },
     ];
 
     return (
@@ -70,24 +54,24 @@ export const Profile = () => {
                 <Typography.Title level={2} className={styles.user}>
                     {t("user")}
                 </Typography.Title>
-                <Image src={`${IMG_SRC}${userInfo.photo}`} preview={false} className={styles.profileImage} />
+                <Image src={`${IMG_SRC}${user?.photo}`} preview={false} className={styles.profileImage} />
                 <div className={styles.profileInfo}>
-                    <Typography.Text className={styles.userInfoText}>Email: {userInfo.email}</Typography.Text>
+                    <Typography.Text className={styles.userInfoText}>Email: {user?.email}</Typography.Text>
                     <div className={styles.steamContainer}>
                         <a
                             className={`${styles.userInfoText} ${styles.steamLink}`}
-                            href={userInfo.steam_url}
+                            href={user?.steam_url}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Steam: {userInfo.steam_url}
+                            Steam: {user?.steam_url}
                         </a>
                         <Tooltip title={t("tooltip")}>
                             <CopyOutlined
                                 className={styles.copyIcon}
                                 onClick={() => {
                                     try {
-                                        navigator.clipboard.writeText(userInfo.steam_url);
+                                        navigator.clipboard.writeText(user?.steam_url as string);
                                         showSuccessNotification("Ссылка скопирована");
                                     } catch {
                                         showErrorNotification("Не удалось скопировать ссылку");

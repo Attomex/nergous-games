@@ -24,10 +24,8 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user) {
             getUserInfo();
-        }
-    }, [user, getUserInfo]);
+    }, [getUserInfo]);
 
     const sidebarItems = [
         { id: 1, icon: <SquaresIcon />, label: t("sidebar.buttons.allGames"), href: "/all-games" },
