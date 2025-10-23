@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import "./StatusButtonGroup.css";
+import React, { useRef, useState } from "react";
+import styles from "./StatusButtonGroup.module.css";
 import { useTranslation } from "react-i18next";
 
 interface StatusButtonsGroupProps {
@@ -26,16 +26,20 @@ export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, 
     const startScrollLeftRef = useRef(0);
     const lastDragTimeRef = useRef(0);
 
+    const [isDragging, setIsDragging] = useState(false);
+
     const onPointerDown = (e: React.PointerEvent) => {
         const el = containerRef.current;
         if (!el) return;
 
         // capture pointer for consistent pointer events (works for mouse/touch/pen)
-        try { (e.target as Element).setPointerCapture(e.pointerId); } catch {}
+        try {
+            (e.target as Element).setPointerCapture(e.pointerId);
+        } catch {}
         isPointerDownRef.current = true;
         startXRef.current = e.clientX;
         startScrollLeftRef.current = el.scrollLeft;
-        el.classList.add("dragging");
+        setIsDragging(true);
     };
 
     const onPointerMove = (e: React.PointerEvent) => {
@@ -54,19 +58,19 @@ export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, 
     };
 
     const onPointerUp = (e: React.PointerEvent) => {
-        const el = containerRef.current;
-        if (!el) return;
-
-        try { (e.target as Element).releasePointerCapture(e.pointerId); } catch {}
+        try {
+            (e.target as Element).releasePointerCapture(e.pointerId);
+        } catch {}
         isPointerDownRef.current = false;
         // keep lastDragTimeRef so we can suppress click that follows a drag
-        el.classList.remove("dragging");
+        setIsDragging(false);
     };
 
     // suppress click if it immediately follows a drag (so dragging doesn't trigger button click)
     const onClickCapture = (e: React.MouseEvent) => {
         const now = Date.now();
-        if (now - lastDragTimeRef.current < 200) { // 200ms window after dragging
+        if (now - lastDragTimeRef.current < 200) {
+            // 200ms window after dragging
             e.stopPropagation();
             e.preventDefault();
         }
@@ -75,22 +79,20 @@ export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, 
     return (
         <div
             ref={containerRef}
-            className="status-buttons-group"
+            className={`${styles["status-buttons-group"]} ${isDragging ? styles["dragging"] : ""}`}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
             onPointerCancel={onPointerUp}
-            onClickCapture={onClickCapture}
-        >
+            onClickCapture={onClickCapture}>
             {buttons.map((button) => (
                 <button
                     key={button.status}
-                    className={`status-button ${status === button.status ? "active" : ""}`}
+                    className={`${styles["status-button"]} ${status === button.status ? styles["active"] : ""}`}
                     onClick={() => {
                         setStatus(button.status);
                         setPage(1);
-                    }}
-                >
+                    }}>
                     {button.title}
                 </button>
             ))}

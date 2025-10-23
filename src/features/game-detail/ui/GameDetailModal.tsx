@@ -40,7 +40,6 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
         closeModal();
     };
 
-
     const statuses = [
         {
             id: 1,
@@ -91,52 +90,61 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
             await api.delete(`/games/${gameInfo.id}/delete-user-game`).then(() => {
                 showSuccessNotification("Игра успешно удалена!");
                 updateUsersGames();
-            })
+            });
         } catch (err) {
             showErrorNotification(`Произошла ошибка при удалении игры ${err}`);
         }
-    }
+    };
 
     return (
-        <Modal open={isModalOpen} footer={null} closable onCancel={closeModal} centered>
-            <div className={styles.content}>
+        <Modal width={700} open={isModalOpen} footer={null} closable onCancel={closeModal} centered>
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
                 <div className={styles.imageWrapper}>
                     <Image src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
                 </div>
-                <div className={styles.info}>
-                    <h2 className={styles.title}>{gameInfo.title}</h2>
-                    <p className={styles.genre}>{gameInfo.genre.replace(/,\s*/g, " / ")}</p>
-                    <div className={styles.meta}>
-                        <CustomRate
-                            key={gameInfo.id}
-                            className={styles.rating__rate}
-                            allowHalf={true}
-                            defaultValue={gameInfo.priority / 2}
-                            onChange={changePriority}
-                        />
-                        <span className={styles.year}>{getYearFromDate(gameInfo.year) || t("year.no-year")}</span>
+                <div>
+                    <div className={styles.content}>
+                        <div className={styles.info}>
+                            <h2 className={styles.title}>{gameInfo.title}</h2>
+                            <p className={styles.genre}>{gameInfo.genre.replace(/,\s*/g, " / ")}</p>
+                            <div className={styles.meta}>
+                                <CustomRate
+                                    key={gameInfo.id}
+                                    className={styles.rating__rate}
+                                    allowHalf={true}
+                                    defaultValue={gameInfo.priority / 2}
+                                    onChange={changePriority}
+                                />
+                                <span className={styles.year}>{getYearFromDate(gameInfo.year) || t("year.no-year")}</span>
+                            </div>
+                            <CustomDropdown
+                                buttonClassName={styles["status-change"]}
+                                dropdownClassName={styles["status-change__dropdown"]}
+                                items={statuses}
+                                initialSelectedItem={status}
+                                onChange={(id) => onChangeStatus(id)}
+                            />
+                        </div>
                     </div>
-                    <CustomDropdown buttonClassName={styles["status-change"]} dropdownClassName={styles["status-change__dropdown"]} items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
+
+                    <DividerStyled>
+                        <Divider style={{ marginTop: "5px", marginBottom: "5px" }} />
+                    </DividerStyled>
+
+                    <p className={styles.description}>{gameInfo.preambula}</p>
+                    <a className={styles.showMore} href={gameInfo.url} target="_blank" rel="noopener noreferrer">
+                        {t("gameDetails.more")}
+                        <LinkIcon />
+                    </a>
+
+                    <p className={styles.devPub}>
+                        <strong>{t("gameDetails.developer")}:</strong> {gameInfo.developer}
+                    </p>
+                    <p className={styles.devPub}>
+                        <strong>{t("gameDetails.publisher")}:</strong> {gameInfo.publisher}
+                    </p>
                 </div>
-
             </div>
-
-            <DividerStyled>
-                <Divider style={{ marginTop: "5px", marginBottom: "5px" }}/>
-            </DividerStyled>
-
-            <p className={styles.description}>{gameInfo.preambula}</p>
-            <a className={styles.showMore} href={gameInfo.url} target="_blank" rel="noopener noreferrer">
-                {t("gameDetails.more")}
-                <LinkIcon />
-            </a>
-
-            <p className={styles.devPub}>
-                <strong>{t("gameDetails.developer")}:</strong> {gameInfo.developer}
-            </p>
-            <p className={styles.devPub}>
-                <strong>{t("gameDetails.publisher")}:</strong> {gameInfo.publisher}
-            </p>
         </Modal>
     );
 };

@@ -5,12 +5,12 @@
 }
 
 .imageWrapper {
-    min-width: 115px;
-    max-width: 115px;
-    min-height: 140px;
-    max-height: 140px;
-    border-radius: 8px;
+    min-width: 100px;
+    max-width: 400px;
+    min-height: 400px;
+    max-height: 400px;
     overflow: hidden;
+    margin-right: 20px;
 }
 
 .imageWrapper img {

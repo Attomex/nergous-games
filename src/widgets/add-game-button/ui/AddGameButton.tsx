@@ -1,5 +1,5 @@
 import React from "react";
-import "./AddGameButton.css";
+import styles from "./AddGameButton.module.css";
 import { Dropdown } from "widgets/dropdown";
 import { DropdownProps } from "shared/types";
 
@@ -17,8 +17,8 @@ export const AddGameButton: React.FC<AddGameButtonProps> = ({ menuItems, placeho
     };
 
     return (
-        <div className="add-game-dropdown">
-            <Dropdown options={menuItems} placeholder={placeholder} onClick={handleItemClick} className="add-game-button" />
+        <div className={`${styles["add-game-dropdown"]}`}>
+            <Dropdown options={menuItems} placeholder={placeholder} onClick={handleItemClick} className={`${styles["add-game-button"]}`} />
         </div>
     );
 };

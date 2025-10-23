@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Paginations.css";
+import styles from "./Paginations.module.css";
 import { useTranslation } from "react-i18next";
 
 interface PaginationProps {
@@ -27,7 +27,6 @@ const NextIcon = () => (
     </svg>
 );
 
-
 export const Paginations: React.FC<PaginationProps> = ({ totalItems, currentPage, pageSize, onChange }) => {
     const totalPages = Math.ceil(totalItems / pageSize);
     const [jumpPage, setJumpPage] = useState<string>("");
@@ -47,26 +46,32 @@ export const Paginations: React.FC<PaginationProps> = ({ totalItems, currentPage
     }
 
     return (
-        <div className="pagination-wrapper">
-            <button className="pagination-btn arrow" disabled={currentPage === 1} onClick={() => onChange(currentPage - 1)}>
+        <div className={`${styles["pagination-wrapper"]}`}>
+            <button className={`${styles["pagination-btn arrow"]}`} disabled={currentPage === 1} onClick={() => onChange(currentPage - 1)}>
                 <PrevIcon />
             </button>
 
             {pages.map((page) => (
-                <button key={page} className={`pagination-btn ${page === currentPage ? "active" : ""}`} onClick={() => onChange(page)}>
+                <button
+                    key={page}
+                    className={`${styles["pagination-btn"]} ${page === currentPage ? styles["active"] : ""}`}
+                    onClick={() => onChange(page)}>
                     {page}
                 </button>
             ))}
 
-            <button className="pagination-btn arrow" disabled={currentPage === totalPages} onClick={() => onChange(currentPage + 1)}>
+            <button
+                className={`${styles["pagination-btn"]} ${styles["arrow"]}`}
+                disabled={currentPage === totalPages}
+                onClick={() => onChange(currentPage + 1)}>
                 <NextIcon />
             </button>
 
-            <div className="pagination-jump">
-                <label htmlFor="jump-page" className="pagination-jump-label">
+            <div className={`${styles["pagination-jump"]}`}>
+                <label htmlFor="jump-page" className={`${styles["pagination-jump-label"]}`}>
                     {t("pagination.text")}
                 </label>
-                <div className="pagination-jump-input-wrapper">
+                <div className={`${styles["pagination-jump-input-wrapper"]}`}>
                     <input
                         id="jump-page"
                         type="number"
@@ -77,7 +82,7 @@ export const Paginations: React.FC<PaginationProps> = ({ totalItems, currentPage
                         onChange={(e) => setJumpPage(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleJump()}
                     />
-                    <button className="pagination-jump-btn" onClick={handleJump}>
+                    <button className={`${styles["pagination-jump-btn"]}`} onClick={handleJump}>
                         ➤
                     </button>
                 </div>
