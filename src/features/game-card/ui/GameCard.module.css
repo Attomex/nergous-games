@@ -243,8 +243,9 @@
 
 @media screen and (max-width: 660px) {
     .card {
-        max-width: 97%;
-        min-width: 97%;
+        box-sizing: border-box;
+        max-width: 100%;
+        min-width: 100%;
         margin: 0.5em auto;
         flex-direction: row;
         padding: 8px;
