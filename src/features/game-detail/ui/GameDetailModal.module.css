@@ -4,11 +4,11 @@
     gap: 16px;
 }
 
-.imageWrapper img {
-    min-width: 120px;
-    max-width: 120px;
-    min-height: 120px;
-    max-height: 120px;
+.imageWrapper {
+    min-width: 115px;
+    max-width: 115px;
+    min-height: 140px;
+    max-height: 140px;
     border-radius: 8px;
     overflow: hidden;
 }

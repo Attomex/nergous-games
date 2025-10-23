@@ -1,7 +1,7 @@
 import { GameInfo } from "shared/types";
 import { DividerStyled } from "shared/ui";
 import styles from "./GameDetailModal.module.css";
-import { Modal, ConfigProvider, Divider, Image } from "antd";
+import { Modal, Divider, Image } from "antd";
 import { LinkIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
 import { gameStatuse, IMG_SRC } from "shared/const";
@@ -107,29 +107,22 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
                     <h2 className={styles.title}>{gameInfo.title}</h2>
                     <p className={styles.genre}>{gameInfo.genre.replace(/,\s*/g, " / ")}</p>
                     <div className={styles.meta}>
-                        <ConfigProvider
-                            theme={{
-                                components: {
-                                    Rate: {
-                                        starBg: "var(--card-third-text-color)",
-                                    },
-                                },
-                            }}>
-                            <CustomRate
-                                key={gameInfo.id}
-                                className={styles.rating__rate}
-                                allowHalf={true}
-                                defaultValue={gameInfo.priority / 2}
-                                onChange={changePriority}
-                            />
-                        </ConfigProvider>
+                        <CustomRate
+                            key={gameInfo.id}
+                            className={styles.rating__rate}
+                            allowHalf={true}
+                            defaultValue={gameInfo.priority / 2}
+                            onChange={changePriority}
+                        />
                         <span className={styles.year}>{getYearFromDate(gameInfo.year) || t("year.no-year")}</span>
                     </div>
+                    <CustomDropdown buttonClassName={styles["status-change"]} dropdownClassName={styles["status-change__dropdown"]} items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
                 </div>
+
             </div>
 
             <DividerStyled>
-                <Divider />
+                <Divider style={{ marginTop: "5px", marginBottom: "5px" }}/>
             </DividerStyled>
 
             <p className={styles.description}>{gameInfo.preambula}</p>
@@ -144,7 +137,6 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
             <p className={styles.devPub}>
                 <strong>{t("gameDetails.publisher")}:</strong> {gameInfo.publisher}
             </p>
-            <CustomDropdown buttonClassName={styles["status-change"]} dropdownClassName={styles["status-change__dropdown"]} items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} />
         </Modal>
     );
 };
