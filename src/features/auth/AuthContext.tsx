@@ -70,6 +70,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
     const logout = async (): Promise<void> => {
         await api.post("/logout");
         Cookies.remove("auth_token");
+        setUser(null);
         navigate("/");
     };
 
