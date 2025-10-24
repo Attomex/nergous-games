@@ -10,7 +10,7 @@ interface ModalClassNames {
 }
 
 interface ModalProps {
-    title: React.ReactNode;
+    title?: React.ReactNode;
     open: boolean;
     onClose: () => void;
     size?: ModalSize;
@@ -47,34 +47,30 @@ export const Modal: React.FC<ModalProps> = ({
         onOk?.();
     };
 
-    return (
-        createPortal(
-            <div
-                className={`${styles["modal"]} ${open ? styles["open"] : styles["close"]}`}
-                id="modal"
-                tabIndex={-1}
-                onClick={handleCancel}
-            >
-                <div className={styles["modal__container"] + " " + styles[size]} onClick={(e) => e.stopPropagation()}>
+    return createPortal(
+        <div className={`${styles["modal"]} ${open ? styles["open"] : styles["close"]}`} id="modal" tabIndex={-1} onClick={handleCancel}>
+            <div className={styles["modal__container"] + " " + styles[size]} onClick={(e) => e.stopPropagation()}>
+                {title && (
                     <div className={classTitle}>
                         <h2>{title}</h2>
                     </div>
-                    <div className={classBody}>{children}</div>
-                    {footer || footer === null ? (
-                        <footer className={classFooter}>{footer}</footer>
-                    ) : (
-                        <footer className={classFooter}>
-                            <button className={styles["modal-btn"] + " " + styles["modal-btn__close"]} onClick={handleCancel}>
-                                Закрыть
-                            </button>
-                            <button className={styles["modal-btn"] + " " + styles["modal-btn__ok"]} onClick={handleOk}>
-                                Ок
-                            </button>
-                        </footer>
-                    )}
-                </div>
-            </div>,
-            document.body
-        )
+                )}
+
+                <div className={classBody}>{children}</div>
+                {footer || footer === null ? (
+                    <footer className={classFooter}>{footer}</footer>
+                ) : (
+                    <footer className={classFooter}>
+                        <button className={styles["modal-btn"] + " " + styles["modal-btn__close"]} onClick={handleCancel}>
+                            Закрыть
+                        </button>
+                        <button className={styles["modal-btn"] + " " + styles["modal-btn__ok"]} onClick={handleOk}>
+                            Ок
+                        </button>
+                    </footer>
+                )}
+            </div>
+        </div>,
+        document.body
     );
 };

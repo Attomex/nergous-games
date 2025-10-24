@@ -1,7 +1,6 @@
 import { GameInfo } from "shared/types";
-import { DividerStyled } from "shared/ui";
 import styles from "./GameDetailModal.module.css";
-import { Modal, Divider, Image } from "antd";
+import { Image } from "antd";
 import { LinkIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
 import { gameStatuse, IMG_SRC } from "shared/const";
@@ -10,6 +9,7 @@ import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import api from "shared/api";
 import { CustomRate } from "widgets/rate";
 import { getYearFromDate } from "shared/lib";
+import { Modal } from "widgets/modal";
 
 interface GameDetailModalProps {
     gameInfo: GameInfo;
@@ -97,10 +97,10 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
     };
 
     return (
-        <Modal width={700} open={isModalOpen} footer={null} closable onCancel={closeModal} centered>
+        <Modal size="large" open={isModalOpen} footer={null} onClose={closeModal}>
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
                 <div className={styles.imageWrapper}>
-                    <Image src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
+                    <img src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
                 </div>
                 <div>
                     <div className={styles.content}>
@@ -126,10 +126,6 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
                             />
                         </div>
                     </div>
-
-                    <DividerStyled>
-                        <Divider style={{ marginTop: "5px", marginBottom: "5px" }} />
-                    </DividerStyled>
 
                     <p className={styles.description}>{gameInfo.preambula}</p>
                     <a className={styles.showMore} href={gameInfo.url} target="_blank" rel="noopener noreferrer">
