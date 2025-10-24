@@ -17,7 +17,7 @@ export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({
     onOk,
 }) => {
     return (
-        <Modal title="Удаление пользователя" open={isModalOpen} onClose={closeModal} footer={
+        <Modal name="delete-user" title="Удаление пользователя" open={isModalOpen} onClose={closeModal} footer={
             <div className={style.footer}>
                 <button className={style.button} onClick={closeModal}>Отмена</button>
                 <button className={`${style.button} ${style.delete}`} onClick={() => onOk(user.id)}>Удалить</button>

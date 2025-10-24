@@ -34,7 +34,7 @@ export const TestPage = () => {
             </div>
             <button onClick={() => setOpen(true)}>Открыть модалку</button>
             <div style={{ fontSize: "10rem", wordBreak: "break-word" }}>dskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdj hsjh dsjhd jshdjhs djhaskj dhweiu hashfj sjdhf ajhsgjk fhsdkjf hsjkf jskhf jshf</div>
-            <Modal title="Modal title" open={open} onClose={() => setOpen(false)} onOk={() => setOpen(false)}>Modal content</Modal>
+            <Modal name="test" title="Modal title" open={open} onClose={() => setOpen(false)} onOk={() => setOpen(false)}>Modal content</Modal>
             
         </>
     );

@@ -21,11 +21,26 @@ import { GameDetailModal } from "features/game-detail";
 import { Flex } from "shared/ui";
 import { DeleteGameModal } from "features/game-card/ui/DeleteGameModal";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
+import { EditGameInfoModal } from "features/edit-game";
 
 const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
     const res = await api.get("/games", { params });
     return res.data; // { data: GameInfo[], pages, total }
+};
+
+const EMPTY_GAME_INFO: GameInfo = {
+    id: 0,
+    title: "",
+    preambula: "",
+    image: "",
+    developer: "",
+    publisher: "",
+    year: "",
+    genre: "",
+    url: "",
+    status: "",
+    priority: 0,
 };
 
 export const AllGames: React.FC = () => {
@@ -49,25 +64,21 @@ export const AllGames: React.FC = () => {
     const [modalAddGames, setModalAddGames] = useState(false);
 
     const [detailsModal, setDetailsModal] = useState(false);
-    const [detailsGameInfo, setDetailsGameInfo] = useState<GameInfo>({
-        id: 0,
-        title: "",
-        preambula: "",
-        image: "",
-        developer: "",
-        publisher: "",
-        year: "",
-        genre: "",
-        url: "",
-        status: "",
-        priority: 0,
-    });
+    const [detailsGameInfo, setDetailsGameInfo] = useState<GameInfo>(EMPTY_GAME_INFO);
 
     const [deleteModal, setDeleteModal] = useState(false);
     const [gameDeleteInfo, setGameDeleteInfo] = useState({
         id: 0,
         title: "",
     });
+
+    const [editModal, setEditModal] = useState(false);
+    const [editGameInfo, setEditGameInfo] = useState<GameInfo>(EMPTY_GAME_INFO);
+
+    const openEditModal = (gameInfo: GameInfo) => {
+        setEditGameInfo(gameInfo);
+        setEditModal(true);
+    }
 
     const openDeleteModal = (id: number, title: string) => {
         setGameDeleteInfo({ id, title });
@@ -222,7 +233,7 @@ export const AllGames: React.FC = () => {
                             gameInfo={g}
                             openDetails={openDetailsModal}
                             openDelete={openDeleteModal}
-                            updateUsersGames={refreshGames}
+                            openEdit={openEditModal}
                         />
                     ))
                 ) : debouncedSearch ? (
@@ -249,6 +260,12 @@ export const AllGames: React.FC = () => {
                 modalOpen={deleteModal}
                 onClose={() => setDeleteModal(false)}
                 onDelete={deleteGame}
+            />
+            <EditGameInfoModal
+                gameInfo={editGameInfo}
+                updateUsersGames={refreshGames}
+                isModalOpen={editModal}
+                closeModal={() => setEditModal(false)}
             />
         </>
     );

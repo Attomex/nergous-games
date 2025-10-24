@@ -51,6 +51,7 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, isModalO
 
     return (
         <Modal
+            name="update-user"
             title="Изменение информации"
             open={isModalOpen}
             onClose={closeModal}
