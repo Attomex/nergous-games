@@ -25,9 +25,12 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
         publisher: "",
         image: null as File | null,
     });
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { t } = useTranslation("translation", { keyPrefix: "addGame.modal" });
 
@@ -41,6 +44,10 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+
+        if (errors[name]) {
+            setErrors((prev) => ({ ...prev, [name]: "" }));
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,6 +68,12 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
 
             setFormData((prev) => ({ ...prev, image: file }));
             setPreviewImage(URL.createObjectURL(file));
+            if (errors.image) {
+                setErrors((prev) => ({
+                    ...prev,
+                    image: "",
+                }));
+            }
         } else {
             setFormData((prev) => ({ ...prev, image: null }));
             setPreviewImage(null);
@@ -75,26 +88,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
     const onFinish = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Ручная валидация
-        if (
-            !formData.title ||
-            !formData.preambula ||
-            !formData.year ||
-            !formData.genre ||
-            !formData.url ||
-            formData.priority === null ||
-            !formData.status ||
-            !formData.developer ||
-            !formData.publisher
-        ) {
-            showErrorNotification("Пожалуйста, заполните все обязательные поля.");
-            return;
-        }
-
-        if (!formData.image) {
-            showErrorNotification("Пожалуйста, загрузите обложку игры.");
-            return;
-        }
+        setErrors(validateForm());
 
         try {
             setIsLoading(true);
@@ -133,6 +127,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
     };
 
     const closeModalForm = () => {
+        closeModal();
         setFormData({
             title: "",
             preambula: "",
@@ -146,7 +141,46 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
             image: null,
         });
         setPreviewImage(null);
-        closeModal();
+        setErrors({});
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
+    const validateForm = (): Record<string, string> => {
+        const newErrors: Record<string, string> = {};
+
+        // 1. Проверка обязательных текстовых полей
+        if (!formData.title) newErrors.title = "Пожалуйста, введите название";
+        if (!formData.preambula) newErrors.preambula = "Пожалуйста, введите описание";
+        if (!formData.genre) newErrors.genre = "Пожалуйста, введите жанр";
+        if (!formData.url) newErrors.url = "Пожалуйста, укажите ссылку";
+        if (!formData.developer) newErrors.developer = "Пожалуйста, введите разработчика";
+        if (!formData.publisher) newErrors.publisher = "Пожалуйста, введите издателя";
+
+        // 2. Проверка года (число + диапазон)
+        const yearNum = Number(formData.year);
+        if (!formData.year) {
+            newErrors.year = "Пожалуйста, введите год";
+        } else if (isNaN(yearNum) || yearNum < 1900 || yearNum > 2100) {
+            newErrors.year = "Введите корректный год (1900-2100)";
+        }
+
+        // 3. Проверка приоритета (число + диапазон)
+        const priorityNum = Number(formData.priority);
+        if (formData.priority === null || formData.priority === undefined || String(formData.priority) === "") {
+             newErrors.priority = "Пожалуйста, укажите приоритет";
+        } else if (isNaN(priorityNum) || priorityNum < 0 || priorityNum > 10) {
+            newErrors.priority = "Приоритет должен быть числом от 0 до 10";
+        }
+        
+        // 4. Проверка изображения
+        if (!formData.image) {
+            newErrors.image = "Пожалуйста, загрузите обложку";
+        }
+
+        return newErrors;
     };
 
     return (
@@ -183,6 +217,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             placeholder={t("add-new.form.name")}
                             required
                         />
+                        {errors.title && <span className={style["error-msg"]}>{errors.title}</span>}
                     </div>
 
                     {/* Поле Описание */}
@@ -200,6 +235,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             rows={3}
                             required
                         />
+                        {errors.preambula && <span className={style["error-msg"]}>{errors.preambula}</span>}
                     </div>
 
                     {/* Поле Год */}
@@ -219,6 +255,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             max={2100}
                             required
                         />
+                        {errors.year && <span className={style["error-msg"]}>{errors.year}</span>}
                     </div>
 
                     {/* Поле Жанр */}
@@ -236,6 +273,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             placeholder={t("add-new.form.genre")}
                             required
                         />
+                        {errors.genre && <span className={style["error-msg"]}>{errors.genre}</span>}
                     </div>
 
                     {/* Поле Ссылка */}
@@ -253,6 +291,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             placeholder={t("add-new.form.source")}
                             required
                         />
+                        {errors.url && <span className={style["error-msg"]}>{errors.url}</span>}
                     </div>
 
                     {/* Поле Приоритет */}
@@ -272,6 +311,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             max={10}
                             required
                         />
+                        {errors.priority && <span className={style["error-msg"]}>{errors.priority}</span>}
                     </div>
 
                     {/* Поле Статус */}
@@ -286,6 +326,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 </option>
                             ))}
                         </select>
+                        {errors.status && <span className={style["error-msg"]}>{errors.status}</span>}
                     </div>
 
                     {/* Поле Разработчик */}
@@ -303,6 +344,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             placeholder={t("add-new.form.developer")}
                             required
                         />
+                        {errors.developer && <span className={style["error-msg"]}>{errors.developer}</span>}
                     </div>
 
                     {/* Поле Издатель */}
@@ -320,6 +362,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                             placeholder={t("add-new.form.publisher")}
                             required
                         />
+                        {errors.publisher && <span className={style["error-msg"]}>{errors.publisher}</span>}
                     </div>
 
                     {/* Поле Обложка */}
@@ -343,12 +386,14 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                                 type="file"
                                 id="image-upload"
                                 name="image"
+                                ref={fileInputRef}
                                 accept="image/jpeg,image/png"
                                 onChange={handleFileChange}
                                 className={style.uploadInput}
                                 required
                             />
                         </div>
+                        {errors.image && <span className={style["error-msg"]}>{errors.image}</span>}
                     </div>
 
             </form>
