@@ -1,10 +1,11 @@
 import React, { useState, useRef } from "react";
 import api from "shared/api";
-import { showErrorNotification, showSuccessNotification } from "shared/lib";
+import { capitalizeFirst, showErrorNotification, showSuccessNotification } from "shared/lib";
 import { UploadIcon, ImageCardIcon, XMarkLgIcon } from "widgets/icons";
 import style from "./CreateGameModal.module.css";
 import { useTranslation } from "react-i18next";
 import { Modal } from "widgets/modal";
+import { AxiosError } from "axios";
 
 interface CreateGameModalProps {
     isModalOpen: boolean;
@@ -12,19 +13,21 @@ interface CreateGameModalProps {
     onGameCreated: () => void;
 }
 
+const EMPTY_FORM = {
+    title: "",
+    preambula: "",
+    year: "",
+    genre: "",
+    url: "",
+    priority: 0,
+    status: "planned",
+    developer: "",
+    publisher: "",
+    image: null as File | null,
+};
+
 export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, closeModal, onGameCreated }) => {
-    const [formData, setFormData] = useState({
-        title: "",
-        preambula: "",
-        year: "",
-        genre: "",
-        url: "",
-        priority: 0,
-        status: "planned",
-        developer: "",
-        publisher: "",
-        image: null as File | null,
-    });
+    const [formData, setFormData] = useState(EMPTY_FORM);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -88,7 +91,13 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
     const onFinish = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        setErrors(validateForm());
+        const formErrors = validateForm();
+        setErrors(formErrors);
+
+        if (Object.keys(formErrors).length > 0) {
+            showErrorNotification("Пожалуйста, исправьте ошибки в форме.");
+            return;
+        }
 
         try {
             setIsLoading(true);
@@ -116,11 +125,11 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
                     closeModalForm();
                     onGameCreated();
                 })
-                .catch((error: { response: { data: { error: any; }; }; }) => {
-                    showErrorNotification(error.response.data.error || "Произошла ошибка при создании игры");
+                .catch((error: AxiosError | any) => {
+                    showErrorNotification(capitalizeFirst(error.response.data) || "Произошла ошибка при создании игры");
                 });
-        } catch (error) {
-            showErrorNotification(`Ошибка при создании игры: ${error}`);
+        } catch (error: AxiosError | any) {
+            showErrorNotification(`Ошибка при создании игры: ${capitalizeFirst(error.response.data)}`);
         } finally {
             setIsLoading(false);
         }
@@ -128,18 +137,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
 
     const closeModalForm = () => {
         closeModal();
-        setFormData({
-            title: "",
-            preambula: "",
-            year: "",
-            genre: "",
-            url: "",
-            priority: 0,
-            status: "planned",
-            developer: "",
-            publisher: "",
-            image: null,
-        });
+        setFormData(EMPTY_FORM);
         setPreviewImage(null);
         setErrors({});
 
@@ -184,7 +182,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
     };
 
     return (
-        <Modal title={t("add-new.title")} footer={
+        <Modal name="create" title={t("add-new.title")} footer={
             <div className={style.modalFooter}>
                 <button type="button" className={style.button} onClick={closeModalForm}>
                     {t("cancel-btn")}

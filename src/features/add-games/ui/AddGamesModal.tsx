@@ -69,7 +69,7 @@ export const AddGamesModal: React.FC<AddGamesModalProps> = ({ isModalOpen, close
     };
 
     return (
-        <Modal title={t("add-several.title")} footer={
+        <Modal name="add-games" title={t("add-several.title")} footer={
             <div className={style.modalFooter}>
                 <button className={style.button} onClick={closeModalForm}>
                     {t("cancel-btn")}

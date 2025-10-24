@@ -27,11 +27,28 @@ import { isDropdownItem } from "shared/types";
 import { EmptyItems } from "widgets/empty-items";
 import { useTranslation } from "react-i18next";
 import { GameDetailModal } from "features/game-detail";
+import { DeleteGameModal } from "features/game-card/ui/DeleteGameModal";
+import { showErrorNotification, showSuccessNotification } from "shared/lib";
+import { EditGameInfoModal } from "features/edit-game";
 
 const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
     const res = await api.get("/games/user", { params });
     return res.data; // { data: GameInfo[], pages, total }
+};
+
+const EMPTY_GAME_INFO: GameInfo = {
+    id: 0,
+    title: "",
+    preambula: "",
+    image: "",
+    developer: "",
+    publisher: "",
+    year: "",
+    genre: "",
+    url: "",
+    status: "",
+    priority: 0,
 };
 
 export const UserGames: React.FC = () => {
@@ -56,19 +73,26 @@ export const UserGames: React.FC = () => {
     const [modalAddGames, setModalAddGames] = useState(false);
 
     const [detailsModal, setDetailsModal] = useState(false);
-    const [detailsGameInfo, setDetailsGameInfo] = useState<GameInfo>({
+    const [detailsGameInfo, setDetailsGameInfo] = useState<GameInfo>(EMPTY_GAME_INFO);
+
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [gameDeleteInfo, setGameDeleteInfo] = useState({
         id: 0,
         title: "",
-        preambula: "",
-        image: "",
-        developer: "",
-        publisher: "",
-        year: "",
-        genre: "",
-        url: "",
-        status: "",
-        priority: 0,
     });
+
+    const [editModal, setEditModal] = useState(false);
+    const [editGameInfo, setEditGameInfo] = useState<GameInfo>(EMPTY_GAME_INFO);
+
+    const openEditModal = (gameInfo: GameInfo) => {
+        setEditGameInfo(gameInfo);
+        setEditModal(true);
+    }
+
+    const openDeleteModal = (id: number, title: string) => {
+        setGameDeleteInfo({ id, title });
+        setDeleteModal(true);
+    }
 
     const { checkAdmin } = useAuth();
     const queryClient = useQueryClient();
@@ -155,6 +179,18 @@ export const UserGames: React.FC = () => {
         queryClient.invalidateQueries({ queryKey: ["userGames"] });
     }, [queryClient]);
 
+    const deleteGame = async (id: number) => {
+        try {
+            await api.delete(`/games/${id}`);
+            showSuccessNotification("Игра успешно удалена!");
+            refreshGames();
+        } catch (err) {
+            showErrorNotification(`Произошла ошибка при удалении игры ${err}`);
+        } finally {
+            setDeleteModal(false);
+        }
+    };
+
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
         let newUrl = "";
@@ -219,7 +255,8 @@ export const UserGames: React.FC = () => {
                                 key={g.id}
                                 gameInfo={g}
                                 openDetails={openDetailsModal}
-                                updateUsersGames={refreshGames}
+                                openDelete={openDeleteModal}
+                                openEdit={openEditModal}
                             />
                         ))
                     ) : debouncedSearch ? (
@@ -240,7 +277,20 @@ export const UserGames: React.FC = () => {
                 {/* Модалки */}
                 <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
                 <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
-                <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={refreshGames}/>
+                <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={refreshGames} />
+                <DeleteGameModal
+                    gameName={gameDeleteInfo.title}
+                    gameId={gameDeleteInfo.id}
+                    modalOpen={deleteModal}
+                    onClose={() => setDeleteModal(false)}
+                    onDelete={deleteGame}
+                />
+                <EditGameInfoModal
+                    gameInfo={editGameInfo}
+                    updateUsersGames={refreshGames}
+                    isModalOpen={editModal}
+                    closeModal={() => setEditModal(false)}
+                />
             </Flex>
         </>
     );

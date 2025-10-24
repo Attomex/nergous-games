@@ -1,6 +1,5 @@
 import { GameInfo } from "shared/types";
 import styles from "./GameDetailModal.module.css";
-import { Image } from "antd";
 import { LinkIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
 import { gameStatuse, IMG_SRC } from "shared/const";
@@ -10,6 +9,7 @@ import api from "shared/api";
 import { CustomRate } from "widgets/rate";
 import { getYearFromDate } from "shared/lib";
 import { Modal } from "widgets/modal";
+import { useMediaQuery } from "shared/hooks";
 
 interface GameDetailModalProps {
     gameInfo: GameInfo;
@@ -23,6 +23,8 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
 
     const textStatus = `status.${gameInfo.status ? gameInfo.status : "no-select"}`;
     const status = t(textStatus as any) as any;
+
+    const modalSize = useMediaQuery("(max-width: 660px)")
 
     const changePriority = async (value: number) => {
         await updateGame("priority", value * 2);
@@ -97,8 +99,8 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
     };
 
     return (
-        <Modal size="large" open={isModalOpen} footer={null} onClose={closeModal}>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+        <Modal name="info" size={modalSize ? "small" : "medium"} open={isModalOpen} footer={null} onClose={closeModal}>
+            <div className={styles.container}>
                 <div className={styles.imageWrapper}>
                     <img src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
                 </div>

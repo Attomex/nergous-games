@@ -47,7 +47,7 @@ export const Paginations: React.FC<PaginationProps> = ({ totalItems, currentPage
 
     return (
         <div className={`${styles["pagination-wrapper"]}`}>
-            <button className={`${styles["pagination-btn arrow"]}`} disabled={currentPage === 1} onClick={() => onChange(currentPage - 1)}>
+            <button className={`${styles["pagination-btn"]} ${styles["arrow"]}`} disabled={currentPage === 1} onClick={() => onChange(currentPage - 1)}>
                 <PrevIcon />
             </button>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GameInfo } from "shared/types";
 import { Button, Form, Input, InputNumber, Image } from "antd";
 import api from "shared/api";
@@ -22,11 +22,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
     const [newImageFile, setNewImageFile] = useState<File | null>(null);
     const { t } = useTranslation("translation", { keyPrefix: "gameCard.editGame" });
 
-    useEffect(() => {
-        // При открытии модалки сбрасываем превью
-        setPreviewImage(IMG_SRC + gameInfo.image);
-        setNewImageFile(null);
-    }, [gameInfo, isModalOpen]);
+    const newFileInputRef = useRef<HTMLInputElement>(null);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -58,8 +54,6 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
             return;
         }
 
-        e.target.value = "";
-
         setNewImageFile(file);
 
         // Создаем превью для отображения
@@ -68,6 +62,8 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
             setPreviewImage(event.target?.result as string);
         };
         reader.readAsDataURL(file);
+
+        if (e.target) e.target.value = "";
     };
 
     const onFinish = async (values: any) => {
@@ -113,7 +109,13 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
         }
     };
 
-    
+    useEffect(() => {
+        if (isModalOpen) {
+            form.setFieldsValue(gameInfo);
+            setPreviewImage(IMG_SRC + gameInfo.image);
+            setNewImageFile(null);
+        }
+    }, [isModalOpen]);
 
     const closeModalForm = () => {
         setNewImageFile(null);
@@ -123,6 +125,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
 
     return (
         <Modal
+            name="edit"
             open={isModalOpen}
             title={`${t("title")}: ${gameInfo.title}`}
             onClose={closeModalForm}
@@ -136,40 +139,46 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                 </Button>,
             ]}
         >
-            <Form form={form} onFinish={onFinish} labelCol={{ span: 5 }}>
-                <Form.Item name="title" initialValue={gameInfo.title} label={t("form.name")}>
+            <Form key={gameInfo.id} form={form} onFinish={onFinish} labelCol={{ span: 5 }}>
+                <Form.Item name="title" label={t("form.name")}>
                     <Input placeholder={t("form.name")} />
                 </Form.Item>
 
-                <Form.Item name="year" initialValue={gameInfo.year} label={t("form.year")}>
+                <Form.Item name="year" label={t("form.year")}>
                     <InputNumber placeholder={t("form.year")} />
                 </Form.Item>
 
-                <Form.Item name="preambula" initialValue={gameInfo.preambula} label={t("form.desc")}>
+                <Form.Item name="preambula" label={t("form.desc")}>
                     <Input.TextArea placeholder={t("form.desc")} autoSize={{ minRows: 3, maxRows: 5 }} />
                 </Form.Item>
 
-                <Form.Item name="developer" initialValue={gameInfo.developer} label={t("form.developer")}>
+                <Form.Item name="developer" label={t("form.developer")}>
                     <Input placeholder={t("form.developer")} />
                 </Form.Item>
 
-                <Form.Item name="publisher" initialValue={gameInfo.publisher} label={t("form.publisher")}>
+                <Form.Item name="publisher" label={t("form.publisher")}>
                     <Input placeholder={t("form.publisher")} />
                 </Form.Item>
 
-                <Form.Item name="genre" initialValue={gameInfo.genre} label={t("form.genre")}>
+                <Form.Item name="genre" label={t("form.genre")}>
                     <Input placeholder={t("form.genre")} />
                 </Form.Item>
 
                 <Form.Item label={t("form.img")}>
                     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                         {/* Превью текущего/нового изображения */}
-                        <Image src={previewImage} preview={false} width={150} style={{ borderRadius: 4 }} />
+                        {previewImage && <Image src={previewImage} preview={false} width={150} style={{ borderRadius: 4 }} />}
 
                         {/* Кнопка для загрузки нового изображения */}
                         <div>
-                            <input type="file" id="image-upload" accept=".jpg,.jpeg,.png" style={{ display: "none" }} onChange={handleImageChange} />
-                            <Button icon={<UploadOutlined />} onClick={() => document.getElementById("image-upload")?.click()}>
+                            <input
+                                type="file"
+                                ref={newFileInputRef}
+                                accept=".jpg,.jpeg,.png,.webp"
+                                style={{ display: "none" }}
+                                onChange={handleImageChange}
+                            />
+                            <Button icon={<UploadOutlined />} onClick={() => newFileInputRef.current?.click()}>
                                 {newImageFile ? t("form.change-btn") : t("form.new-img-btn")}
                             </Button>
                             {newImageFile && (

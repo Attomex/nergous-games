@@ -1,3 +1,9 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
 
 .content {
     display: flex;
@@ -5,16 +11,16 @@
 }
 
 .imageWrapper {
-    min-height: 540px;
-    max-height:540px;
-    min-width: 405px;
-    max-width: 405px;
+    flex-shrink: 0;
+    width: 270px;
     overflow: hidden;
     margin-right: 30px;
 }
 
 .imageWrapper img {
     height: 100%;
+    width: 100%;
+    border-radius: 8px;
     object-fit: cover;
 }
 
@@ -132,4 +138,30 @@
 
 .dropped {
     background-color: #ff0000;
+}
+
+@media screen and (max-width: 960px) {
+    .imageWrapper {
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .imageWrapper {
+        display: flex;
+        justify-content: center;
+        border-radius: 8px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        width: 100%;    
+    }
+
+    .imageWrapper img {
+        width: 150px;
+        height: 200px;
+    }
 }

@@ -19,6 +19,8 @@ import { EmptyItems } from "widgets/empty-items";
 import { GameCard } from "features/game-card";
 import { GameDetailModal } from "features/game-detail";
 import { Flex } from "shared/ui";
+import { DeleteGameModal } from "features/game-card/ui/DeleteGameModal";
+import { showErrorNotification, showSuccessNotification } from "shared/lib";
 
 const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
@@ -61,6 +63,16 @@ export const AllGames: React.FC = () => {
         priority: 0,
     });
 
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [gameDeleteInfo, setGameDeleteInfo] = useState({
+        id: 0,
+        title: "",
+    });
+
+    const openDeleteModal = (id: number, title: string) => {
+        setGameDeleteInfo({ id, title });
+        setDeleteModal(true);
+    }
 
     const { checkAdmin } = useAuth();
     const queryClient = useQueryClient();
@@ -132,6 +144,33 @@ export const AllGames: React.FC = () => {
         queryClient.invalidateQueries({ queryKey: ["allGames"] });
     }, [queryClient]);
 
+    const deleteGame = async (id: number) => {
+        try {
+            await api.delete(`/games/${id}`);
+            showSuccessNotification("Игра успешно удалена!");
+            refreshGames();
+        } catch (err) {
+            showErrorNotification(`Произошла ошибка при удалении игры ${err}`);
+        } finally {
+            setDeleteModal(false);
+        }
+    };
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        let newUrl = "";
+
+        if (search) {
+            searchParams.set("s", search);
+            newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+        } else {
+            searchParams.delete("s");
+            newUrl = `${window.location.pathname}`;
+        }
+
+        window.history.replaceState(null, "", newUrl);
+    }, [search])
+
     const sortHandleChange: DropdownProps["onClick"] = ({ value }) => {
         setGeneralSort(value as SortOption);
     };
@@ -182,6 +221,7 @@ export const AllGames: React.FC = () => {
                             key={g.id}
                             gameInfo={g}
                             openDetails={openDetailsModal}
+                            openDelete={openDeleteModal}
                             updateUsersGames={refreshGames}
                         />
                     ))
@@ -203,6 +243,13 @@ export const AllGames: React.FC = () => {
             <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
             <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
             <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={refreshGames} />
+            <DeleteGameModal
+                gameName={gameDeleteInfo.title}
+                gameId={gameDeleteInfo.id}
+                modalOpen={deleteModal}
+                onClose={() => setDeleteModal(false)}
+                onDelete={deleteGame}
+            />
         </>
     );
 };

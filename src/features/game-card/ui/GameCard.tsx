@@ -1,34 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./GameCard.module.css";
 import { DropdownItem, DropdownProps, GameInfo } from "shared/types";
-import { EditGameInfoModal } from "features/edit-game";
 import { statsColors } from "shared/const";
 import { useAuth } from "features/auth";
 import { WikipediaIcon, SteamIcon, IGDBIcon, StarFillIcon, ThreeDotIcon, EditIcon, TrashIcon } from "widgets/icons";
 import { IMG_SRC } from "shared/const";
 import { EyeIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
-import { getYearFromDate, showErrorNotification, showSuccessNotification } from "shared/lib";
+import { getYearFromDate } from "shared/lib";
 import { Dropdown } from "widgets/dropdown";
-import api from "shared/api";
-import { DeleteGameModal } from "./DeleteGameModal";
 
 interface GameCardProps {
     gameInfo: GameInfo;
     openDetails: (gameInfo: GameInfo) => void;
-    updateUsersGames: () => void;
+    openEdit: (gameInfo: GameInfo) => void;
+    openDelete: (id: number, title: string) => void;
 }
 
-export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, updateUsersGames }) => {
+export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, openEdit, openDelete }) => {
     const { isAdmin } = useAuth();
     const { t } = useTranslation("translation");
-    // const key = gameInfo.status as keyof typeof gameStatuse;
     const textStatus = `gameCard.status.${gameInfo.status ? gameInfo.status : "no-select"}`;
     const status = t(textStatus as any);
-
-    // Открытие модалки для изменения инфы об игре
-    const [editGameInfoModal, setEditGameInfoModal] = useState(false);
-    const [deleteGameModal, setDeleteGameModal] = useState(false);
 
     // Изменение приоритета
     const getColor = (status: string): string => {
@@ -75,8 +68,8 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, updat
     const set = getColorSource(gameInfo.url);
 
     const kebabItemAction: DropdownProps["onClick"] = ({ key }) => {
-        if (key === 1) setEditGameInfoModal(true);
-        else if (key === 2) setDeleteGameModal(true);
+        if (key === 1) openEdit(gameInfo);
+        else if (key === 2) openDelete(gameInfo.id, gameInfo.title);
     };
 
     const kebabItems: DropdownItem[] = [
@@ -92,18 +85,6 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, updat
             danger: true,
         },
     ]
-
-    const deleteGame = async () => {
-        try {
-            await api.delete(`/games/${gameInfo.id}`);
-            showSuccessNotification("Игра успешно удалена!");
-            updateUsersGames();
-        } catch (err) {
-            showErrorNotification(`Произошла ошибка при удалении игры ${err}`);
-        } finally {
-            setDeleteGameModal(false);
-        }
-    };
 
     return (
         <article className={styles.card}>
@@ -201,19 +182,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, updat
                 </div>
                 <CustomDropdown buttonClassName={styles["status-change"]} dropdownClassName={styles["status-change__dropdown"]} items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} /> */}
             </div>
-            <EditGameInfoModal
-                gameInfo={gameInfo}
-                updateUsersGames={updateUsersGames}
-                isModalOpen={editGameInfoModal}
-                closeModal={() => setEditGameInfoModal(false)}
-            />
-
-            <DeleteGameModal
-                gameName={gameInfo.title}
-                modalOpen={deleteGameModal}
-                onClose={() => setDeleteGameModal(false)}
-                onDelete={deleteGame}
-            />
+            
         </article>
     );
 };
