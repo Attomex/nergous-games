@@ -1,0 +1,97 @@
+:root {
+    --submit-bg: #1890ff;
+    --submit-border: #1890ff;
+    --submit-hv-bg: #40a9ff;
+    --submit-hv-border: #40a9ff;
+}
+@layer btn {
+    .button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--bg-color);
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+        color: var(--text-color);
+        max-height: 34px;
+    }
+
+    /* Обычная кнопка */
+    .button__default {
+        color: var(--text-color);
+        border-color: var(--gray-light-color);
+    }
+
+    .button__default:hover {
+        border-color: var(--gray-dark-color);
+    }
+
+    body.dark .button__default,
+    body.system-dark .button__default {
+        border-color: var(--gray-dark-color);
+    }
+
+    body.dark .button__default:hover,
+    body.system-dark .button__default:hover {
+        border-color: var(--gray-border-color);
+    }
+
+    /* Кнопка отмены */
+    .button__cancel:hover {
+        background-color: var(--gray-light-color);
+    }
+
+    body.dark .button__cancel,
+    body.system-dark .button__cancel {
+        border-color: var(--gray-medium-color);
+    }
+
+    body.dark .button__cancel:hover,
+    body.system-dark .button__cancel:hover {
+        background-color: var(--gray-medium-color);
+    }
+
+    /* Кнопка удаления */
+    .button__delete {
+        color: var(--red-color);
+        border-color: var(--red-color);
+    }
+
+    .button__delete:hover {
+        color: var(--white-color);
+        background: var(--red-color);
+    }
+
+    /* Кнопка отправки */
+    .button__submit {
+        color: var(--white-color);
+        border-color: var(--submit-border);
+        background: var(--submit-bg);
+    }
+
+    .button__submit:hover {
+        border-color: var(--submit-hv-border);
+        background: var(--submit-hv-bg);
+    }
+}
+
+@layer anim {
+    .spin {
+        -webkit-animation: rotate 1s ease-in-out infinite;
+        animation: rotate 1s ease-in-out infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}

@@ -3,6 +3,7 @@ import api from "shared/api";
 import { IUser } from "../model";
 import { UserCard } from "./UserCard";
 import styles from "./AdminUsers.module.css"
+import { useTranslation } from "react-i18next";
 
 const fetchUsers = async () => {
     const res = await api.get("/users");
@@ -17,24 +18,23 @@ export const AdminUsers = () => {
         refetchOnWindowFocus: false,
     });
 
+    const { t } = useTranslation("translation", {keyPrefix: "admin-users"});
     // const userTag = whoIs(data[0].isAdmin);
 
     return (
         <>
             <div style={{ maxWidth: "1400px", margin: "0 auto", gap: 16 }}>
-                <h1 style={{ color: "var(--text-color)" }}>Пользователи</h1>
+                <h1 style={{ color: "var(--text-color)" }}>{t("title")}</h1>
                 <div className={styles.cardsWrapper}>
                     {users.length > 0 ? (
                         users.map((user: IUser) => (
                             <UserCard key={user.id} user={user} refetch={refetch} />
                         ))
                     ) : (
-                        <div>Пользователи не найдены</div>
+                        <div>{t("empty-users")}</div>
                     )}
                 </div>
             </div>
-
-            
         </>
     );
 };

@@ -24,9 +24,11 @@ export {
     XMarkLgIcon,
     TranslateIcon,
     MenuIcon,
-    CheronLeft,
-    CheronRight,
+    ChevronLeft,
+    ChevronRight,
+    ChevronUp,
     IGDBIcon,
     StarFillIcon,
     ThreeDotIcon,
+    SyncIcon,
 } from "./ui";

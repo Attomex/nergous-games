@@ -12,14 +12,16 @@ import { Dropdown } from "widgets/dropdown";
 
 interface GameCardProps {
     gameInfo: GameInfo;
+    isMobile: boolean;
     openDetails: (gameInfo: GameInfo) => void;
     openEdit: (gameInfo: GameInfo) => void;
     openDelete: (id: number, title: string) => void;
 }
 
-export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, openEdit, openDelete }) => {
+export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, isMobile, openEdit, openDelete }) => {
     const { isAdmin } = useAuth();
     const { t } = useTranslation("translation");
+
     const textStatus = `gameCard.status.${gameInfo.status ? gameInfo.status : "no-select"}`;
     const status = t(textStatus as any);
 
@@ -75,39 +77,28 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, openE
     const kebabItems: DropdownItem[] = [
         {
             id: 1,
-            label: "Редактировать",
+            label: t("gameCard.dropdown.edit"),
             icon: <EditIcon />,
         },
         {
             id: 2,
-            label: "Удалить",
+            label: t("gameCard.dropdown.delete"),
             icon: <TrashIcon />,
             danger: true,
         },
-    ]
+    ];
 
     return (
-        <article className={styles.card}>
+        <article className={styles.card} onClick={isMobile ? () => openDetails(gameInfo) : undefined} style={{ cursor: isMobile ? "pointer" : "default" }}>
             {/* Левый столбец — изображение */}
-            <div className={styles.image} onClick={() => openDetails(gameInfo)}>
+            <div className={styles.image} onClick={isMobile ? undefined : () => openDetails(gameInfo)}>
                 <img loading="lazy" src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
 
-                {/* Поверхностные кнопачки */}
-                {/* {isAdmin && (
-                    <div
-                        className={styles.editGame}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setEditGameInfoModal(true);
-                        }}
-                    >
-                        <EditIcon />
+                {!isMobile && (
+                    <div className={styles.eye}>
+                        <EyeIcon w="48px" h="48px" />
                     </div>
-                )} */}
-
-                <div className={styles.eye}>
-                    <EyeIcon w="48px" h="48px" />
-                </div>
+                )}
 
                 <div className={styles.status__tag}>
                     <span
@@ -144,8 +135,8 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, openE
             <div className={styles.details}>
                 <div className={styles.header__wrapper}>
                     <header className={styles.title}>{gameInfo.title}</header>
-                    {isAdmin &&<div className={styles.cardActions} onClick={(e) => e.stopPropagation()}>
-                        <Dropdown options={kebabItems} buttonIcon={<ThreeDotIcon />} onClick={kebabItemAction}/>
+                    {isAdmin && <div className={styles.cardActions} onClick={(e) => e.stopPropagation()}>
+                        <Dropdown options={kebabItems} buttonIcon={<ThreeDotIcon />} onClick={kebabItemAction} />
                     </div>}
                     <div className={styles.year}>{getYearFromDate(gameInfo.year) || t("gameCard.year.no-year")}</div>
                 </div>
@@ -160,29 +151,8 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, openE
                 </div>
 
                 <div className={styles.description}>{gameInfo.preambula}</div>
-
-                {/* <hr className={styles.divider} />
-
-                <div className={styles.rating__year}>
-                    <div className={styles.rating__container}>
-                        {status !== undefined && (
-                            <div className={styles.rating}>
-                                <div className={styles.rating__content}>
-                                    <span className={styles.priority__text}>{t("gameCard.priority.text")}</span>
-                                    <CustomRate
-                                        className={styles.rating__rate}
-                                        allowHalf={true}
-                                        defaultValue={gameInfo.priority / 2}
-                                        onChange={changePriority}
-                                    />
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-                <CustomDropdown buttonClassName={styles["status-change"]} dropdownClassName={styles["status-change__dropdown"]} items={statuses} initialSelectedItem={status} onChange={(id) => onChangeStatus(id)} /> */}
             </div>
-            
+
         </article>
     );
 };

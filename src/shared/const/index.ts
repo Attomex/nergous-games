@@ -4,3 +4,4 @@ export { gameStatuse } from "./gameStatuse";
 export type { GameStatusKey } from "./gameStatuse";
 export { genres } from "./gameGenre";
 export { URL, IMG_SRC, APP_ID, UPDATES_PATH } from "./serverConst";
+export { EMPTY_GAME_INFO, EMPTY_USER } from "./emptyConsts";

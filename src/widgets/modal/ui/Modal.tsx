@@ -76,8 +76,7 @@ export const Modal: React.FC<ModalProps> = ({
                         <h2>{title}</h2>
                     </div>
                 )}
-
-                <div className={classBody}>{children}</div>
+                    <div className={classBody}>{children}</div>
                 <Footer />
             </div>
         </div>,

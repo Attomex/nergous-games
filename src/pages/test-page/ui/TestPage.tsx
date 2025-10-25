@@ -1,41 +1,16 @@
-import { Dropdown } from "widgets/dropdown";
-import type { DropdownOption } from "shared/types";
-import { EyeIcon, EditIcon } from "widgets/icons";
-import { Modal } from "widgets/modal";
+import { SyncIcon } from "widgets/icons";
 import "./TestPage.css";
-import { useState } from "react";
 
 export const TestPage = () => {
-    const [open, setOpen] = useState(false);
 
-    const options: DropdownOption[] = [
-        {
-            id: 1,
-            label: "ДЛИННЫЙ ",
-            value: "value1",
-            extra: <EditIcon />,
-            icon: <EyeIcon />,
-        },
-        {
-            id: 2,
-            label: "Option 2",
-            value: "value2",
-        },
-    ];
 
     return (
-        <>
-            <div style={{ display: "flex", justifyContent: "right" }}>
-                <Dropdown
-                    placeholder="Бла бла бла"
-                    // buttonIcon={<EyeIcon />}
-                    options={options}
-                />
-            </div>
-            <button onClick={() => setOpen(true)}>Открыть модалку</button>
-            <div style={{ fontSize: "10rem", wordBreak: "break-word" }}>dskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdjdskjdjhsdj hsjh dsjhd jshdjhs djhaskj dhweiu hashfj sjdhf ajhsgjk fhsdkjf hsjkf jskhf jshf</div>
-            <Modal title="Modal title" open={open} onClose={() => setOpen(false)} onOk={() => setOpen(false)}>Modal content</Modal>
-            
-        </>
+        <div style={{ display: "flex", gap: "10px" }}>
+            <button style={{ display: "flex", alignItems: "center", gap: "10px" }}  className={"button"}><SyncIcon spin/>test</button>
+            <button className={"button button__default"}>def</button>
+            <button className={"button button__cancel"}>cancel</button>
+            <button className={"button button__delete"}>test</button>
+            <button className={"button button__submit"}>test</button>
+        </div>
     );
 };

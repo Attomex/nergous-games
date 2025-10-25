@@ -16,20 +16,21 @@ import { useAuth } from "features/auth";
 
 import api from "shared/api";
 import { DropdownOption, DropdownProps, GameInfo } from "shared/types";
-import { useDebouncedSearch } from "shared/hooks";
+import { useDebouncedSearch, useMediaQuery } from "shared/hooks";
 
 import { Paginations } from "widgets/pagination";
 import { AddGameButton } from "widgets/add-game-button";
 import { SearchInput } from "widgets/search-input";
 import { Dropdown } from "widgets/dropdown";
-import { AscIcon, CheronLeft, CheronRight, DescIcon, SortAZIcon, SortZAIcon } from "widgets/icons";
+import { AscIcon, ChevronLeft, ChevronRight, DescIcon, SortAZIcon, SortZAIcon } from "widgets/icons";
 import { isDropdownItem } from "shared/types";
 import { EmptyItems } from "widgets/empty-items";
 import { useTranslation } from "react-i18next";
 import { GameDetailModal } from "features/game-detail";
-import { DeleteGameModal } from "features/game-card/ui/DeleteGameModal";
+import { DeleteGameModal } from "features/delete-game";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { EditGameInfoModal } from "features/edit-game";
+import { EMPTY_GAME_INFO } from "shared/const";
 
 const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
@@ -37,25 +38,12 @@ const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
     return res.data; // { data: GameInfo[], pages, total }
 };
 
-const EMPTY_GAME_INFO: GameInfo = {
-    id: 0,
-    title: "",
-    preambula: "",
-    image: "",
-    developer: "",
-    publisher: "",
-    year: "",
-    genre: "",
-    url: "",
-    status: "",
-    priority: 0,
-};
-
 export const UserGames: React.FC = () => {
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState("");
     const { search, debouncedSearch, setSearch } = useDebouncedSearch(setPage, 500);
     const { t } = useTranslation("translation");
+    const isMobile = useMediaQuery("(max-width: 660px)");
 
     type SortOption = keyof typeof sortOptions;
     const sortOptions = {
@@ -80,6 +68,7 @@ export const UserGames: React.FC = () => {
         id: 0,
         title: "",
     });
+    const [deleteLoading, setDeleteLoading] = useState(false);
 
     const [editModal, setEditModal] = useState(false);
     const [editGameInfo, setEditGameInfo] = useState<GameInfo>(EMPTY_GAME_INFO);
@@ -184,10 +173,11 @@ export const UserGames: React.FC = () => {
             await api.delete(`/games/${id}`);
             showSuccessNotification("Игра успешно удалена!");
             refreshGames();
+            setDeleteModal(false);
         } catch (err) {
             showErrorNotification(`Произошла ошибка при удалении игры ${err}`);
         } finally {
-            setDeleteModal(false);
+            setDeleteLoading(false);
         }
     };
 
@@ -225,11 +215,11 @@ export const UserGames: React.FC = () => {
                     <Flex gap={16} style={{ width: "100%" }} className={styles["top-panel"]}>
                         <Flex gap={0} className={styles["status-buttons"]}>
                             <span className={styles["status-buttons__arrow"]}>
-                                <CheronLeft />
+                                <ChevronLeft />
                             </span>
                             <StatusButtonsGroup status={status} setStatus={setStatus} setPage={setPage} />
                             <span className={styles["status-buttons__arrow"]}>
-                                <CheronRight />
+                                <ChevronRight />
                             </span>
                         </Flex>
 
@@ -254,6 +244,7 @@ export const UserGames: React.FC = () => {
                             <GameCard
                                 key={g.id}
                                 gameInfo={g}
+                                isMobile={isMobile}
                                 openDetails={openDetailsModal}
                                 openDelete={openDeleteModal}
                                 openEdit={openEditModal}
@@ -284,6 +275,7 @@ export const UserGames: React.FC = () => {
                     modalOpen={deleteModal}
                     onClose={() => setDeleteModal(false)}
                     onDelete={deleteGame}
+                    loading={deleteLoading}
                 />
                 <EditGameInfoModal
                     gameInfo={editGameInfo}

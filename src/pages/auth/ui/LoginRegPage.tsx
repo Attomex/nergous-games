@@ -22,15 +22,16 @@ export const LoginRegPage = () => {
         if(Cookies.get("auth_token")) {
             navigate("/games");
         }
-    }, [])
+    }, [navigate]);
 
     const containerClass = [styles.loginReg__container, type === "signUp" ? styles.loginReg__rightPanelActive : ""].join(" ");
 
     return (
         <div className={styles.loginReg__root}>
             <div className={containerClass} id="container">
-                <SignUpForm />
-                <SignInForm />
+                <SignUpForm onToggle={handleOnClick} />
+                <SignInForm onToggle={handleOnClick} />
+                
                 <div className={styles.loginReg__overlayContainer}>
                     <div className={styles.loginReg__overlay}>
                         <div className={`${styles.loginReg__overlayPanel} ${styles.loginReg__overlayLeft}`}>

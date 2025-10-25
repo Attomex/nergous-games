@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import Cookies from "js-cookie";
 import type { User } from "shared/types";
-import { emptyUser } from "shared/types";
+import { EMPTY_USER } from "shared/const";
 import { URL } from "shared/const";
 import { showErrorNotification } from "shared/lib";
 import api from "shared/api";
@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType>({
     user: null,
     login: () => { },
     logout: () => { },
-    getUserInfo: () => Promise.resolve(emptyUser),
+    getUserInfo: () => Promise.resolve(EMPTY_USER),
     isAdmin: false,
     checkAdmin: () => Promise.resolve(false),
 });
@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
             return userResponse;
         } catch (error) {
             showErrorNotification(error as string);
-            return emptyUser;
+            return EMPTY_USER;
         }
 
     }, [user]);

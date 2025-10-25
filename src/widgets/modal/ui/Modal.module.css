@@ -29,11 +29,11 @@
     gap: 20px;
     background-color: var(--bg-color);
     border-radius: 8px;
-    width: 100%;
+    width: 96%;
     padding: 20px;
     box-sizing: border-box;
     transform: scale(0.9);
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out; 
 }
 
 .modal.open > .modal__container {

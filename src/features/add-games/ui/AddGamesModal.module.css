@@ -1,42 +1,3 @@
-.modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    width: 90%;
-    max-width: 520px;
-    display: flex;
-    flex-direction: column;
-}
-
-.modalHeader {
-    padding: 16px 24px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.modalTitle {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 1.4;
-}
-
-.form {
-    padding: 24px;
-}
-
 .formList {
     display: flex;
     flex-direction: column;
@@ -114,44 +75,6 @@
 .addButton:hover {
     border-color: #40a9ff;
     color: #40a9ff;
-}
-
-.modalFooter {
-    padding: 10px 16px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-}
-
-.button {
-    padding: 6px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    border: 1px solid #d9d9d9;
-    background-color: #fff;
-    transition: all 0.3s ease;
-}
-
-.button:hover {
-    border-color: #40a9ff;
-    color: #40a9ff;
-}
-
-.buttonPrimary {
-    background-color: #1890ff;
-    color: #fff;
-    border-color: #1890ff;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.buttonPrimary:hover {
-    background-color: #40a9ff;
-    border-color: #40a9ff;
-    color: #fff;
 }
 
 .icon {

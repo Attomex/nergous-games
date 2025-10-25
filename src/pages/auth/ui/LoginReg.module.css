@@ -6,8 +6,8 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
-    margin: -20px 0 50px;
+    min-height: 100vh;
+    padding: 20px 0;
 }
 
 .loginReg__root * {
@@ -59,6 +59,7 @@
     text-transform: uppercase;
     transition: transform 80ms ease-in;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 .loginReg__button:active {
@@ -72,6 +73,13 @@
 .loginReg__ghost {
     background-color: transparent;
     border-color: #ffffff;
+}
+
+.loginReg__mobileToggle {
+    display: none;
+    border-color: #ff4b2b;
+    color: #ff4b2b;
+    margin-top: 20px;
 }
 
 .loginReg__form {
@@ -103,7 +111,8 @@
     background-color: rgb(238, 238, 238);
     width: 100%;
     overflow: hidden;
-    margin-bottom: 8px;
+    margin-top: 10px;
+    /* margin-bottom: 8px; */
 }
 
 .loginReg__input__file__name {
@@ -113,6 +122,18 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     margin: auto 0;
+    font-size: 14px;
+}
+
+.loginReg__input__file input[type="button"] {
+    border: 1px solid #ff4b2b;
+    background: #ff4b2b;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .loginReg__container {
@@ -260,4 +281,97 @@
 .loginReg__footer a {
     color: #3c97bf;
     text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .loginReg__root {
+        padding: 0;
+    }
+
+    .loginReg__container {
+        width: 100%;
+        max-width: 100%;
+        min-height: 100vh;
+        height: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: hidden;
+    }
+
+    .loginReg__overlayContainer {
+        display: none;
+    }
+
+    .loginReg__formContainer {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 100%;
+        height: auto;
+        min-height: 100vh;
+        padding: 40px 15px 20px 15px;
+        
+        transform: none !important;
+        transition: none;
+        opacity: 1 !important;
+        z-index: 1 !important;
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .loginReg__signUpContainer {
+        display: none;
+    }
+    .loginReg__signInContainer {
+        display: flex;
+    }
+
+    .loginReg__rightPanelActive .loginReg__signUpContainer {
+        display: flex;
+    }
+    .loginReg__rightPanelActive .loginReg__signInContainer {
+        display: none;
+    }
+
+    .loginReg__mobileToggle {
+        display: block;
+    }
+
+    .loginReg__form {
+        padding: 0 10px;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .loginReg__h1 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    .loginReg__input {
+        padding: 10px 12px;
+        margin: 6px 0;
+        font-size: 14px;
+    }
+    
+    .loginReg__input__file {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+    .loginReg__input__file__name {
+        font-size: 12px;
+    }
+
+    .loginReg__button {
+        padding: 10px 35px;
+        font-size: 12px;
+    }
+
+    .loginReg__footer {
+        position: relative;
+        padding: 10px;
+    }
 }

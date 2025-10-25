@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { GameInfo } from "shared/types";
 import { Button, Form, Input, InputNumber, Image } from "antd";
 import api from "shared/api";
-import { SyncOutlined, UploadOutlined } from "@ant-design/icons";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { IMG_SRC } from "shared/const";
 import { useTranslation } from "react-i18next";
 import { Modal } from "widgets/modal";
+import { SyncIcon, UploadIcon } from "widgets/icons";
 
 interface EditGameInfoModalProps {
     gameInfo: GameInfo;
@@ -20,7 +20,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
     const [isLoading, setIsLoading] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
     const [newImageFile, setNewImageFile] = useState<File | null>(null);
-    const { t } = useTranslation("translation", { keyPrefix: "gameCard.editGame" });
+    const { t } = useTranslation("translation");
 
     const newFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -37,7 +37,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
         ];
 
         // Получаем расширение файла
-        const fileExtension = file.name.split(".").pop()?.toLowerCase();
+        const fileExtension = file.name.split("gameCard.editGame..").pop()?.toLowerCase();
         const isValidExtension = ["jpg", "jpeg", "png", "webp"].includes(fileExtension || "");
 
         // Проверяем и по MIME типу и по расширению
@@ -127,44 +127,44 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
         <Modal
             name="edit"
             open={isModalOpen}
-            title={`${t("title")}: ${gameInfo.title}`}
+            title={`${t("gameCard.editGame.title")}: ${gameInfo.title}`}
             onClose={closeModalForm}
             size="large"
             footer={[
-                <Button key="back" onClick={closeModal}>
-                    {t("form.cancel-btn")}
-                </Button>,
-                <Button key="submit" type="primary" icon={<SyncOutlined />} loading={isLoading} onClick={() => form.submit()}>
-                    {t("form.save-btn")}
-                </Button>,
+                <button key="back" className="button button__cancel" onClick={closeModal}>
+                    {t("gameCard.editGame.form.cancel-btn")}
+                </button>,
+                <button key="submit" className="button button__submit" disabled={isLoading} onClick={() => form.submit()}>
+                    {isLoading ? <><SyncIcon spin />{t("request-response.updating")}</> : <><UploadIcon />{t("gameCard.editGame.form.save-btn")}</>}
+                </button>,
             ]}
         >
             <Form key={gameInfo.id} form={form} onFinish={onFinish} labelCol={{ span: 5 }}>
-                <Form.Item name="title" label={t("form.name")}>
-                    <Input placeholder={t("form.name")} />
+                <Form.Item name="title" label={t("gameCard.editGame.form.name")}>
+                    <Input placeholder={t("gameCard.editGame.form.name")} />
                 </Form.Item>
 
-                <Form.Item name="year" label={t("form.year")}>
-                    <InputNumber placeholder={t("form.year")} />
+                <Form.Item name="year" label={t("gameCard.editGame.form.year")}>
+                    <InputNumber placeholder={t("gameCard.editGame.form.year")} />
                 </Form.Item>
 
-                <Form.Item name="preambula" label={t("form.desc")}>
-                    <Input.TextArea placeholder={t("form.desc")} autoSize={{ minRows: 3, maxRows: 5 }} />
+                <Form.Item name="preambula" label={t("gameCard.editGame.form.desc")}>
+                    <Input.TextArea placeholder={t("gameCard.editGame.form.desc")} autoSize={{ minRows: 3, maxRows: 5 }} />
                 </Form.Item>
 
-                <Form.Item name="developer" label={t("form.developer")}>
-                    <Input placeholder={t("form.developer")} />
+                <Form.Item name="developer" label={t("gameCard.editGame.form.developer")}>
+                    <Input placeholder={t("gameCard.editGame.form.developer")} />
                 </Form.Item>
 
-                <Form.Item name="publisher" label={t("form.publisher")}>
-                    <Input placeholder={t("form.publisher")} />
+                <Form.Item name="publisher" label={t("gameCard.editGame.form.publisher")}>
+                    <Input placeholder={t("gameCard.editGame.form.publisher")} />
                 </Form.Item>
 
-                <Form.Item name="genre" label={t("form.genre")}>
-                    <Input placeholder={t("form.genre")} />
+                <Form.Item name="genre" label={t("gameCard.editGame.form.genre")}>
+                    <Input placeholder={t("gameCard.editGame.form.genre")} />
                 </Form.Item>
 
-                <Form.Item label={t("form.img")}>
+                <Form.Item label={t("gameCard.editGame.form.img")}>
                     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                         {/* Превью текущего/нового изображения */}
                         {previewImage && <Image src={previewImage} preview={false} width={150} style={{ borderRadius: 4 }} />}
@@ -178,8 +178,8 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                                 style={{ display: "none" }}
                                 onChange={handleImageChange}
                             />
-                            <Button icon={<UploadOutlined />} onClick={() => newFileInputRef.current?.click()}>
-                                {newImageFile ? t("form.change-btn") : t("form.new-img-btn")}
+                            <Button icon={<UploadIcon />} onClick={() => newFileInputRef.current?.click()}>
+                                {newImageFile ? t("gameCard.editGame.form.change-btn") : t("gameCard.editGame.form.new-img-btn")}
                             </Button>
                             {newImageFile && (
                                 <div style={{ marginTop: 8 }}>
@@ -191,7 +191,7 @@ export const EditGameInfoModal: React.FC<EditGameInfoModalProps> = ({ gameInfo, 
                                             setPreviewImage(IMG_SRC + gameInfo.image);
                                         }}
                                     >
-                                        {t("form.cancel-btn")}
+                                        {t("gameCard.editGame.form.cancel-btn")}
                                     </Button>
                                 </div>
                             )}

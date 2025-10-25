@@ -6,7 +6,7 @@ interface AppContentProps {
 
 export const AppContent = ({ children }: AppContentProps) => {
     return ( 
-        <div className={style.content}>
+        <div id="app-content" className={style.content}>
             {children}
         </div>
     )

@@ -114,7 +114,7 @@ export const AppHeader = () => {
 
     return (
         <>
-            <header className={style.header}>
+            <header id="app-header" className={style.header}>
                 <div className={style.header__inner}>
                     {/* Бургер + Заголовок */}
                     {isMobile && (

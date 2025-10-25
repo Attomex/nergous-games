@@ -11,5 +11,3 @@ export interface User {
     photo: string;
     stats: UserStats;
 }
-
-export const emptyUser = { email: "", steam_url: "", photo: "", stats: { finished: 0, playing: 0, planned: 0, dropped: 0 } }

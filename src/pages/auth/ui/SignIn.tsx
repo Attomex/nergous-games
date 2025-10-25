@@ -13,7 +13,7 @@ interface LoginFormState {
     app_id: number | undefined;
 }
 
-export const SignInForm = () => {
+export const SignInForm = ({ onToggle }: { onToggle: (type: string) => void }) => {
     const { login } = useAuth();
     const { t } = useTranslation("translation");
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ export const SignInForm = () => {
         const { email, password, app_id } = state;
 
         try {
-            
+
             await api.post('/login', { email, password, app_id }).then(
                 async (response: { data: any; }) => {
                     const data = response.data;
@@ -76,6 +76,13 @@ export const SignInForm = () => {
                 />
                 {/* <a className={styles.loginReg__a} href="#">Забыли свой пароль?</a> */}
                 <button className={styles.loginReg__button}>{t("loginReg.login.form-button")}</button>
+                <button
+                    type="button"
+                    className={`${styles.loginReg__button} ${styles.loginReg__ghost} ${styles.loginReg__mobileToggle}`}
+                    onClick={() => onToggle("signUp")}
+                >
+                    {t("loginReg.login.mobile-side-button")}
+                </button>
             </form>
         </div>
     );

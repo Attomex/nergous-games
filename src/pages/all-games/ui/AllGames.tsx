@@ -8,7 +8,7 @@ import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-quer
 import { Paginations } from "widgets/pagination";
 import { Divider, Loader } from "shared/ui";
 import { AddGameButton } from "widgets/add-game-button";
-import { useDebouncedSearch } from "shared/hooks";
+import { useDebouncedSearch, useMediaQuery } from "shared/hooks";
 import { SearchInput } from "widgets/search-input";
 import { Dropdown } from "widgets/dropdown";
 import { DropdownOption, DropdownProps, GameInfo } from "shared/types";
@@ -19,8 +19,10 @@ import { EmptyItems } from "widgets/empty-items";
 import { GameCard } from "features/game-card";
 import { GameDetailModal } from "features/game-detail";
 import { Flex } from "shared/ui";
-import { DeleteGameModal } from "features/game-card/ui/DeleteGameModal";
+import { DeleteGameModal } from "features/delete-game";
 import { showErrorNotification, showSuccessNotification } from "shared/lib";
+import { EMPTY_GAME_INFO } from "shared/const";
+import { EditGameInfoModal } from "features/edit-game";
 
 const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
     const [, params] = queryKey;
@@ -32,6 +34,7 @@ export const AllGames: React.FC = () => {
     const [page, setPage] = useState(1);
     const { search, debouncedSearch, setSearch } = useDebouncedSearch(setPage, 500);
     const { t } = useTranslation("translation");
+    const isMobile = useMediaQuery("(max-width: 660px)");
 
     type SortOption = keyof typeof sortOptions;
     const sortOptions = {
@@ -68,6 +71,15 @@ export const AllGames: React.FC = () => {
         id: 0,
         title: "",
     });
+    const [deleteLoading, setDeleteLoading] = useState(false);
+
+    const [editModal, setEditModal] = useState(false);
+    const [editGameInfo, setEditGameInfo] = useState<GameInfo>(EMPTY_GAME_INFO);
+
+    const openEditModal = (gameInfo: GameInfo) => {
+        setEditGameInfo(gameInfo);
+        setEditModal(true);
+    }
 
     const openDeleteModal = (id: number, title: string) => {
         setGameDeleteInfo({ id, title });
@@ -146,13 +158,15 @@ export const AllGames: React.FC = () => {
 
     const deleteGame = async (id: number) => {
         try {
+            setDeleteLoading(true);
             await api.delete(`/games/${id}`);
             showSuccessNotification("Игра успешно удалена!");
+            setDeleteModal(false);
             refreshGames();
         } catch (err) {
             showErrorNotification(`Произошла ошибка при удалении игры ${err}`);
         } finally {
-            setDeleteModal(false);
+            setDeleteLoading(false);
         }
     };
 
@@ -220,9 +234,10 @@ export const AllGames: React.FC = () => {
                         <GameCard
                             key={g.id}
                             gameInfo={g}
+                            isMobile={isMobile}
                             openDetails={openDetailsModal}
                             openDelete={openDeleteModal}
-                            updateUsersGames={refreshGames}
+                            openEdit={openEditModal}
                         />
                     ))
                 ) : debouncedSearch ? (
@@ -249,6 +264,13 @@ export const AllGames: React.FC = () => {
                 modalOpen={deleteModal}
                 onClose={() => setDeleteModal(false)}
                 onDelete={deleteGame}
+                loading={deleteLoading}
+            />
+            <EditGameInfoModal
+                gameInfo={editGameInfo}
+                updateUsersGames={refreshGames}
+                isModalOpen={editModal}
+                closeModal={() => setEditModal(false)}
             />
         </>
     );

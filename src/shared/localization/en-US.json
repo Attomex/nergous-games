@@ -28,7 +28,9 @@
 
             "side-title": "One account for everything!",
             "side-text": "Sign up to access all our services with a single account.",
-            "side-button": "Sign up"
+            "side-button": "Sign up",
+
+            "mobile-side-button": "Account registration"
         },
         "registration": {
             "title": "Registration",
@@ -39,11 +41,27 @@
             "form-image-btn": "Choose file",
             "form-image-text": "File not selected",
             "form-button": "Registration",
-            
+
             "side-title": "Log in to your account",
             "side-text": "Already have an account? Just log in and you're good to go.",
-            "side-button": "Log in"
+            "side-button": "Log in",
+
+            "mobile-side-button": "Already have an account?"
         }
+    },
+    "admin-users": {
+        "title": "Users",
+        "empty-users": "Users not found",
+        "user-card": {
+            "roles": {
+                "admin": "Administrator",
+                "user": "User"
+            },
+            "link-steam": "Steam link"
+        },
+
+        "edit-btn": "Edit",
+        "delete-btn": "Delete"
     },
     "sidebar": {
         "buttons": {
@@ -108,6 +126,33 @@
             "create-btn": "Create"
         }
     },
+    "modals": {
+        "delete-game": {
+            "title": "Deleting a game",
+
+            "text-target": "Are you sure you want to delete the game",
+            "text-warning": "This action will completely delete all game data without the possibility of recovery!"
+        },
+        "edit-user": {
+            "title": "Editing user information",
+
+            "avatar": "Avatar",
+            "role-set": {
+                "label": "Role",
+                "admin": "Administrator",
+                "user": "User"
+            }
+        },
+        "delete-user": {
+            "title": "Delete user",
+
+            "text-target": "Are you sure you want to delete this user?",
+            "text-warning": "This action will permanently delete all user data!"
+        },
+        "save-btn": "Save",
+        "cancel-btn": "Cancel",
+        "delete-btn": "Delete"
+    },
     "filterGames": {
         "button": {
             "all": "All",
@@ -138,6 +183,10 @@
         },
         "priority": {
             "text": "Priority"
+        },
+        "dropdown": {
+            "edit": "Edit",
+            "delete": "Delete"
         },
         "gameDetails": {
             "more": "Learn more",
@@ -183,5 +232,11 @@
         "f-text": "No games were found matching your request.",
         "s-text": "Please try changing your query and try",
         "again-text": "again"
+    },
+    "request-response": {
+        "creating": "Creating",
+        "loading": "Loading",
+        "updating": "Updating",
+        "deleting": "Deleting"
     }
 }

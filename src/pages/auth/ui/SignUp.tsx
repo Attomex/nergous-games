@@ -14,7 +14,7 @@ interface RegisterFormState {
     image: File | null;
 }
 
-export const SignUpForm = () => {
+export const SignUpForm = ({ onToggle }: { onToggle: (type: string) => void }) => {
     const inputFile = useRef<HTMLInputElement>(null);
     const { login } = useAuth();
     const { t } = useTranslation("translation");
@@ -170,6 +170,14 @@ export const SignUpForm = () => {
                 ) : (
                     <button className={styles.loginReg__button}>{t("loginReg.registration.form-button")}</button>
                 )}
+
+                <button
+                    type="button"
+                    className={`${styles.loginReg__button} ${styles.loginReg__ghost} ${styles.loginReg__mobileToggle}`}
+                    onClick={() => onToggle("signIn")}
+                >
+                    {t("loginReg.registration.mobile-side-button")}
+                </button>
             </form>
         </div>
     );

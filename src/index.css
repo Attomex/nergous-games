@@ -6,6 +6,7 @@
 660px
 440px
 */
+@import url("./components.css");
 
 :root {
     --button-radius: 4px;
@@ -515,7 +516,7 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow: hidden;
+    overflow: auto;
     font-family: "Manrope";
 }
 

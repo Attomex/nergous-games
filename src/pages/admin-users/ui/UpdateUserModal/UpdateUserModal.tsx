@@ -1,4 +1,4 @@
-import { SyncOutlined } from "@ant-design/icons";
+import { SyncIcon, UploadIcon } from "widgets/icons";
 import { IUser } from "pages/admin-users/model";
 import { ReactNode, useState } from "react";
 import api from "shared/api";
@@ -7,6 +7,7 @@ import { IMG_SRC } from "shared/const";
 import { Modal } from "widgets/modal";
 import styles from "./UpdateUserModal.module.css";
 import { CustomDropdown } from "widgets/dropdown";
+import { useTranslation } from "react-i18next";
 
 interface UpdateUserModalProps {
     user: IUser;
@@ -22,6 +23,8 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, isModalO
     const [role, setRole] = useState(user.is_admin ? "admin" : "user");
 
     const [isLoading, setIsLoading] = useState(false);
+
+    const { t } = useTranslation("translation");
 
     const onFinish = async () => {
         try {
@@ -51,22 +54,23 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, isModalO
 
     return (
         <Modal
-            title="Изменение информации"
+            name="update-user"
+            title={t("modals.edit-user.title")}
             open={isModalOpen}
             onClose={closeModal}
             footer={
-                <div className={styles.footer}>
-                    <button className={styles.buttonCancel} onClick={closeModal} disabled={isLoading}>
-                        Отменить
+                <>
+                    <button className="button button__cancel" onClick={closeModal} disabled={isLoading}>
+                        {t("modals.cancel-btn")}
                     </button>
-                    <button className={styles.buttonSubmit} onClick={onFinish} disabled={isLoading}>
-                        {isLoading ? <SyncOutlined spin /> : "Сохранить"}
+                    <button className="button button__submit" onClick={onFinish} disabled={isLoading}>
+                        {isLoading ? <><SyncIcon spin /> {t("request-response.updating")}</> : <><UploadIcon /> {t("modals.save-btn")}</>}
                     </button>
-                </div>
+                </>
             }>
             <div className={styles.form}>
                 <div className={styles.formRow}>
-                    <label>Аватар</label>
+                    <label>{t("modals.edit-user.avatar")}</label>
                     <img src={IMG_SRC + user.path_to_photo} alt="User avatar" width={64} height={64} className={styles.avatar} />
                 </div>
 
@@ -82,20 +86,20 @@ export const UpdateUserModal: React.FC<UpdateUserModalProps> = ({ user, isModalO
                         value={steamUrl}
                         onChange={(e) => setSteamUrl(e.target.value)}
                         className={styles.input}
-                        placeholder="Ссылка на Steam"
+                        placeholder="Steam"
                     />
                 </div>
 
                 <div className={styles.formRow}>
-                    <label>Роль</label>
+                    <label>{t("modals.edit-user.role-set.label")}</label>
                     <CustomDropdown
                         items={[
-                            { id: 1, label: "Пользователь", extra: <></> },
-                            { id: 2, label: "Администратор", extra: <></> },
+                            { id: 1, label: t("modals.edit-user.role-set.user"), extra: <></> },
+                            { id: 2, label: t("modals.edit-user.role-set.admin"), extra: <></> },
                         ]}
                         buttonClassName={styles.button}
                         dropdownClassName={styles.dropdown}
-                        initialSelectedItem={role === "user" ? "Пользователь" : "Администратор"}
+                        initialSelectedItem={role === "user" ? t("modals.edit-user.role-set.user") : t("modals.edit-user.role-set.admin")}
                         onChange={(id) => onChangeRole(id)}
                     />
                 </div>

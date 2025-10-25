@@ -3,13 +3,8 @@
     font-size: 0.9rem;
 }
 
-.userEmail {
+.gameName {
     padding-inline: 2px;
     font-weight: bold;
     font-size: 1rem;
-}
-
-.footer {
-    display: flex;
-    gap: 10px;
 }
