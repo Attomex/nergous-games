@@ -11,6 +11,8 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease-in-out;
+    overflow-x: auto;
+    overflow-y: auto;
 }
 
 .modal.open {
@@ -68,7 +70,7 @@
 
 .modal__body {
     font-size: 0.9rem;
-    max-height: 70vh;
+    /* max-height: 70vh; */
     overflow-y: visible;
 }
 
@@ -114,11 +116,11 @@
 }
 
 .small {
-    max-width: 300px;
+    max-width: 400px;
 }
 .medium {
-    max-width: 620px;
+    max-width: 700px;
 }
 .large {
-    max-width: 800px;
+    max-width: 1000px;
 }
