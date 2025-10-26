@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 interface StatusButtonsGroupProps {
     status: string;
     setStatus: (status: string) => void;
-    setPage?: (page: number) => void;
+    setPage: (page: number) => void;
 }
 
 export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, setStatus, setPage }) => {
@@ -91,7 +91,7 @@ export const StatusButtonsGroup: React.FC<StatusButtonsGroupProps> = ({ status, 
                     className={`${styles["status-button"]} ${status === button.status ? styles["active"] : ""}`}
                     onClick={() => {
                         setStatus(button.status);
-                        setPage && setPage(1);
+                        setPage(1);
                     }}>
                     {button.title}
                 </button>

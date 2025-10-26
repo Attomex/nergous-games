@@ -12,13 +12,14 @@ import { Dropdown } from "widgets/dropdown";
 
 interface GameCardProps {
     gameInfo: GameInfo;
+    innerRef?: React.Ref<HTMLDivElement>;
     isMobile: boolean;
     openDetails: (gameInfo: GameInfo) => void;
     openEdit: (gameInfo: GameInfo) => void;
     openDelete: (id: number, title: string) => void;
 }
 
-export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, isMobile, openEdit, openDelete }) => {
+export const GameCard: React.FC<GameCardProps> = ({ gameInfo, innerRef, openDetails, isMobile, openEdit, openDelete }) => {
     const { isAdmin } = useAuth();
     const { t } = useTranslation("translation");
 
@@ -89,7 +90,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameInfo, openDetails, isMob
     ];
 
     return (
-        <article className={styles.card} onClick={isMobile ? () => openDetails(gameInfo) : undefined} style={{ cursor: isMobile ? "pointer" : "default" }}>
+        <article ref={innerRef} className={styles.card} onClick={isMobile ? () => openDetails(gameInfo) : undefined} style={{ cursor: isMobile ? "pointer" : "default" }}>
             {/* Левый столбец — изображение */}
             <div className={styles.image} onClick={isMobile ? undefined : () => openDetails(gameInfo)}>
                 <img loading="lazy" src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />

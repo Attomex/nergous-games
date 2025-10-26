@@ -3,7 +3,7 @@ import { Flex } from "shared/ui";
 import { Divider } from "shared/ui";
 import { Loader } from "shared/ui";
 
-import {  useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 
 import styles from "./UserGames.module.css";
 
@@ -16,8 +16,9 @@ import { useAuth } from "features/auth";
 
 import api from "shared/api";
 import { DropdownOption, DropdownProps, GameInfo } from "shared/types";
-import { useDebouncedSearch, useIntersectionObserver, useMediaQuery } from "shared/hooks";
+import { useDebouncedSearch, useMediaQuery } from "shared/hooks";
 
+import { Paginations } from "widgets/pagination";
 import { AddGameButton } from "widgets/add-game-button";
 import { SearchInput } from "widgets/search-input";
 import { Dropdown } from "widgets/dropdown";
@@ -31,16 +32,16 @@ import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { EditGameInfoModal } from "features/edit-game";
 import { EMPTY_GAME_INFO } from "shared/const";
 
-const fetchUserGames = async ({ pageParam = 1, ...params }: any) => {
-    const res = await api.get("/games/user", {
-        params: { page: pageParam, ...params }
-    });
-    return res.data;
+const fetchUserGames = async ({ queryKey }: { queryKey: any }) => {
+    const [, params] = queryKey;
+    const res = await api.get("/games/user", { params });
+    return res.data; // { data: GameInfo[], pages, total }
 };
 
 export const UserGames: React.FC = () => {
+    const [page, setPage] = useState(1);
     const [status, setStatus] = useState("");
-    const { search, debouncedSearch, setSearch } = useDebouncedSearch(() => { }, 500);
+    const { search, debouncedSearch, setSearch } = useDebouncedSearch(setPage, 500);
     const { t } = useTranslation("translation");
     const isMobile = useMediaQuery("(max-width: 660px)");
 
@@ -86,51 +87,15 @@ export const UserGames: React.FC = () => {
     const queryClient = useQueryClient();
 
     const pageSize = 12;
-    const {
-        data,
-        isPending,
-        isError,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-    } = useInfiniteQuery({
+    const { data, isPending, isError } = useQuery({
         queryKey: [
             "userGames",
-            {
-                status: status,
-                page_size: pageSize,
-                search: debouncedSearch,
-                sort_by: generalSort.split("-")[0],
-                sort_order: generalSort.split("-")[1]
-            },
+            { status, page, page_size: pageSize, search: debouncedSearch, sort_by: generalSort.split("-")[0], sort_order: generalSort.split("-")[1] },
         ],
-        queryFn: ({ pageParam = 1 }) =>
-            fetchUserGames({
-                pageParam: pageParam,
-                status: status,
-                page_size: pageSize,
-                search: debouncedSearch,
-                sort_by: generalSort.split("-")[0],
-                sort_order: generalSort.split("-")[1],
-            }),
-        initialPageParam: 1,
-        getNextPageParam: (lastPage) => {
-            // Проверяем, есть ли следующая страница
-            if (lastPage.current < lastPage.pages) {
-                return lastPage.current + 1;
-            }
-            return undefined;
-        },
+        queryFn: fetchUserGames,
+        placeholderData: keepPreviousData,
         refetchOnWindowFocus: false,
     });
-
-    const loadMore = useCallback(() => {
-        if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage();
-        }
-    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-    const lastElementRef = useIntersectionObserver(loadMore, { rootMargin: '250px' });
 
     const sortItems: DropdownOption[] = [
         {
@@ -186,7 +151,8 @@ export const UserGames: React.FC = () => {
         setGeneralSort(value as SortOption);
     };
 
-    const userGames = data?.pages.flatMap(page => page.data).filter(Boolean) ?? [];
+    const userGames: GameInfo[] = data?.data ?? [];
+    const totalItems: number = data?.total ?? 0;
 
     const closeModal = () => {
         setModalCreateGame(false);
@@ -251,7 +217,7 @@ export const UserGames: React.FC = () => {
                             <span className={styles["status-buttons__arrow"]}>
                                 <ChevronLeft />
                             </span>
-                            <StatusButtonsGroup status={status} setStatus={setStatus} />
+                            <StatusButtonsGroup status={status} setStatus={setStatus} setPage={setPage} />
                             <span className={styles["status-buttons__arrow"]}>
                                 <ChevronRight />
                             </span>
@@ -274,60 +240,50 @@ export const UserGames: React.FC = () => {
                 {/* Карточки */}
                 <Flex wrap justify="between" className={styles["cards-wrapper"]}>
                     {userGames && userGames.length > 0 ? (
-                        userGames.map((g, index) => {
-                            const isLast = index === userGames.length - 1;
-                            return (
-                                <GameCard
-                                    key={g.id}
-                                    gameInfo={g}
-                                    innerRef={isLast ? lastElementRef : undefined}
-                                    isMobile={isMobile}
-                                    openDetails={openDetailsModal}
-                                    openDelete={openDeleteModal}
-                                    openEdit={openEditModal}
-                                />
-                            );
-                        })
-                    ) : debouncedSearch && !isPending && !isFetchingNextPage ? (
+                        userGames.map((g) => (
+                            <GameCard
+                                key={g.id}
+                                gameInfo={g}
+                                isMobile={isMobile}
+                                openDetails={openDetailsModal}
+                                openDelete={openDeleteModal}
+                                openEdit={openEditModal}
+                            />
+                        ))
+                    ) : debouncedSearch ? (
                         <EmptyItems />
                     ) : (
                         <></>
                     )}
                 </Flex>
                 {/* Пагинация и статус загрузки */}
-                {/* Статус загрузки */}
                 {isPending && (
                     <div style={{ textAlign: "center", marginTop: 8 }}>
                         <Loader size="large" tip="Загрузка..." />
                     </div>
                 )}
-                {/* ИЗМЕНЕНИЕ: Добавляем индикатор загрузки для следующих страниц */}
-                {isFetchingNextPage && (
-                    <div style={{ textAlign: "center", marginTop: 8 }}>
-                        <Loader size="large" tip="Загрузка следующих игр..." />
-                    </div>
-                )}
                 {isError && <div style={{ color: "red" }}>Ошибка при загрузке игр.</div>}
-            </Flex>
-            {/* Модалки */}
-            <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
-            <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
-            <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={refreshGames} />
-            <DeleteGameModal
-                gameName={gameDeleteInfo.title}
-                gameId={gameDeleteInfo.id}
-                modalOpen={deleteModal}
-                onClose={() => setDeleteModal(false)}
-                onDelete={deleteGame}
-                loading={deleteLoading}
-            />
-            <EditGameInfoModal
-                gameInfo={editGameInfo}
-                updateUsersGames={refreshGames}
-                isModalOpen={editModal}
-                closeModal={() => setEditModal(false)}
-            />
+                {isPending ? null : <Paginations totalItems={totalItems} currentPage={page} pageSize={pageSize} onChange={setPage} />}
 
+                {/* Модалки */}
+                <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
+                <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />
+                <GameDetailModal gameInfo={detailsGameInfo} isModalOpen={detailsModal} closeModal={() => setDetailsModal(false)} updateUsersGames={refreshGames} />
+                <DeleteGameModal
+                    gameName={gameDeleteInfo.title}
+                    gameId={gameDeleteInfo.id}
+                    modalOpen={deleteModal}
+                    onClose={() => setDeleteModal(false)}
+                    onDelete={deleteGame}
+                    loading={deleteLoading}
+                />
+                <EditGameInfoModal
+                    gameInfo={editGameInfo}
+                    updateUsersGames={refreshGames}
+                    isModalOpen={editModal}
+                    closeModal={() => setEditModal(false)}
+                />
+            </Flex>
         </>
     );
 };

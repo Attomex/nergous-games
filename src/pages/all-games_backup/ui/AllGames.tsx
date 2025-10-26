@@ -4,10 +4,11 @@ import api from "shared/api";
 import { CreateGameModal } from "features/create-game";
 import { AddGamesModal } from "features/add-games";
 import { useAuth } from "features/auth";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
+import { Paginations } from "widgets/pagination";
 import { Divider, Loader } from "shared/ui";
 import { AddGameButton } from "widgets/add-game-button";
-import { useDebouncedSearch, useMediaQuery, useIntersectionObserver } from "shared/hooks";
+import { useDebouncedSearch, useMediaQuery } from "shared/hooks";
 import { SearchInput } from "widgets/search-input";
 import { Dropdown } from "widgets/dropdown";
 import { DropdownOption, DropdownProps, GameInfo } from "shared/types";
@@ -23,15 +24,15 @@ import { showErrorNotification, showSuccessNotification } from "shared/lib";
 import { EMPTY_GAME_INFO } from "shared/const";
 import { EditGameInfoModal } from "features/edit-game";
 
-const fetchAllGames = async ({ pageParam = 1, ...params }: any) => {
-    const res = await api.get("/games", {
-        params: { page: pageParam, ...params }
-    });
-    return res.data;
+const fetchAllGames = async ({ queryKey }: { queryKey: any }) => {
+    const [, params] = queryKey;
+    const res = await api.get("/games", { params });
+    return res.data; // { data: GameInfo[], pages, total }
 };
 
 export const AllGames: React.FC = () => {
-    const { search, debouncedSearch, setSearch } = useDebouncedSearch(() => { }, 500);
+    const [page, setPage] = useState(1);
+    const { search, debouncedSearch, setSearch } = useDebouncedSearch(setPage, 500);
     const { t } = useTranslation("translation");
     const isMobile = useMediaQuery("(max-width: 660px)");
 
@@ -78,12 +79,12 @@ export const AllGames: React.FC = () => {
     const openEditModal = (gameInfo: GameInfo) => {
         setEditGameInfo(gameInfo);
         setEditModal(true);
-    };
+    }
 
     const openDeleteModal = (id: number, title: string) => {
         setGameDeleteInfo({ id, title });
         setDeleteModal(true);
-    };
+    }
 
     const { checkAdmin } = useAuth();
     const queryClient = useQueryClient();
@@ -128,55 +129,18 @@ export const AllGames: React.FC = () => {
     ];
 
     const pageSize = 18;
-
-    const {
-        data,
-        isPending,
-        isError,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-    } = useInfiniteQuery({
+    const { data, isPending, isError } = useQuery({
         queryKey: [
             "allGames",
-            {
-                page_size: pageSize,
-                search: debouncedSearch,
-                sort_by: generalSort.split("-")[0],
-                sort_order: generalSort.split("-")[1]
-            },
+            { page, page_size: pageSize, search: debouncedSearch, sort_by: generalSort.split("-")[0], sort_order: generalSort.split("-")[1] },
         ],
-        queryFn: ({ pageParam = 1 }) =>
-            fetchAllGames({
-                pageParam: pageParam,
-                page_size: pageSize,
-                search: debouncedSearch,
-                sort_by: generalSort.split("-")[0],
-                sort_order: generalSort.split("-")[1],
-            }),
-        initialPageParam: 1,
-        getNextPageParam: (lastPage) => {
-            if (lastPage.current < lastPage.pages) {
-                return lastPage.current + 1;
-            }
-            return undefined;
-        },
+        queryFn: fetchAllGames,
+        placeholderData: keepPreviousData,
         refetchOnWindowFocus: false,
     });
 
-    // Функция для загрузки следующей страницы
-    const loadMore = useCallback(() => {
-        if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage();
-        }
-    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-    // Используем Intersection Observer для отслеживания последнего элемента
-    const lastElementRef = useIntersectionObserver(loadMore, { rootMargin: '250px' });
-
-    // Получаем все игры из всех страниц
-    const userGames = data?.pages.flatMap(page => page.data).filter(Boolean) ?? [];
-    // const totalItems: number = data?.pages[0]?.total ?? 0;
+    const userGames: GameInfo[] = data?.data ?? [];
+    const totalItems: number = data?.total ?? 0;
 
     const closeModal = () => {
         setModalCreateGame(false);
@@ -219,7 +183,7 @@ export const AllGames: React.FC = () => {
         }
 
         window.history.replaceState(null, "", newUrl);
-    }, [search]);
+    }, [search])
 
     const sortHandleChange: DropdownProps["onClick"] = ({ value }) => {
         setGeneralSort(value as SortOption);
@@ -266,43 +230,30 @@ export const AllGames: React.FC = () => {
             {/* Карточки */}
             <Flex wrap justify="between" gap={10} style={{ width: "100%" }}>
                 {userGames && userGames.length > 0 ? (
-                    userGames.map((g, index) => {
-                        const isLast = index === userGames.length - 1;
-                        return (
-                            <GameCard
-                                key={g.id}
-                                gameInfo={g}
-                                innerRef={isLast ? lastElementRef : undefined}
-                                isMobile={isMobile}
-                                openDetails={openDetailsModal}
-                                openDelete={openDeleteModal}
-                                openEdit={openEditModal}
-                            />
-                        );
-                    })
-                ) : debouncedSearch && !isPending && !isFetchingNextPage ? (
+                    userGames.map((g) => (
+                        <GameCard
+                            key={g.id}
+                            gameInfo={g}
+                            isMobile={isMobile}
+                            openDetails={openDetailsModal}
+                            openDelete={openDeleteModal}
+                            openEdit={openEditModal}
+                        />
+                    ))
+                ) : debouncedSearch ? (
                     <EmptyItems />
                 ) : (
                     <></>
                 )}
             </Flex>
-
-            {/* Статус загрузки */}
+            {/* Пагинация и статус загрузки */}
             {isPending && (
                 <div style={{ textAlign: "center", marginTop: 8 }}>
                     <Loader size="large" tip="Загрузка..." />
                 </div>
             )}
-
-            {isFetchingNextPage && (
-                <div style={{ textAlign: "center", marginTop: 8 }}>
-                    <Loader size="large" tip="Загрузка следующих игр..." />
-                </div>
-            )}
-
             {isError && <div style={{ color: "red" }}>Ошибка при загрузке игр.</div>}
-
-            {/* Убираем обычную пагинацию */}
+            {isPending ? null : <Paginations totalItems={totalItems} currentPage={page} pageSize={pageSize} onChange={setPage} />}
 
             <CreateGameModal isModalOpen={modalCreateGame} closeModal={closeModal} onGameCreated={refreshGames} />
             <AddGamesModal isModalOpen={modalAddGames} closeModal={closeModal} onAddGames={refreshGames} />

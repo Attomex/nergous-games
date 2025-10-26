@@ -1,0 +1,61 @@
+.status-buttons-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.status-button {
+    padding: 6px 12px;
+    border: 1px solid var(--main-button-border-color);
+    border-radius: 4px;
+    background-color: var(--main-button-bg-color, #fff);
+    color: var(--main-button-text-color, #000);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    transform-origin: center center;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.status-button:hover {
+    background-color: var(--main-button-hover-bg-color);
+    color: var(--main-button-hover-text-color);
+    border-color: var(--main-button-hover-bg-color);
+}
+
+.status-button:active {
+    transform: scale(0.95);
+}
+
+.status-button.active {
+    background-color: var(--main-button-active-bg-color);
+    color: var(--main-button-active-text-color);
+    border-color: var(--main-button-active-bg-color);
+}
+
+@media screen and (max-width: 560px) {
+    .status-buttons-group {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        cursor: grab;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        user-select: none;
+        padding-inline: 8px;
+    }
+
+    .status-buttons-group::-webkit-scrollbar {
+        display: none;
+        height: 0;
+    }
+    .status-buttons-group {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .status-buttons-group.dragging {
+        cursor: grabbing;
+    }
+}
