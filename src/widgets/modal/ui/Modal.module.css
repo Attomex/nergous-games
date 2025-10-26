@@ -36,6 +36,17 @@
     transition: transform 0.3s ease-in-out; 
 }
 
+.modal__container.closable {
+    position: relative;
+}
+
+.modal__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
 .modal.open > .modal__container {
     transform: scale(1);
 }
@@ -58,7 +69,7 @@
 .modal__body {
     font-size: 0.9rem;
     max-height: 70vh;
-    overflow-y: auto;
+    overflow-y: visible;
 }
 
 .modal__footer {

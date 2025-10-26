@@ -12,6 +12,15 @@
     transform: scale(0.9);
 }
 
+.dropdown-item,
+.dropdown-toggle {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .dropdown-toggle {
     display: flex;
     align-items: center;
@@ -156,7 +165,7 @@
     .shaped {
         width: 28px;
         height: 28px;
-    }  
+    }
     .icon {
         width: 14px;
         height: 14px;

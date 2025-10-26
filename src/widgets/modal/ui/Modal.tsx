@@ -1,5 +1,6 @@
 import { createPortal } from "react-dom";
 import styles from "./Modal.module.css";
+import { XMarkLgIcon } from "widgets/icons";
 
 type ModalSize = "small" | "medium" | "large";
 
@@ -13,6 +14,7 @@ interface ModalProps {
     name: string;
     title?: React.ReactNode;
     open: boolean;
+    closable?: boolean;
     onClose: () => void;
     size?: ModalSize;
     classNames?: ModalClassNames;
@@ -32,6 +34,7 @@ export const Modal: React.FC<ModalProps> = ({
     title,
     footer,
     open,
+    closable = false,
     onOk,
     onClose,
     children,
@@ -58,10 +61,12 @@ export const Modal: React.FC<ModalProps> = ({
         }
         return (
             <footer className={classFooter}>
-                <button className={styles["modal-btn"] + " " + styles["modal-btn__close"]} onClick={handleCancel}>
+                {/* <button className={styles["modal-btn"] + " " + styles["modal-btn__close"]} onClick={handleCancel}> */}
+                <button className="button button__cancel" onClick={handleCancel}>
                     Закрыть
                 </button>
-                <button className={styles["modal-btn"] + " " + styles["modal-btn__ok"]} onClick={handleOk}>
+                {/* <button className={styles["modal-btn"] + " " + styles["modal-btn__ok"]} onClick={handleOk}> */}
+                <button className="button button__submit" onClick={handleOk}>
                     Ок
                 </button>
             </footer>
@@ -70,7 +75,8 @@ export const Modal: React.FC<ModalProps> = ({
 
     return createPortal(
         <div className={`${styles["modal"]} ${open ? styles["open"] : styles["close"]}`} id={`modal_${name}`} tabIndex={-1} onClick={handleCancel}>
-            <div className={styles["modal__container"] + " " + styles[size]} onClick={(e) => e.stopPropagation()}>
+            <div className={styles["modal__container"] + " " + styles[size] + " " + (closable ? styles["closable"] : "")} onClick={(e) => e.stopPropagation()}>
+                {closable && <span className={styles["modal__close"]} onClick={handleCancel}><XMarkLgIcon /></span>}
                 {title && (
                     <div className={classTitle}>
                         <h2>{title}</h2>

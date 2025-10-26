@@ -45,6 +45,9 @@
     margin-right: 25px;
     cursor: pointer;
     margin-left: auto;
+
+    /* Если не поможет в Dropdown эта настройка - раскомментировать эту строку, и возможно баг с посдветкой группы уберется */
+    /* -webkit-tap-highlight-color: transparent; */
 }
 
 .title {

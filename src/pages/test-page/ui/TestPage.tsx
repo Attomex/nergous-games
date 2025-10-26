@@ -1,16 +1,15 @@
-import { SyncIcon } from "widgets/icons";
+import React from "react";
 import "./TestPage.css";
+import { StatusModal } from "features/add-games/ui/StatusModal";
 
 export const TestPage = () => {
+    const [isOpen, setIsOpen] = React.useState(false);
 
 
     return (
         <div style={{ display: "flex", gap: "10px" }}>
-            <button style={{ display: "flex", alignItems: "center", gap: "10px" }}  className={"button"}><SyncIcon spin/>test</button>
-            <button className={"button button__default"}>def</button>
-            <button className={"button button__cancel"}>cancel</button>
-            <button className={"button button__delete"}>test</button>
-            <button className={"button button__submit"}>test</button>
+            <button onClick={() => setIsOpen(true)}>dsds</button>
+            <StatusModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
         </div>
     );
 };
