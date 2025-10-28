@@ -99,7 +99,7 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
     };
 
     return (
-        <Modal name="info" size={modalSize ? "small" : "medium"} open={isModalOpen} footer={null} onClose={closeModal}>
+        <Modal name="info" closable size={modalSize ? "small" : "medium"} open={isModalOpen} footer={null} onClose={closeModal}>
             <div className={styles.container}>
                 <div className={styles.imageWrapper}>
                     <img src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />

@@ -127,7 +127,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isModalOpen, c
             });
 
             await api
-                .post("addGame.modal./games", data)
+                .post("/games", data)
                 .then(() => {
                     showSuccessNotification("Игра успешно создана!");
                     closeModalForm();

@@ -512,11 +512,17 @@ body.dark {
     --admin-hover-border-color: var(--gray-light-color);
 }
 
+html,
+body {
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: pan-y;
+}
+
 body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow: auto;
     font-family: "Manrope";
 }
 

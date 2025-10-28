@@ -6,6 +6,9 @@
     min-height: 0;
     padding: 20px;
     background-color: var(--main-bg-color);
+
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 @media screen and (max-width: 660px) {

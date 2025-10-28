@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
 
 export const useDebouncedSearch = (setPage: (page: number) => void, delay: number = 500) => {
-    const initSearch = window.location.search.split("=")[1];
-    const [search, setSearch] = useState(initSearch);
-    const [debouncedSearch, setDebouncedSearch] = useState(initSearch);
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const searchParam = searchParams.get("s");
+
+        if (searchParam) {
+            setSearch(decodeURIComponent(searchParam));
+        }
+    }, []);
 
     useEffect(() => {
         const handler = setTimeout(() => {

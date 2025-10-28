@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./LoginReg.module.css";
 import { SignInForm } from "./SignIn";
 import { SignUpForm } from "./SignUp";
@@ -18,7 +18,7 @@ export const LoginRegPage = () => {
         }
     };
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if(Cookies.get("auth_token")) {
             navigate("/games");
         }
