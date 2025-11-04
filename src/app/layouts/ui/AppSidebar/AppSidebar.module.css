@@ -200,7 +200,17 @@
 }
 
 .link {
+    text-decoration: none;
+    color: inherit;
     cursor: pointer;
+}
+
+.link[aria-current="page"] {
+    font-weight: 800;
+}
+
+.link[aria-current="page"]::after {
+    transform: scaleX(1);
 }
 
 .logout,

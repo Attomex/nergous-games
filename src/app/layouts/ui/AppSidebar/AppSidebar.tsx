@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styles from "./AppSidebar.module.css";
 import { useAuth } from "features/auth";
 import { IMG_SRC } from "shared/const";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { showSuccessNotification } from "shared/lib";
 import { BookIcon, SquaresIcon, LogoutIcon, ArrowRepeat, XMarkLgIcon } from "widgets/icons";
 import { useTranslation } from "react-i18next";
@@ -21,7 +21,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
 }) => {
     const { t } = useTranslation("translation");
     const { user, getUserInfo, logout } = useAuth();
-    const navigate = useNavigate();
 
     useEffect(() => {
             getUserInfo();
@@ -72,29 +71,30 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                     <section className={styles["app-sidebar__body"]}>
                         <ul className={styles["sidebar-list"]}>
                             {sidebarItems.map((item) => (
-                                <li
+                                <Link
                                     key={item.id}
                                     className={`${styles["sidebar-item"]} ${styles["link"]} ${styles["hover"]}`}
+                                    to={item.href}
                                     onClick={() => {
-                                        navigate(item.href)
                                         closeSidebar();
                                     }}
+                                    aria-current={window.location.pathname === item.href ? "page" : "false"}
                                     tabIndex={item.id}
                                 >
                                     <span className={styles["sidebar-item__icon"]}>{item.icon}</span>
                                     <span className={styles["sidebar-text"]}>{item.label}</span>
-                                </li>
+                                </Link>
                             ))}
                         </ul>
                     </section>
                     <section className={styles["app-sidebar__footer"]}>
-                        <div className={`${styles["sidebar-item"]} ${styles["link"]} ${styles["hover"]} ${styles["logout"]}`} onClick={logout} tabIndex={4}>
+                        <Link to="" className={`${styles["sidebar-item"]} ${styles["link"]} ${styles["hover"]} ${styles["logout"]}`} onClick={logout} tabIndex={4}>
 
                             <span className={styles["sidebar-item__icon"]}>
                                 <LogoutIcon />
                             </span>
                             <span className={styles["sidebar-text"]}>{t("sidebar.buttons.logout")}</span>
-                        </div>
+                        </Link>
                     </section>
                 </div>
             </div>

@@ -75,15 +75,17 @@ export const Modal: React.FC<ModalProps> = ({
 
     return createPortal(
         <div className={`${styles["modal"]} ${open ? styles["open"] : styles["close"]}`} id={`modal_${name}`} tabIndex={-1} onClick={handleCancel}>
-            <div className={styles["modal__container"] + " " + styles[size] + " " + (closable ? styles["closable"] : "")} onClick={(e) => e.stopPropagation()}>
-                {closable && <span className={styles["modal__close"]} onClick={handleCancel}><XMarkLgIcon /></span>}
-                {title && (
-                    <div className={classTitle}>
-                        <h2>{title}</h2>
-                    </div>
-                )}
+            <div className={styles["modal__wrapper"]}>
+                <div className={styles["modal__container"] + " " + styles[size] + " " + (closable ? styles["closable"] : "")} onClick={(e) => e.stopPropagation()}>
+                    {closable && <span className={styles["modal__close"]} onClick={handleCancel}><XMarkLgIcon /></span>}
+                    {title && (
+                        <div className={classTitle}>
+                            <h2>{title}</h2>
+                        </div>
+                    )}
                     <div className={classBody}>{children}</div>
-                <Footer />
+                    <Footer />
+                </div>
             </div>
         </div>,
         document.body

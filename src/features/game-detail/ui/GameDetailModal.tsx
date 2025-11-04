@@ -104,7 +104,7 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ gameInfo, isMo
                 <div className={styles.imageWrapper}>
                     <img src={IMG_SRC + gameInfo.image} alt={gameInfo.title} />
                 </div>
-                <div>
+                <div style={{ flexGrow: 1 }}>
                     <div className={styles.content}>
                         <div className={styles.info}>
                             <h2 className={styles.title}>{gameInfo.title}</h2>

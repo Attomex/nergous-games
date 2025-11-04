@@ -72,7 +72,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
     return (
         <div className={dropdownStyles["dropdown-wrapper"]} ref={rootRef}>
-            <button className={toggleClasses} onClick={handleToggle} ref={buttonRef} style={styles}>
+            <button aria-haspopup="true" className={toggleClasses} onClick={handleToggle} ref={buttonRef} style={styles}>
                 {buttonIcon && <span className={dropdownStyles["icon"]}>{buttonIcon}</span>}
                 {placeholder}
             </button>
