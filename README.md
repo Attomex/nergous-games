@@ -1,73 +1,23 @@
-# React + TypeScript + Vite
+# Nergous Games 🎮
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Фронтенд-часть веб-платформы для удобного трекинга личной игровой библиотеки. Проект создавался как интерактивная замена громоздким Excel-таблицам, в которых раньше велся учет игровых тайтлов.
 
-Currently, two official plugins are available:
+Разработано в тандеме с Backend-разработчиком.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Ключевой функционал
 
-## React Compiler
+* **Автоматический парсинг со Steam:** При добавлении игры бэкенд забирает все необходимые данные (название, обложки и т.д.) напрямую из Steam API, избавляя от ручного ввода.
+* **Управление статусами:** Игры можно распределять по категориям: *Играю*, *Пройдена*, *Брошена* или *Не выбрана (В планах)*.
+* **Глобальный каталог:** Страница «Все игры» со списком всех тайтлов, которые когда-либо добавлялись на платформу.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📐 Архитектура и Особенности реализации
 
-## Expanding the ESLint configuration
+* **Feature-Sliced Design (FSD):** Проект спроектирован по методологии FSD, что обеспечивает строгую декомпозицию, контролируемые связи между модулями и масштабируемость кодовой базы.
+* **Кастомная UI-система:** Изначально в проекте использовался готовый UI-кит **Ant Design**, однако в процессе разработки было принято решение практически полностью отказаться от него. Было разработано более 20 собственных переиспользуемых UI-компонентов, что позволило кастомизировать интерфейс под задачи проекта и снизить зависимость от тяжелых внешних библиотек.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠 Технологический стек
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+* **Фреймворк:** React
+* **Язык:** TypeScript
+* **Сборщик:** Vite
+* **UI-база:** Ant Design (с последующим переходом на кастомные компоненты)
